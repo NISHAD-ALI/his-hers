@@ -51,6 +51,7 @@ userRoute.get('/order-success',orderController.orderSuccess)
 userRoute.get('/order-Cancel',orderController.orderCancel)
 userRoute.post('/cancelOrder',orderController.cancelOrder)
 userRoute.get('/cancelPage',orderController.orderCancel)
+userRoute.get('/returnPage',orderController.returnOrder)
 
 
 module.exports = userRoute

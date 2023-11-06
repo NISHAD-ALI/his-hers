@@ -205,13 +205,20 @@ const cancelOrder = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 }
-
-
+// ++++++++++++++++ORDER RETURN PAGE++++++++++++++++++
+const returnOrder = async (req,res) => {
+  try {
+    res.render('orderReturn')
+  } catch (error) {
+    console.log(error.message)
+  }
+}
 
 module.exports = {
   loadCheckout,
   placeOrder,
   orderSuccess,
   orderCancel,
-  cancelOrder
+  cancelOrder,
+  returnOrder
 }
