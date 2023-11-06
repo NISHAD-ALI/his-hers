@@ -100,12 +100,24 @@ const loginAdmin = async (req, res) => {
 const loadAdminDash = async (req, res) => {
   try {
    
-
-    const orderDat = await Order.find({  }).populate("products.productId");
-   
- 
-
-        res.render('dashboard', { orderDat });
+const orderDat = await Order.find({})
+      .populate({
+        path: 'userid',
+        select: 'name' // Select the 'name' field from the user document
+      })
+      .populate('products.productId');
+    
+    const orderCount = await Order.countDocuments();
+    const totalRevenue = await Order.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalRevenue: { $sum: '$totalAmount' }
+        }
+      }
+    ]);
+  
+        res.render('dashboard', { orderDat,orderCount,totalRevenue: totalRevenue[0].totalRevenue });
       
   } catch (error) {
     console.log(error.message);

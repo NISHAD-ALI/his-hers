@@ -148,7 +148,7 @@ const placeOrder = async (req, res) => {
 
 const orderSuccess = async (req, res) => {
   try {
-    console.log('3');
+    console.log('3'); 
     res.render('orderSuccess')
   } catch (error) {
     console.log(error.message)

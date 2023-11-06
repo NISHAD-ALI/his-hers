@@ -138,8 +138,7 @@
                                                                                 data-id="<%= orderData[j]._id %>"
                                                                                 class="btn btn-outline-primary-2 cancel-button">RETURN<i
                                                                                     class="icon-long-arrow-right"></i></a>
-                                                                            <% }else
-                                                                                if(orderData[j].status==='cancelled' ){
+                                                                            <% }else if(orderData[j].status==='cancelled' ){
                                                                                 %>
                                                                                 <a href="/viewMore" data-type="order"
                                                                                     data-id="<%= orderData[j]._id %>"
@@ -147,7 +146,14 @@
                                                                                     <i
                                                                                         class="icon-long-arrow-right"></i></a>
 
+                                                                                        <%  }else if(orderData[j].status==='Returned' ){ %>
 
+
+                                                                                        <a href="/viewMore" data-type="order"
+                                                                                            data-id="<%= orderData[j]._id %>"
+                                                                                            class="btn btn-outline-primary-2 cancel-button">SHOP
+                                                                                            <i
+                                                                                                class="icon-long-arrow-right"></i></a>
                                                                                 <% }else{ %>
                                                                                     <a href="/cancelPage"
                                                                                         data-type="order"
