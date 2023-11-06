@@ -282,6 +282,7 @@
                                 </label>
                               </div>
                             </th>
+                            <th></th>
                             <th> Product Name  </th>
                             <th> Price </th>
                             <th> Date </th>
@@ -310,7 +311,16 @@
                            <span class="pl-2"> <%= product.productname %></span>
                             </td>
                             <td> <%= product.price %> </td>
-                            <td> <%=  orderDat[j].purchaseDate %>  </td>
+                            <td>
+                              <%= orderDat[j].purchaseDate.toLocaleString('en-US', {
+                                year: 'numeric',
+                                month: 'short',
+                                day: '2-digit',
+                                hour: '2-digit',
+                                minute: '2-digit',
+                                second: '2-digit'
+                              }).replace(/,/, '').replace(/\//g, '-') %>
+                            </td>
                             <td> <%=  orderDat[j].status %> </td>
                             <td> <%=  orderDat[j].paymentMethod %> </td>
                    
