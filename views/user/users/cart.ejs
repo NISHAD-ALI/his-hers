@@ -356,40 +356,7 @@
 
 
     <script>
-    // function updateCount(val, productId) {
-    //     $.ajax({
-    //         method: "post",
-    //         url: "/updateCartQuantity",
-    //         data: JSON.stringify({ id: productId, val: val }),
-    //         contentType: 'application/json',
-    //         success: function (response) {
-    //             if (response.result === true) {
-                    
-
-    //                 $('#Cart').load('/cart #Cart');
-    //                 $('#downCart').load('/cart #downCart');
-    //             } 
-    //             else if (response.result === 'stock_exceeded') {
-    //                 // Show SweetAlert indicating the product is out of stock
-    //                 Swal.fire({
-    //                     title: 'Stock Exceeded',
-    //                     text: 'The product quantity exceeds stock availability.',
-    //                     icon: 'error',
-    //                     confirmButtonText: 'OK',
-    //                 });
-    //             }else if (response.result === false) {
-    //                 // Show SweetAlert indicating the product is out of stock
-    //                 Swal.fire({
-    //                     title: 'Out of Stock',
-    //                     text: 'This product is currently out of stock.',
-    //                     icon: 'error',
-    //                     confirmButtonText: 'OK',
-    //                 });
-    //             }
-    //         }
-    //     });
-    // }
-
+ 
     function updateCount(val, productId) {
     $.ajax({
         method: "post",
