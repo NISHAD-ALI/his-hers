@@ -1,0 +1,33 @@
+<%- include('../admin/layout/adminSidebar.ejs') -%>
+<%- include('../admin/layout/adminHeader.ejs') -%>
+
+
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Edit Category</h4>
+        <% if(typeof message !== 'undefined'){ %>
+          <span
+            id="er2"
+            style="color: rgb(241, 7, 7); text-align: center"
+            ><%= message %></span
+          >
+          <% } %>
+        <form class="forms-sample" action="/admin/edit-cat" method="post">
+          <div class="form-group">
+            <input type="hidden" name="categoryId" value="<%= cats._id %>">
+            <label for="exampleInputName1">Name of Category</label>
+            <input type="text" class="form-control" id="exampleInputName1" placeholder="Category Name" name="catName">
+          </div>
+
+
+
+          <button type="submit" class="btn btn-primary mr-2">Submit</button>
+          <button class="btn btn-dark">Cancel</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+  <%- include('../admin/layout/adminFooter.ejs') -%>

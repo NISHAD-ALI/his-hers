@@ -1,0 +1,98 @@
+<%- include('../layout/header.ejs') -%>
+
+<main class="main">
+    <div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
+        <div class="container">
+            <h1 class="page-title">My Account<span>Shop</span></h1>
+        </div><!-- End .container -->
+    </div><!-- End .page-header -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">Shop</a></li>
+                <li class="breadcrumb-item active" aria-current="page">My Account</li>
+            </ol>
+        </div><!-- End .container -->
+    </nav><!-- End .breadcrumb-nav -->
+
+    <div class="page-content">
+        <div class="dashboard">
+            <div class="container">
+                <div class="row">
+                    <aside class="col-md-4 col-lg-3">
+                        <ul class="nav nav-dashboard flex-column mb-3 mb-md-0" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link " id="tab-dashboard-link" data-toggle="tab" href="#tab-dashboard" role="tab" aria-controls="tab-dashboard" aria-selected="false">Dashboard</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="tab-orders-link" data-toggle="tab" href="#tab-orders" role="tab" aria-controls="tab-orders" aria-selected="false">Orders</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="tab-downloads-link" data-toggle="tab" href="#tab-downloads" role="tab" aria-controls="tab-downloads" aria-selected="false">Downloads</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" id="tab-address-link" data-toggle="tab" href="#tab-address" role="tab" aria-controls="tab-address" aria-selected="true">Address</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="tab-account-link" data-toggle="tab" href="#tab-account" role="tab" aria-controls="tab-account" aria-selected="false">Account Details</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Sign Out</a>
+                            </li>
+                        </ul>
+                    </aside><!-- End .col-lg-3 -->
+
+                    <div class="col-md-8 col-lg-9">
+                        <p>Hey <b><%= userName %></b>!   Please Provide your Accurate Information.</p>
+                        <div class="tab-content">
+                            
+                            <form action ='/addAddress' method="post">
+                                <div class="mb-3">
+                                  <label for="exampleInputEmail1" class="form-label">Full Name</label>
+                                  <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="fullname">
+                                </div>
+                                <div class="mb-3">
+                                  <label for="exampleInputPassword1" class="form-label">Mobile Number</label>
+                                  <input type="text" class="form-control" id="exampleInputPassword1" name="mobile">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="exampleInputEmail1" class="form-label">Email address</label>
+                                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email">
+                                  </div>
+                                  <div class="mb-3">
+                                    <label for="exampleInputEmail1" class="form-label">House Number</label>
+                                    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="houseNo">
+                                  </div>
+                                  <div class="mb-3">
+                                    <label for="exampleInputEmail1" class="form-label">City</label>
+                                    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="city">
+                                  </div>
+                                  <div class="mb-3">
+                                    <label for="exampleInputEmail1" class="form-label">State</label>
+                                    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="state">
+                                  </div>
+                                  <div class="mb-3">
+                                    <label for="exampleInputEmail1" class="form-label">Zipcode</label>
+                                    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="zipcode">
+                                  </div>
+                                  <div class="mb-3">
+                                    <label for="exampleInputEmail1" class="form-label">Additional Details</label>
+                                    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="additionalDetails" style="height: 80px;">
+                                  </div>
+                                  <button type="submit" class="btn btn-outline-primary-2 ">
+                                    <span>SUBMIT</span>
+                                    <i class="icon-long-arrow-right"></i>
+                              </form>
+
+                           
+                        </div>
+                    </div><!-- End .col-lg-9 -->
+                </div><!-- End .row -->
+            </div><!-- End .container -->
+        </div><!-- End .dashboard -->
+    </div><!-- End .page-content -->
+</main><!-- End .main -->
+
+
+<%- include('../layout/footer.ejs') -%>

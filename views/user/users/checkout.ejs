@@ -1,0 +1,231 @@
+<%- include('../layout/header.ejs') -%>
+
+<main class="main">
+    <div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
+        <div class="container">
+            <h1 class="page-title">Checkout<span>Shop</span></h1>
+        </div><!-- End .container -->
+    </div><!-- End .page-header -->
+
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">Shop</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Checkout</li>
+            </ol>
+        </div><!-- End .container -->
+    </nav><!-- End .breadcrumb-nav -->
+
+    <div class="page-content">
+        <div class="checkout">
+            <div class="container">
+                <a href="/addAddress">
+                    <button type="submit" class="btn btn-outline-primary-2 float-right">
+                        <span>+ ADD ADDRESS</span>
+                        <i class="icon-long-arrow-right"></i>
+                    </button>
+                </a>
+                <div class="checkout-discount">
+                    <form action="#">
+                        <input type="text" class="form-control" required id="checkout-discount-input">
+                        <label for="checkout-discount-input" class="text-truncate">
+                            Have a coupon? <span>Click here to enter your code</span>
+                        </label>
+                    </form>
+                </div><!-- End .checkout-discount -->
+             
+                <form action="/orderPlace?id=<%= %>" method="post">
+                    <div class="row">
+                        <div class="col-lg-9">
+                            <p>The following addresses will be used on the checkout page by default.</p>
+                            
+
+                            <div class="row">
+                                <% if (UserAddress && UserAddress.length > 0) { %>
+                                    <% for (let i = 0; i < UserAddress.length; i++) { %>
+                                        <div class="col-lg-6">
+                                            <div class="card card-dashboard">
+                                                <div class="card-body">
+                                                    <input type="radio" name="selectedAddress" value="<%= UserAddress[i]._id %>" id="address<%= i %>" class="address-checkbox">
+                                                    <label for="address<%= i %>" class="address-label">Billing Address</label>
+                                                    <% if (UserAddress[i].address && UserAddress[i].address.length > 0) { %>
+                                                        <% for (let j = 0; j < UserAddress[i].address.length; j++) { %>
+                                                            <p>
+                                                                <%= UserAddress[i].address[j].fullname %><br>
+                                                                <%= UserAddress[i].address[j].mobile %><br>
+                                                                <%= UserAddress[i].address[j].email %><br>
+                                                                <%= UserAddress[i].address[j].houseNo %><br>
+                                                                <%= UserAddress[i].address[j].city %><br>
+                                                                <%= UserAddress[i].address[j].state %><br>
+                                                                <%= UserAddress[i].address[j].zipcode %><br>
+                                                                <%= UserAddress[i].address[j].additionalDetails %><br>
+                                                            </p>
+                                                            <a href="/editAddress?id=<%= UserAddress[i]._id %>">Edit <i class="icon-edit"></i></a>
+                                                        <% } %>
+                                                    <% } else { %>
+                                                        <p>No billing address found.</p>
+                                                    <% } %>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <% } %>
+                                <% } else { %>
+                                    <p>No user addresses found.</p>
+                                <% } %>
+                            </div>
+                            
+                        </div><!-- End .col-lg-9 -->
+                        <aside class="col-lg-3">
+                            <div class="summary">
+                                <h3 class="summary-title">Your Order</h3><!-- End .summary-title -->
+
+                                <table class="table table-summary">
+                                    <thead>
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <% if(cartData) {%>
+                                            <% let product = cartData.products %>
+                                        <% for (let i = 0; i < product.length; i++) { %>
+                                            <% const value = product[i].productId; %>
+                                        <tr>
+                                            <td><a href="#"> <%= value.productname %></a></td>
+                                            <td>$<%= datatotal[i] %></td>
+                                        </tr>
+                                        <% } %>
+                                        <% } %>
+                    
+
+                                        <tr class="summary-subtotal">
+                                            <td>Subtotal:</td>
+                                            <td>$<%= totalamount %></td>
+                                        </tr><!-- End .summary-subtotal -->
+                                        <tr>
+                                            <td>Shipping:</td>
+                                            <td>Free shipping</td>
+                                        </tr>
+                                        <tr class="summary-total">
+                                            <td>Total:</td>
+                                            <td>$<%= totalamount %></td>
+                                        </tr><!-- End .summary-total -->
+                                    </tbody>
+                                </table><!-- End .table table-summary -->
+
+                                <div class="accordion-summary" id="accordion-payment">
+                                    <!-- Your payment options here -->
+                                    <div class="payment-options">
+                                        <h3 class="summary-title">Select Payment Method</h3><!-- End .summary-title -->
+                                    
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="payment-cod" name="payment-method" class="custom-control-input" value="cod">
+                                            <label class="custom-control-label" for="payment-cod">Cash on Delivery</label>
+                                        </div>
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="payment-online" name="payment-method" class="custom-control-input" value="online">
+                                            <label class="custom-control-label" for="payment-online">Online Payment (Razorpay)</label>
+                                        </div>
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="payment-netbanking" name="payment-method" class="custom-control-input" value="netbanking">
+                                            <label class="custom-control-label" for="payment-netbanking">Net Banking</label>
+                                        </div>
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="payment-creditcard" name="payment-method" class="custom-control-input" value="creditcard">
+                                            <label class="custom-control-label" for="payment-creditcard">Credit Card</label>
+                                        </div>
+                                    </div>
+                                </div><!-- End .accordion -->
+
+                                <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block">
+                                    Place Order
+                                    
+                                </button>
+                            </div><!-- End .summary -->
+                        </aside><!-- End .col-lg-3 -->
+                    </div><!-- End .row -->
+                </form>
+            </div><!-- End .container -->
+        </div><!-- End .checkout -->
+    </div><!-- End .page-content -->
+</main><!-- End .main -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    // $(document).ready(function () {
+    //     $("form").on("submit", function (e) {
+    //         // Check if no address is selected
+    //         if ($('input[name="selectedAddress"]:checked').length === 0) {
+    //             e.preventDefault(); 
+    //             Swal.fire({
+    //                 icon: 'error',
+    //                 title: 'Oops...',
+    //                 text: 'Please select a billing address!',
+    //             });
+    //         } else if ($('input[name="payment-method"]:checked').length === 0) {
+    //             e.preventDefault();
+    //             Swal.fire({
+    //                 icon: 'error',
+    //                 title: 'Oops...',
+    //                 text: 'Please select a payment method!',
+    //             });
+    //         }
+    //     });
+    // });
+
+  $(document).ready(function () {
+    $("form").on("submit", function (e) {
+      // Check if no address is selected
+      if ($('input[name="selectedAddress"]:checked').length === 0) {
+        e.preventDefault();
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Please select a billing address!',
+        });
+      } else if ($('input[name="payment-method"]:checked').length === 0) {
+        e.preventDefault();
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Please select a payment method!',
+        });
+      } else {
+        e.preventDefault();
+        // Submit the form using AJAX
+        $.ajax({
+          type: 'POST',
+          url: '/orderPlace',
+          data: $('form').serialize(), // You may need to adjust this based on your form data
+          success: function (response) {
+            if (response.successPage) {
+              // Redirect to the success page
+              window.location.href = response.successPage;
+            } else {
+              Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'An error occurred while placing the order.',
+              });
+            }
+          },
+          error: function () {
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'An error occurred while placing the order.',
+            });
+          },
+        });
+      }
+    });
+  });
+
+
+</script>
+<%- include('../layout/footer.ejs') -%>

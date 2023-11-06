@@ -1,0 +1,68 @@
+<%- include('../layout/header.ejs') -%>
+
+<div class="page-wrapper">
+    <main class="main">
+        <div class="container">
+            <div class="otp-verification">
+                <h2>OTP Verification</h2>
+                <p>Please enter the 6-digit OTP sent to your email address.</p>
+                <form action="/verify" method="post">
+                    <div class="form-group">
+                        <label for "otp">OTP Code</label>
+                        <input type="text" class="form-control" id="otp" name="otp" maxlength="6" required>
+                    </div>
+                    <% if (typeof message !== 'undefined') { %>
+                        <div class="alert alert-primary text-center">
+                            <%= message %>
+                        </div>
+                    <% } %>
+                    <div class="form-footer">
+                        <button type="submit" class="btn btn-outline-primary-2">
+                            <span>Verify OTP</span>
+                            <i class="icon-long-arrow-right"></i>
+                        </button>
+                    </div>
+                </form>
+                <div id="resend-otp-container" style="display: none;">
+                    <p>Didn't receive the OTP?</p>
+                    <a href="/otpResend"><button id="resend-otp-button" class="btn btn-primary">
+                        Resend OTP
+                    </button></a>
+                </div>
+                <div id="countdown-timer">
+                    Resend OTP in: <span id="countdown">0:00</span>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    // Function to format time in MM:SS
+    function formatTime(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        return `${0}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const countdownElement = document.getElementById("countdown");
+        const countdownContainer = document.getElementById("countdown-timer");
+        const resendContainer = document.getElementById("resend-otp-container");
+
+        let remainingSeconds = 60;
+
+        const countdownInterval = setInterval(function () {
+            countdownElement.textContent = formatTime(remainingSeconds);
+            remainingSeconds--;
+
+            if (remainingSeconds < 0) {
+                clearInterval(countdownInterval);
+                countdownContainer.style.display = "none";
+                resendContainer.style.display = "block";
+            }
+        }, 1000);
+    });
+</script>
+
+<%- include('../layout/footer.ejs') -%>

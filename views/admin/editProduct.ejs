@@ -1,0 +1,94 @@
+<%- include('../admin/layout/adminSidebar.ejs') -%>
+<%- include('../admin/layout/adminHeader.ejs') -%>
+
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Edit Product</h4>
+          <br>
+          <form  action="/admin/edit-Pro?id=<%= currentData._id %>" method="post">
+          
+            <div class="form-group">
+              <label for="exampleInputName1">Name Of Product</label>
+              <input type="text" class="form-control" id="name"  placeholder="Name" name="proName" value="<%= currentData.productname %>">
+            </div>
+            <input type="hidden" name="product_id" value="<%= currentData._id %>">
+            <div class="form-group">
+              <label for="exampleInputEmail3">Quantity</label>
+              <input type="text" class="form-control" id="exampleInputEmail3" placeholder="Quantity" name="qty" value="<%= currentData.quantity %>">
+            </div>
+            <div class="form-group">
+              <label for="price">Price</label>
+              <div class="input-group" id="price">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">$</span>
+                </div>
+                <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" name="price" value="<%= currentData.price %>">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="exampleSelectGender">Category</label>
+              <select class="form-control" id="exampleSelectGender" name="category" required>
+                <% catData.forEach((item) => { %>
+                  <% if (item.blocked == 0) { %>
+                    <option value="<%= item.name %>" <% if (item.name === currentData.category) { %>selected<% } %>>
+                      <%= item.name %>
+                    </option>
+                  <% } %>
+                <% }); %>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="ccbox">Size</label>
+              <div class="form-check" id="ccbox">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="S" id="checkbox1" name="options" <% if (currentData.size.includes('S')) { %>checked<% } %>>
+                  <label class="form-check-label" for="checkbox1">
+                    S
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="M" id="checkbox2" name="options" <% if (currentData.size.includes('M')) { %>checked<% } %>>
+                  <label class="form-check-label" for="checkbox2">
+                    M
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="L" id="checkbox3" name="options" <% if (currentData.size.includes('L')) { %>checked<% } %>>
+                  <label class="form-check-label" for="checkbox3">
+                    L
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="XL" id="checkbox4" name="options" <% if (currentData.size.includes('XL')) { %>checked<% } %>>
+                  <label class="form-check-label" for="checkbox4">
+                    XL
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="exampleTextarea1">Description</label>
+              <textarea class="form-control" id="exampleTextarea1" rows="4" name="description"><%= currentData.description %></textarea>
+            </div>
+            <div class="form-group">
+              <label for="exampleTextarea1">Additional Details</label>
+              <textarea class="form-control" id="exampleTextarea1" rows="4" name="additionalInfo"><%= currentData.additionalInfo %></textarea>
+            </div>
+            <!-- <div class="form-group">
+              <label for="images">Upload Images</label>
+              <input type="file" class="form-control-file" id="images" name="image" multiple>
+            </div> -->
+            <button type="submit"  class="btn btn-primary mr-2">Submit</button>
+            <button class="btn btn-dark">Cancel</button>
+          </form>
+        </div>
+        
+      </div>
+  </div>
+
+
+ 
+
+  
+<%- include('../admin/layout/adminFooter.ejs') -%>
