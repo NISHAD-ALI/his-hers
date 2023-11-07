@@ -512,12 +512,64 @@ const resetPasswordEmailLink = async (req, res) => {
       from: process.env.EMAIL_USER,
       to: user.email,
       subject: 'Password Reset Request',
-      html:` <p>Hey ${user.name}.Click the following link to reset your password:</p>
-      <a href="${resetPasswordLink}" style="text-decoration: none;">
-        <button style="background-color: #007BFF; color: white; border: none; padding: 10px 20px; cursor: pointer;">
-          CLICK HERE
-        </button>
-      </a>
+      html:`   <html>
+      <head>
+        <style>
+          /* Add your custom email styles here */
+          body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f3f3;
+          }
+          .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px #ccc;
+          }
+          .header {
+            background-color: #007BFF;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            border-radius: 5px 5px 0 0;
+          }
+          .content {
+            padding: 20px;
+          }
+          .button-container {
+            text-align: center;
+          }
+          .button {
+            background-color: #007BFF;
+            color: #fff; 
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="email-container">
+          <div class="header">
+            <h1>Password Reset Request</h1>
+          </div>
+          <div class="content">
+            <p>Hello ${user.name},</p>
+            <p>We received a request to reset your password. Click the button below to reset your password:</p>
+            <div class="button-container">
+              <a href="${resetPasswordLink}" class="button">Reset Password</a>
+            </div>
+            <p>If you didn't request a password reset, please ignore this email. Your password will remain unchanged.</p>
+            <br>
+            <p>Regards,Team <b>HIS&HERS</b><p>
+          </div>
+        </div>
+      </body>
+    </html>
       `
     };
 
