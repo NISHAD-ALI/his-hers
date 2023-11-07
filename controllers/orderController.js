@@ -174,10 +174,19 @@ const cancelOrder = async (req, res) => {
     if (type === 'order') {
       // Handle order cancellation
       const order = await Order.findOne({ _id: id });
+      const count = order.products[0].count;
+
 
       if (order) {
         order.status = 'cancelled';
         await order.save();
+        for (const orderProduct of order.products) {
+          const proDB = await product.findOne({ _id: orderProduct.productId });
+          if (proDB) {
+            proDB.quantity += count;
+            await proDB.save();
+          }
+        }
         res.json({ success: true });
 
       }
@@ -185,18 +194,7 @@ const cancelOrder = async (req, res) => {
       else {
         res.status(400).json({ error: 'Order not found' });
       }
-    } else if (type === 'product') {
-      // Handle product cancellation
-      const product = await product.findOne({ _id: id });
-      if (product) {
-
-        product.orderStatus = 'cancelled';
-        await product.save();
-        res.json({ success: true });
-
-      } else {
-        res.status(400).json({ error: 'Product not found' });
-      }
+  
     } else {
       res.status(400).json({ error: 'Invalid request type' });
     }
@@ -208,17 +206,57 @@ const cancelOrder = async (req, res) => {
 // ++++++++++++++++ORDER RETURN PAGE++++++++++++++++++
 const returnOrder = async (req,res) => {
   try {
+  
     res.render('orderReturn')
   } catch (error) {
     console.log(error.message)
   }
 }
 
+// ++++++++++++++++ORDER RETURN ++++++++++++++++++
+const orderReturnPOST = async (req, res) => {
+  try {
+    const type = req.body.type;
+    const id = req.body.id;
+
+    if (type === 'order') {
+      // Handle order return
+      const order = await Order.findOne({ _id: id });
+      const count = order.products[0].count;
+
+
+      if (order) {
+        order.status = 'Returned';
+        await order.save();
+        for (const orderProduct of order.products) {
+          const proDB = await product.findOne({ _id: orderProduct.productId });
+          if (proDB) {
+            proDB.quantity += count;
+            await proDB.save();
+          }
+        }
+        res.json({ success: true });
+
+      }
+
+      else {
+        res.status(400).json({ error: 'Order not found' });
+      }
+  
+    } else {
+      res.status(400).json({ error: 'Invalid request type' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
 module.exports = {
   loadCheckout,
   placeOrder,
   orderSuccess,
   orderCancel,
   cancelOrder,
-  returnOrder
+  returnOrder,
+  orderReturnPOST
 }

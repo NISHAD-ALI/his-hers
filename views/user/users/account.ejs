@@ -106,7 +106,7 @@
 
                                                                         </div>
                                                                     </td>
-                                                                    <td class="price-col">$<%= value.price %>
+                                                                    <td class="price-col">$<%= orderData[j].totalAmount %>
                                                                     </td>
                                                                     <td class="status-col">
                                                                         <span>
@@ -133,38 +133,21 @@
 
                                                                     <!-- ORDER CANCEL BUTTON                            -->
                                                                     <td class="remove-col">
-                                                                        <% if (orderData[j].status==='Delivered' ) { %>
-                                                                            <a href="/returnPage" data-type="order"
-                                                                                data-id="<%= orderData[j]._id %>"
-                                                                                class="btn btn-outline-primary-2 cancel-button">RETURN<i
-                                                                                    class="icon-long-arrow-right"></i></a>
-                                                                            <% }else if(orderData[j].status==='cancelled' ){
-                                                                                %>
-                                                                                <a href="/viewMore" data-type="order"
-                                                                                    data-id="<%= orderData[j]._id %>"
-                                                                                    class="btn btn-outline-primary-2 cancel-button">SHOP
-                                                                                    <i
-                                                                                        class="icon-long-arrow-right"></i></a>
-
-                                                                                        <%  }else if(orderData[j].status==='Returned' ){ %>
-
-
-                                                                                        <a href="/viewMore" data-type="order"
-                                                                                            data-id="<%= orderData[j]._id %>"
-                                                                                            class="btn btn-outline-primary-2 cancel-button">SHOP
-                                                                                            <i
-                                                                                                class="icon-long-arrow-right"></i></a>
-                                                                                <% }else{ %>
-                                                                                    <a href="/cancelPage"
-                                                                                        data-type="order"
-                                                                                        data-id="<%= orderData[j]._id %>"
-                                                                                        class="btn btn-outline-primary-2 cancel-button">CANCEL<i
-                                                                                            class="icon-long-arrow-right"></i></a>
-
-                                                                                    <% } %>
-
-                                                                                        </a>
+                                                                        <% if (orderData[j].status === 'Delivered') { %>
+                                                                            <a href="/returnPage" data-type="order" data-id="<%= orderData[j]._id %>"
+                                                                                class="btn btn-outline-primary-2 return-button">RETURN<i class="icon-long-arrow-right"></i></a>
+                                                                        <% } else if (orderData[j].status === 'cancelled') { %>
+                                                                            <a href="/viewMore" data-type="order" data-id="<%= orderData[j]._id %>"
+                                                                                class="btn btn-outline-primary-2 shop-button">SHOP <i class="icon-long-arrow-right"></i></a>
+                                                                        <% } else if (orderData[j].status === 'Returned') { %>
+                                                                            <a href="/viewMore" data-type="order" data-id="<%= orderData[j]._id %>"
+                                                                                class="btn btn-outline-primary-2 shop-button">SHOP <i class="icon-long-arrow-right"></i></a>
+                                                                        <% } else { %>
+                                                                            <a href="/cancelPage" data-type="order" data-id="<%= orderData[j]._id %>"
+                                                                                class="btn btn-outline-primary-2 cancel-button">CANCEL<i class="icon-long-arrow-right"></i></a>
+                                                                        <% } %>
                                                                     </td>
+                                                                    
 
                                                                 </tr>
                                                                
@@ -383,7 +366,34 @@
                 });
             });
         });
+        $(document).ready(function () {
+            // Handle the cancel button click event
+            $('.return-button').click(function () {
+                const $button = $(this);
+                const type = $button.data('type');
+                const id = $button.data('id');
 
-
+                $.ajax({
+                    type: 'POST',
+                    url: ' /returnOrder',
+                    data: {
+                        type: type,
+                        id: id
+                    },
+                    success: function (data) {
+                        if (data.success) {
+                            // Update the status column without reloading the page
+                            $button.parent().find('span').text(type === 'order' ? 'Order Status: Returned' : 'Product Status: Returned');
+                        } else {
+                            console.error('Failed to Return ' + type);
+                        }
+                    },
+                    error: function (error) {
+                        console.error(error);
+                    }
+                });
+            });
+        });
+       
     </script>
     <%- include('../layout/footer.ejs') -%>
