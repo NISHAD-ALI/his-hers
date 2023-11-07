@@ -58,7 +58,7 @@ const addToCart = async (req, res) => {
     const cartData = await Cart.findOne({ userid: userId, "products.productId": productId });
 
     if (userId) {
-      if (productData.quantity > 1) {
+      if (productData.quantity >= 1) {
         if (cartData) {
           await Cart.updateOne(
             { userid: userId, "products.productId": productId },
