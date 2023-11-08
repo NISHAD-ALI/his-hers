@@ -651,11 +651,11 @@
                 url: "/addToCart",
                 method: "post",
                 data: {
-                    id: productId, // Replace with the actual productId
+                    id: productId,
                 },
                 success: (response) => {
                     if (response.login === true) {
-                        // User is not logged in, show "Please Login" message and redirect to the login page
+                       
                         Swal.fire({
                             icon: "warning",
                             title: "Please Login",
@@ -670,14 +670,14 @@
                             }
                         });
                     } else if (response.result) {
-                        // User is logged in, redirect to the cart page and display "Product Added to Cart" message
+                      
                         Swal.fire({
                             icon: "success",
                             title: "Product Added to Cart",
                             text: "Your product has been added to the cart.",
                             
                         }).then(() => {
-                            window.location.href = "/cart"; // Redirect to the cart page
+                            window.location.href = "/cart"; 
                         });
                     } else if (response.alreadyAdded) {
                         Swal.fire({
