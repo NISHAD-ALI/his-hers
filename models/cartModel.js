@@ -10,6 +10,10 @@ const cartSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  total: {
+    type: Number,
+    required: true,
+  },
   products: [
     {
       productId: {
@@ -31,6 +35,7 @@ const cartSchema = new mongoose.Schema({
       },
     },
   ],
+
 });
 
 module.exports = mongoose.model("cart", cartSchema);

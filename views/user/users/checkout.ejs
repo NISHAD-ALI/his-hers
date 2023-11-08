@@ -111,7 +111,7 @@
                                         </tr>
                                         <tr class="summary-total">
                                             <td>Total:</td>
-                                            <td>$<%= totalamount %></td>
+                                            <td id="total">$<%= totalamount %></td>
                                         </tr><!-- End .summary-total -->
                                     </tbody>
                                 </table><!-- End .table table-summary -->
@@ -139,11 +139,9 @@
                                         </div>
                                     </div>
                                 </div><!-- End .accordion -->
-
-                                <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block">
-                                    Place Order
-                                    
-                                </button>
+                                <button type="button" id="payWithRazorpay" class="btn btn-primary" style="display: none;">Pay with Razorpay</button>
+                                <input type="hidden" id="total" name="total" value="<%= totalamount %>">
+                                <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block">Place Order</button>
                             </div><!-- End .summary -->
                         </aside><!-- End .col-lg-3 -->
                     </div><!-- End .row -->
@@ -155,13 +153,74 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+<script src="https://checkout.razorpay.com/v1/razorpay.js"></script>
 <script>
+//  $(document).ready(function () {
+
+
+
+
+
+//         console.log(order);
+//         var options = {
+//         "key": "rzp_test_spjMMzxxQd5jRn",
+//         "amount": order.amount, 
+//         "currency": "INR",
+//         "name": "Shozey",
+//         "description": "Test Transaction",
+//         "image": "/user/images/Fs Hat Logo.jpg",
+//         "order_id": order.id, 
+//         handler: function (response) {
+//             verifyPayment(response, order);
+//         },
+//         "prefill": { 
+//             "name": "Shozey", 
+//             "email": "shozey@gmail.com",
+//             "contact": "9000090000"
+//         },
+//         "notes": {
+//             "address": "Shozey "
+//         },
+//         "theme": {
+//             "color": "#cc9967"
+//         }
+//     };
+//     var rzp1 = new Razorpay(options);
+//     rzp1.open();
+//     }
+
+
+//     function verifyPayment(payment, order) {
+//         const amount2 = document.getElementById("total").value;
+//         console.log(amount2);
+//         $.ajax({
+//         url: "/verify-payment",
+//         method: "post",
+//         data: {
+//             payment: payment,
+//             amount2: amount2,
+//             order: order,
+//         },
+//         success: (response) => {
+//             if (response.placed == true) {
+//                 window.location.href = '/orderplaced'
+//             } else {
+//             swal.fire({
+//                 positon: "center",
+//                 icon: "error",
+//                 title: "Payment failed",
+//                 showConfirmButton: false,
+//                 timer: 1500,
+//             });
+//             }
+//         },
+//  });
+//  }
+
     // $(document).ready(function () {
     //     $("form").on("submit", function (e) {
-    //         // Check if no address is selected
     //         if ($('input[name="selectedAddress"]:checked').length === 0) {
-    //             e.preventDefault(); 
+    //             e.preventDefault();
     //             Swal.fire({
     //                 icon: 'error',
     //                 title: 'Oops...',
@@ -174,34 +233,128 @@
     //                 title: 'Oops...',
     //                 text: 'Please select a payment method!',
     //             });
+    //         } else if ($('input[name="payment-method"]:checked').val() === 'online') {
+    //             e.preventDefault();
+
+    //             // Submit the form using Razorpay
+    //             $.ajax({
+    //                 type: 'POST',
+    //                 url: '/create-razorpay-order', // Your server route to create a Razorpay order
+    //                 data: $('form').serialize(),
+    //                 success: function (response) {
+    //                     if (response.order) {
+    //                         // Call Razorpay to handle payment
+    //                         razorpayPayment(response.order);
+    //                     } else {
+    //                         Swal.fire({
+    //                             icon: 'error',
+    //                             title: 'Oops...',
+    //                             text: 'An error occurred while creating the Razorpay order.',
+    //                         });
+    //                     }
+    //                 },
+    //                 error: function () {
+    //                     Swal.fire({
+    //                         icon: 'error',
+    //                         title: 'Oops...',
+    //                         text: 'An error occurred while creating the Razorpay order.',
+    //                     });
+    //                 },
+    //             });
     //         }
     //     });
     // });
 
-  $(document).ready(function () {
-    $("form").on("submit", function (e) {
-      // Check if no address is selected
-      if ($('input[name="selectedAddress"]:checked').length === 0) {
-        e.preventDefault();
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Please select a billing address!',
-        });
-      } else if ($('input[name="payment-method"]:checked').length === 0) {
-        e.preventDefault();
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Please select a payment method!',
-        });
-      } else {
-        e.preventDefault();
-        // Submit the form using AJAX
+    // function razorpayPayment(order) {
+    //     var options = {
+    //         "key": process.env.RAZORPAYKEYID,
+    //         "amount": order.amount,
+    //         "currency": "INR",
+    //         "name": "Your Store Name",
+    //         "description": "Payment for Your Order",
+    //         "order_id": order.id,
+    //         "handler": function (response) {
+    //             verifyPayment(response, order);
+    //         },
+    //         "prefill": {
+    //             "name": "Customer Name",
+    //             "email": "customer@example.com",
+    //             "contact": "1234567890",
+    //         },
+    //         "notes": {
+    //             "address": "Customer Address",
+    //         },
+    //         "theme": {
+    //             "color": "#cc9967", // Customize the color to match your theme
+    //         }
+    //     };
+    //     var rzp = new Razorpay(options);
+    //     rzp.open();
+    // }
+
+    // function verifyPayment(payment, order) {
+    //     console.log('ASDFGFG');
+        
+    //     console.log(payment);
+    //     console.log(order);
+    //     $.ajax({
+    //         type: 'POST',
+    //         url: '/verify-payment', // Your server route to verify the payment
+    //         data: {
+    //             payment: payment,
+    //             order: order,
+    //         },
+    //         success: function (response) {
+    //             if (response.placed) {
+    //                 window.location.href = '/order-success'; // Redirect to the order success page
+    //             } else {
+    //                 Swal.fire({
+    //                     position: 'center',
+    //                     icon: 'error',
+    //                     title: 'Payment failed',
+    //                     showConfirmButton: false,
+    //                     timer: 1500,
+    //                 });
+    //             }
+    //         },
+    //         error: function () {
+    //             Swal.fire({
+    //                 icon: 'error',
+    //                 title: 'Oops...',
+    //                 text: 'An error occurred while verifying the payment.',
+    //             });
+    //         },
+    //     });
+    // }
+    $(document).ready(function () {
+  $("form").on("submit", function (e) {
+    // Check if no address is selected
+    if ($('input[name="selectedAddress"]:checked').length === 0) {
+      e.preventDefault();
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Please select a billing address!',
+      });
+    } else if ($('input[name="payment-method"]:checked').length === 0) {
+      e.preventDefault();
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Please select a payment method!',
+      });
+    } else {
+      e.preventDefault();
+      const selectedPaymentMethod = $('input[name="payment-method"]:checked').val();
+
+      if (selectedPaymentMethod === 'online') {
+        // Handle online payment method using AJAX
+        console.log('ffff');
+        
         $.ajax({
           type: 'POST',
-          url: '/orderPlace',
-          data: $('form').serialize(), // You may need to adjust this based on your form data
+          url: '/verify-payment', // Your server route for online payment
+          data: $('form').serialize(),
           success: function (response) {
             if (response.successPage) {
               // Redirect to the success page
@@ -210,7 +363,7 @@
               Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: 'An error occurred while placing the order.',
+                text: 'An error occurred during online payment.',
               });
             }
           },
@@ -218,14 +371,44 @@
             Swal.fire({
               icon: 'error',
               title: 'Oops...',
-              text: 'An error occurred while placing the order.',
+              text: 'An error occurred during online payment.',
+            });
+          },
+        });
+      } else if (selectedPaymentMethod === 'emi') {
+        // Handle EMI payment method if needed
+      } else if (selectedPaymentMethod === 'cod') {
+        // Handle COD payment using AJAX
+        $.ajax({
+          type: 'POST',
+          url: '/orderPlace', // Your server route for COD payment
+          data: $('form').serialize(),
+          success: function (response) {
+            if (response.successPage) {
+              // Redirect to the success page
+              window.location.href = response.successPage;
+            } else {
+              Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'An error occurred during COD payment.',
+              });
+            }
+          },
+          error: function () {
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'An error occurred during COD payment.',
             });
           },
         });
       }
-    });
+    }
   });
-
+});
 
 </script>
+
+
 <%- include('../layout/footer.ejs') -%>

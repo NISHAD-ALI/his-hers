@@ -38,4 +38,40 @@ const verifypayment = async(req,res)=>{
     }
 }
 
+
+
+
+
+if(payment == "Cash on delivery"){
+        let data = cartData.items
+            
+        for( let i=0;i<data.length;i++){
+            let products = data[i].productid
+            let count = data[i].count
+            console.log(product);
+            
+            await product.updateOne({_id:products},{$inc:{quantity:-count}})
+        }
+        console.log("sdfewssdgdf");
+        await cart.deleteOne({userid:id})
+       return res.json({success:true}
+       
+        
+        )
+      }else if(payment == "Wallet"){
+        return res.json({online:true})
+  
+      }else{
+        const options ={
+            amount: totalsum*100,
+            currency: "INR",
+            receipt: ""+orderdata._id,
+          }
+  
+          instance.orders.create(options, function (err, order) {
+  
+           return res.json({ order });
+          });
+  
+         }
 </script>
