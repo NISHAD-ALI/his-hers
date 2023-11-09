@@ -346,16 +346,28 @@ const verifypayment = async(req,res)=>{
       const hmacValue = hmac.digest("hex");
   
       if(hmacValue == paymentData.payment.razorpay_signature){
-          let data = cartData.products
-          
-          for( let i=0;i<data.length;i++){
-              let products = data[i].productId
-              let count = data[i].count
-              console.log(product);
-              
-              await product.updateOne({_id:products},{$inc:{quantity:-count}})
+        console.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
+        
+        const orderProducts = [];
+
+        for (const cartProduct of cartData.products) {
+          orderProducts.push({
+            productId: cartProduct.productId,
+            quantity: cartProduct.count,
+          });
         }
-  
+        async function decreaseProductQuantities(orderProducts) {
+          for (const orderProduct of orderProducts) {
+            const productData = await product.findOne({ _id: orderProduct.productId });
+    
+            if (productData) {
+              const newQuantity = productData.quantity - orderProduct.quantity;
+              await product.updateOne({ _id: orderProduct.productId }, { quantity: newQuantity });
+            }
+          }
+        }
+      await decreaseProductQuantities(orderProducts);
+    
         await Order.findByIdAndUpdate(
           { _id: paymentData.order.receipt },
           { $set: { paymentStatus: "placed", paymentId: paymentData.payment.razorpay_payment_id } }
