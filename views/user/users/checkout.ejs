@@ -1,414 +1,377 @@
 <%- include('../layout/header.ejs') -%>
 
-<main class="main">
+  <main class="main">
     <div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
-        <div class="container">
-            <h1 class="page-title">Checkout<span>Shop</span></h1>
-        </div><!-- End .container -->
+      <div class="container">
+        <h1 class="page-title">Checkout<span>Shop</span></h1>
+      </div><!-- End .container -->
     </div><!-- End .page-header -->
 
     <nav aria-label="breadcrumb" class="breadcrumb-nav">
-        <div class="container">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                <li class="breadcrumb-item"><a href="#">Shop</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Checkout</li>
-            </ol>
-        </div><!-- End .container -->
+      <div class="container">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item"><a href="#">Shop</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Checkout</li>
+        </ol>
+      </div><!-- End .container -->
     </nav><!-- End .breadcrumb-nav -->
 
     <div class="page-content">
-        <div class="checkout">
-            <div class="container">
-                <a href="/addAddress">
-                    <button type="submit" class="btn btn-outline-primary-2 float-right">
-                        <span>+ ADD ADDRESS</span>
-                        <i class="icon-long-arrow-right"></i>
-                    </button>
-                </a>
-                <div class="checkout-discount">
-                    <form action="#">
-                        <input type="text" class="form-control" required id="checkout-discount-input">
-                        <label for="checkout-discount-input" class="text-truncate">
-                            Have a coupon? <span>Click here to enter your code</span>
-                        </label>
-                    </form>
-                </div><!-- End .checkout-discount -->
-             
-                <form action="/orderPlace?id=<%= %>" method="post">
-                    <div class="row">
-                        <div class="col-lg-9">
-                            <p>The following addresses will be used on the checkout page by default.</p>
-                            
+      <div class="checkout">
+        <div class="container">
+          <a href="/addAddress">
+            <button type="submit" class="btn btn-outline-primary-2 float-right">
+              <span>+ ADD ADDRESS</span>
+              <i class="icon-long-arrow-right"></i>
+            </button>
+          </a>
+          <div class="checkout-discount">
+            <form action="#">
+              <input type="text" class="form-control" required id="checkout-discount-input">
+              <label for="checkout-discount-input" class="text-truncate">
+                Have a coupon? <span>Click here to enter your code</span>
+              </label>
+            </form>
+          </div><!-- End .checkout-discount -->
 
-                            <div class="row">
-                                <% if (UserAddress && UserAddress.length > 0) { %>
-                                    <% for (let i = 0; i < UserAddress.length; i++) { %>
-                                        <div class="col-lg-6">
-                                            <div class="card card-dashboard">
-                                                <div class="card-body">
-                                                    <input type="radio" name="selectedAddress" value="<%= UserAddress[i]._id %>" id="address<%= i %>" class="address-checkbox">
-                                                    <label for="address<%= i %>" class="address-label">Billing Address</label>
-                                                    <% if (UserAddress[i].address && UserAddress[i].address.length > 0) { %>
-                                                        <% for (let j = 0; j < UserAddress[i].address.length; j++) { %>
-                                                            <p>
-                                                                <%= UserAddress[i].address[j].fullname %><br>
-                                                                <%= UserAddress[i].address[j].mobile %><br>
-                                                                <%= UserAddress[i].address[j].email %><br>
-                                                                <%= UserAddress[i].address[j].houseNo %><br>
-                                                                <%= UserAddress[i].address[j].city %><br>
-                                                                <%= UserAddress[i].address[j].state %><br>
-                                                                <%= UserAddress[i].address[j].zipcode %><br>
-                                                                <%= UserAddress[i].address[j].additionalDetails %><br>
-                                                            </p>
-                                                            <a href="/editAddress?id=<%= UserAddress[i]._id %>">Edit <i class="icon-edit"></i></a>
-                                                        <% } %>
-                                                    <% } else { %>
-                                                        <p>No billing address found.</p>
-                                                    <% } %>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    <% } %>
-                                <% } else { %>
-                                    <p>No user addresses found.</p>
+          <form action="/orderPlace?id=<%= %>" method="post" id="myform">
+            <div class="row">
+              <div class="col-lg-9">
+                <p>The following addresses will be used on the checkout page by default.</p>
+
+
+                <div class="row">
+                  <% if (UserAddress && UserAddress.length> 0) { %>
+                    <% for (let i=0; i < UserAddress.length; i++) { %>
+                      <div class="col-lg-6">
+                        <div class="card card-dashboard">
+                          <div class="card-body">
+                            <input type="radio" name="selectedAddress" value="<%= UserAddress[i]._id %>"
+                              id="address<%= i %>" class="address-checkbox">
+                            <label for="address<%= i %>" class="address-label">Billing Address</label>
+                            <% if (UserAddress[i].address && UserAddress[i].address.length> 0) { %>
+                              <% for (let j=0; j < UserAddress[i].address.length; j++) { %>
+                                <p>
+                                  <%= UserAddress[i].address[j].fullname %><br>
+                                    <%= UserAddress[i].address[j].mobile %><br>
+                                      <%= UserAddress[i].address[j].email %><br>
+                                        <%= UserAddress[i].address[j].houseNo %><br>
+                                          <%= UserAddress[i].address[j].city %><br>
+                                            <%= UserAddress[i].address[j].state %><br>
+                                              <%= UserAddress[i].address[j].zipcode %><br>
+                                                <%= UserAddress[i].address[j].additionalDetails %><br>
+                                </p>
+                                <a href="/editAddress?id=<%= UserAddress[i]._id %>">Edit <i class="icon-edit"></i></a>
                                 <% } %>
-                            </div>
-                            
-                        </div><!-- End .col-lg-9 -->
-                        <aside class="col-lg-3">
-                            <div class="summary">
-                                <h3 class="summary-title">Your Order</h3><!-- End .summary-title -->
+                                  <% } else { %>
+                                    <p>No billing address found.</p>
+                                    <% } %>
+                          </div>
+                        </div>
+                      </div>
+                      <% } %>
+                        <% } else { %>
+                          <p>No user addresses found.</p>
+                          <% } %>
+                </div>
 
-                                <table class="table table-summary">
-                                    <thead>
-                                        <tr>
-                                            <th>Product</th>
-                                            <th>Total</th>
-                                        </tr>
-                                    </thead>
+              </div><!-- End .col-lg-9 -->
+              <aside class="col-lg-3">
+                <div class="summary">
+                  <h3 class="summary-title">Your Order</h3><!-- End .summary-title -->
 
-                                    <tbody>
-                                        <% if(cartData) {%>
-                                            <% let product = cartData.products %>
-                                        <% for (let i = 0; i < product.length; i++) { %>
-                                            <% const value = product[i].productId; %>
-                                        <tr>
-                                            <td><a href="#"> <%= value.productname %></a></td>
-                                            <td>$<%= datatotal[i] %></td>
-                                        </tr>
-                                        <% } %>
-                                        <% } %>
-                    
+                  <table class="table table-summary">
+                    <thead>
+                      <tr>
+                        <th>Product</th>
+                        <th>Total</th>
+                      </tr>
+                    </thead>
 
-                                        <tr class="summary-subtotal">
-                                            <td>Subtotal:</td>
-                                            <td>$<%= totalamount %></td>
-                                        </tr><!-- End .summary-subtotal -->
-                                        <tr>
-                                            <td>Shipping:</td>
-                                            <td>Free shipping</td>
-                                        </tr>
-                                        <tr class="summary-total">
-                                            <td>Total:</td>
-                                            <td id="total">$<%= totalamount %></td>
-                                        </tr><!-- End .summary-total -->
-                                    </tbody>
-                                </table><!-- End .table table-summary -->
+                    <tbody>
+                      <% if(cartData) {%>
+                        <% let product=cartData.products %>
+                          <% for (let i=0; i < product.length; i++) { %>
+                            <% const value=product[i].productId; %>
+                              <tr>
+                                <td><a href="#">
+                                    <%= value.productname %>
+                                  </a></td>
+                                <td>$<%= datatotal[i] %>
+                                </td>
+                              </tr>
+                              <% } %>
+                                <% } %>
 
-                                <div class="accordion-summary" id="accordion-payment">
-                                    <!-- Your payment options here -->
-                                    <div class="payment-options">
-                                        <h3 class="summary-title">Select Payment Method</h3><!-- End .summary-title -->
-                                    
-                                        <div class="custom-control custom-radio">
-                                            <input type="radio" id="payment-cod" name="payment-method" class="custom-control-input" value="cod">
-                                            <label class="custom-control-label" for="payment-cod">Cash on Delivery</label>
-                                        </div>
-                                        <div class="custom-control custom-radio">
-                                            <input type="radio" id="payment-online" name="payment-method" class="custom-control-input" value="online">
-                                            <label class="custom-control-label" for="payment-online">Online Payment (Razorpay)</label>
-                                        </div>
-                                        <div class="custom-control custom-radio">
-                                            <input type="radio" id="payment-netbanking" name="payment-method" class="custom-control-input" value="netbanking">
-                                            <label class="custom-control-label" for="payment-netbanking">Net Banking</label>
-                                        </div>
-                                        <div class="custom-control custom-radio">
-                                            <input type="radio" id="payment-creditcard" name="payment-method" class="custom-control-input" value="creditcard">
-                                            <label class="custom-control-label" for="payment-creditcard">Credit Card</label>
-                                        </div>
-                                    </div>
-                                </div><!-- End .accordion -->
-                                <button type="button" id="payWithRazorpay" class="btn btn-primary" style="display: none;">Pay with Razorpay</button>
-                                <input type="hidden" id="total" name="total" value="<%= totalamount %>">
-                                <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block">Place Order</button>
-                            </div><!-- End .summary -->
-                        </aside><!-- End .col-lg-3 -->
-                    </div><!-- End .row -->
-                </form>
-            </div><!-- End .container -->
-        </div><!-- End .checkout -->
+
+                                  <tr class="summary-subtotal">
+                                    <td>Subtotal:</td>
+                                    <td>$<%= totalamount %>
+                                    </td>
+                                  </tr><!-- End .summary-subtotal -->
+                                  <tr>
+                                    <td>Shipping:</td>
+                                    <td>Free shipping</td>
+                                  </tr>
+                                  <tr class="summary-total">
+                                    <td>Total:</td>
+                                    <td id="total">$<%= totalamount %>
+                                    </td>
+                                  </tr><!-- End .summary-total -->
+                    </tbody>
+                  </table><!-- End .table table-summary -->
+
+                  <div class="accordion-summary" id="accordion-payment">
+                    <!-- Your payment options here -->
+                    <div class="payment-options">
+                      <h3 class="summary-title">Select Payment Method</h3><!-- End .summary-title -->
+
+                      <div class="custom-control custom-radio">
+                        <input type="radio" id="payment-cod" name="payment-method" class="custom-control-input"
+                          value="cod">
+                        <label class="custom-control-label" for="payment-cod">Cash on Delivery</label>
+                      </div>
+                      <div class="custom-control custom-radio">
+                        <input type="radio" id="payment-online" name="payment-method" class="custom-control-input"
+                          value="online">
+                        <label class="custom-control-label" for="payment-online">Online Payment (Razorpay)</label>
+                      </div>
+                      <div class="custom-control custom-radio">
+                        <input type="radio" id="payment-netbanking" name="payment-method" class="custom-control-input"
+                          value="netbanking">
+                        <label class="custom-control-label" for="payment-netbanking">Net Banking</label>
+                      </div>
+                      <div class="custom-control custom-radio">
+                        <input type="radio" id="payment-creditcard" name="payment-method" class="custom-control-input"
+                          value="creditcard">
+                        <label class="custom-control-label" for="payment-creditcard">Credit Card</label>
+                      </div>
+                    </div>
+                  </div><!-- End .accordion -->
+                  <button type="button" id="payWithRazorpay" class="btn btn-primary" style="display: none;">Pay with
+                    Razorpay</button>
+                  <input type="hidden" id="total" name="total" value="<%= totalamount %>">
+                  <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block">Place Order</button>
+                </div><!-- End .summary -->
+              </aside><!-- End .col-lg-3 -->
+            </div><!-- End .row -->
+          </form>
+        </div><!-- End .container -->
+      </div><!-- End .checkout -->
     </div><!-- End .page-content -->
-</main><!-- End .main -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </main><!-- End .main -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://checkout.razorpay.com/v1/razorpay.js"></script>
-<script>
-//  $(document).ready(function () {
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script>
 
-
-
-
-
-//         console.log(order);
-//         var options = {
-//         "key": "rzp_test_spjMMzxxQd5jRn",
-//         "amount": order.amount, 
-//         "currency": "INR",
-//         "name": "Shozey",
-//         "description": "Test Transaction",
-//         "image": "/user/images/Fs Hat Logo.jpg",
-//         "order_id": order.id, 
-//         handler: function (response) {
-//             verifyPayment(response, order);
-//         },
-//         "prefill": { 
-//             "name": "Shozey", 
-//             "email": "shozey@gmail.com",
-//             "contact": "9000090000"
-//         },
-//         "notes": {
-//             "address": "Shozey "
-//         },
-//         "theme": {
-//             "color": "#cc9967"
-//         }
-//     };
-//     var rzp1 = new Razorpay(options);
-//     rzp1.open();
-//     }
-
-
-//     function verifyPayment(payment, order) {
-//         const amount2 = document.getElementById("total").value;
-//         console.log(amount2);
-//         $.ajax({
-//         url: "/verify-payment",
-//         method: "post",
-//         data: {
-//             payment: payment,
-//             amount2: amount2,
-//             order: order,
-//         },
-//         success: (response) => {
-//             if (response.placed == true) {
-//                 window.location.href = '/orderplaced'
-//             } else {
-//             swal.fire({
-//                 positon: "center",
-//                 icon: "error",
-//                 title: "Payment failed",
-//                 showConfirmButton: false,
-//                 timer: 1500,
-//             });
-//             }
-//         },
-//  });
-//  }
 
     // $(document).ready(function () {
-    //     $("form").on("submit", function (e) {
-    //         if ($('input[name="selectedAddress"]:checked').length === 0) {
-    //             e.preventDefault();
-    //             Swal.fire({
-    //                 icon: 'error',
-    //                 title: 'Oops...',
-    //                 text: 'Please select a billing address!',
-    //             });
-    //         } else if ($('input[name="payment-method"]:checked').length === 0) {
-    //             e.preventDefault();
-    //             Swal.fire({
-    //                 icon: 'error',
-    //                 title: 'Oops...',
-    //                 text: 'Please select a payment method!',
-    //             });
-    //         } else if ($('input[name="payment-method"]:checked').val() === 'online') {
-    //             e.preventDefault();
+    //   $('#myform').submit(function (event) {
+    //     event.preventDefault();
+    //     var formData = $(this).serializeArray();
 
-    //             // Submit the form using Razorpay
-    //             $.ajax({
-    //                 type: 'POST',
-    //                 url: '/create-razorpay-order', // Your server route to create a Razorpay order
-    //                 data: $('form').serialize(),
-    //                 success: function (response) {
-    //                     if (response.order) {
-    //                         // Call Razorpay to handle payment
-    //                         razorpayPayment(response.order);
-    //                     } else {
-    //                         Swal.fire({
-    //                             icon: 'error',
-    //                             title: 'Oops...',
-    //                             text: 'An error occurred while creating the Razorpay order.',
-    //                         });
-    //                     }
-    //                 },
-    //                 error: function () {
-    //                     Swal.fire({
-    //                         icon: 'error',
-    //                         title: 'Oops...',
-    //                         text: 'An error occurred while creating the Razorpay order.',
-    //                     });
-    //                 },
-    //             });
+    //     console.log(formData);
+    //     $.ajax({
+    //       url: '/orderPlace',
+    //       method: 'POST',
+    //       data: formData,
+    //       success: function (response) {
+    //         console.log(response);
+    //         if (response.success === true) {
+    //           console.log('hi');
+
+    //           window.location.href = '/order-success';
+    //         } else if (response.online === true) {
+    //           console.log('online');
+
+    //           // razorpayPayment(response.order);
+    //           window.location.href = '/order-success';
+    //         } else {
+    //           console.log('HO');
+
+    //           razorpayPayment(response.order);
     //         }
+    //       },
+    //       error: function (error) {
+    //         console.error('Error:', error);
+    //       }
     //     });
+    //   });
     // });
 
+
     // function razorpayPayment(order) {
-    //     var options = {
-    //         "key": process.env.RAZORPAYKEYID,
-    //         "amount": order.amount,
-    //         "currency": "INR",
-    //         "name": "Your Store Name",
-    //         "description": "Payment for Your Order",
-    //         "order_id": order.id,
-    //         "handler": function (response) {
-    //             verifyPayment(response, order);
-    //         },
-    //         "prefill": {
-    //             "name": "Customer Name",
-    //             "email": "customer@example.com",
-    //             "contact": "1234567890",
-    //         },
-    //         "notes": {
-    //             "address": "Customer Address",
-    //         },
-    //         "theme": {
-    //             "color": "#cc9967", // Customize the color to match your theme
-    //         }
-    //     };
-    //     var rzp = new Razorpay(options);
-    //     rzp.open();
+
+    //   console.log(order);
+    //   var options = {
+    //     "key": "rzp_test_tWXk3EajSk1xck",
+    //     "amount": order.amount,
+    //     "currency": "INR",
+    //     "name": "Shozey",
+    //     "description": "Test Transaction",
+    //     "image": "/user/images/Fs Hat Logo.jpg",
+    //     "order_id": order.id,
+    //     handler: function (response) {
+    //       verifyPayment(response, order);
+    //     },
+    //     "prefill": {
+    //       "name": "HIS&HERS",
+    //       "email": "info@his&hers.com",
+    //       "contact": "9000090000"
+    //     },
+    //     "notes": {
+    //       "address": "Shozey "
+    //     },
+    //     "theme": {
+    //       "color": "#cc9967"
+    //     }
+    //   };
+    //   var rzp1 = new Razorpay(options);
+    //   rzp1.open();
     // }
 
+
     // function verifyPayment(payment, order) {
-    //     console.log('ASDFGFG');
-        
-    //     console.log(payment);
-    //     console.log(order);
-    //     $.ajax({
-    //         type: 'POST',
-    //         url: '/verify-payment', // Your server route to verify the payment
-    //         data: {
-    //             payment: payment,
-    //             order: order,
-    //         },
-    //         success: function (response) {
-    //             if (response.placed) {
-    //                 window.location.href = '/order-success'; // Redirect to the order success page
-    //             } else {
-    //                 Swal.fire({
-    //                     position: 'center',
-    //                     icon: 'error',
-    //                     title: 'Payment failed',
-    //                     showConfirmButton: false,
-    //                     timer: 1500,
-    //                 });
-    //             }
-    //         },
-    //         error: function () {
-    //             Swal.fire({
-    //                 icon: 'error',
-    //                 title: 'Oops...',
-    //                 text: 'An error occurred while verifying the payment.',
-    //             });
-    //         },
-    //     });
+    //   console.log('aass');
+
+    //   const amount2 = document.getElementById("total").value;
+    //   console.log(amount2);
+    //   $.ajax({
+    //     url: "/verify-payment",
+    //     method: "post",
+    //     data: {
+    //       payment: payment, // No need to access payment properties individually
+    //       order: order,
+    //       amount2: amount2,
+    //     },
+    //     success: (response) => {
+    //       if (response.placed === true) {
+    //         window.location.href = ' /order-success';
+    //       } else {
+    //         swal.fire({
+    //           positon: "center",
+    //           icon: "error",
+    //           title: "Payment failed",
+    //           showConfirmButton: false,
+    //           timer: 1500,
+    //         });
+    //       }
+    //     },
+    //   });
     // }
     $(document).ready(function () {
-  $("form").on("submit", function (e) {
-    // Check if no address is selected
-    if ($('input[name="selectedAddress"]:checked').length === 0) {
-      e.preventDefault();
+  $('#myform').submit(function (event) {
+    event.preventDefault();
+    var formData = $(this).serializeArray();
+
+    // Check if an address and payment method are selected
+    var selectedAddress = $('input[name="selectedAddress"]:checked').val();
+    var selectedPaymentMethod = $('input[name="payment-method"]:checked').val();
+
+    if (!selectedAddress) {
+      // Show a SweetAlert if an address is not selected
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        text: 'Please select a billing address!',
+        text: 'Please select an address!',
       });
-    } else if ($('input[name="payment-method"]:checked').length === 0) {
-      e.preventDefault();
+    } else if (!selectedPaymentMethod) {
+      // Show a different SweetAlert if a payment method is not selected
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
         text: 'Please select a payment method!',
       });
     } else {
-      e.preventDefault();
-      const selectedPaymentMethod = $('input[name="payment-method"]:checked').val();
-
-      if (selectedPaymentMethod === 'online') {
-        // Handle online payment method using AJAX
-        console.log('ffff');
-        
-        $.ajax({
-          type: 'POST',
-          url: '/verify-payment', // Your server route for online payment
-          data: $('form').serialize(),
-          success: function (response) {
-            if (response.successPage) {
-              // Redirect to the success page
-              window.location.href = response.successPage;
-            } else {
-              Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'An error occurred during online payment.',
-              });
-            }
-          },
-          error: function () {
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: 'An error occurred during online payment.',
-            });
-          },
-        });
-      } else if (selectedPaymentMethod === 'emi') {
-        // Handle EMI payment method if needed
-      } else if (selectedPaymentMethod === 'cod') {
-        // Handle COD payment using AJAX
-        $.ajax({
-          type: 'POST',
-          url: '/orderPlace', // Your server route for COD payment
-          data: $('form').serialize(),
-          success: function (response) {
-            if (response.successPage) {
-              // Redirect to the success page
-              window.location.href = response.successPage;
-            } else {
-              Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'An error occurred during COD payment.',
-              });
-            }
-          },
-          error: function () {
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: 'An error occurred during COD payment.',
-            });
-          },
-        });
-      }
+      $.ajax({
+        url: '/orderPlace',
+        method: 'POST',
+        data: formData,
+        success: function (response) {
+          console.log(response);
+          if (response.success === true) {
+            console.log('hi');
+            window.location.href = '/order-success';
+          } else if (response.online === true) {
+            console.log('online');
+            // razorpayPayment(response.order);
+            window.location.href = '/order-success';
+          } else {
+            console.log('HO');
+            razorpayPayment(response.order);
+          }
+        },
+        error: function (error) {
+          console.error('Error:', error);
+        }
+      });
     }
   });
+
+  function razorpayPayment(order) {
+    console.log(order);
+    var options = {
+      "key": "rzp_test_tWXk3EajSk1xck",
+      "amount": order.amount,
+      "currency": "INR",
+      "name": "Shozey",
+      "description": "Test Transaction",
+      "image": "/user/images/Fs Hat Logo.jpg",
+      "order_id": order.id,
+      handler: function (response) {
+        verifyPayment(response, order);
+      },
+      "prefill": {
+        "name": "HIS&HERS",
+        "email": "info@his&hers.com",
+        "contact": "9000090000"
+      },
+      "notes": {
+        "address": "Shozey"
+      },
+      "theme": {
+        "color": "#cc9967"
+      }
+    };
+    var rzp1 = new Razorpay(options);
+    rzp1.open();
+  }
+
+  function verifyPayment(payment, order) {
+    console.log('aass');
+    const amount2 = document.getElementById("total").value;
+    console.log(amount2);
+    $.ajax({
+      url: "/verify-payment",
+      method: "post",
+      data: {
+        payment: payment,
+        order: order,
+        amount2: amount2,
+      },
+      success: (response) => {
+        if (response.placed === true) {
+          window.location.href = '/order-success';
+        } else {
+          Swal.fire({
+            position: "center",
+            icon: "error",
+            title: "Payment failed",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
+      },
+    });
+  }
 });
 
-</script>
 
 
-<%- include('../layout/footer.ejs') -%>
+  </script>
+
+
+  <%- include('../layout/footer.ejs') -%>

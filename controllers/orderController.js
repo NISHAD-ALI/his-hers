@@ -13,6 +13,7 @@ const razorpay = new Razorpay({
   key_id: process.env.RAZORPAYKEYID,
   key_secret: process.env.RAZORPAYSECRETKEY,
 });
+console.log();
 // ++++++++++++++++RENDER CHECKOUT++++++++++++++++++
 
 const loadCheckout = async (req, res) => {
@@ -162,7 +163,8 @@ const placeOrder = async (req, res) => {
     const paymentMethod = req.body['payment-method'];
     const status = paymentMethod === 'cod' ? 'placed' : 'pending';
     const statusLevel = status === 'placed' ? 1 : 0;
-
+     console.log('XP 1');
+     
     const user = await User.findOne({ _id: userId });
     const address = await Address.findOne({ _id: addressId });
 
@@ -170,7 +172,7 @@ const placeOrder = async (req, res) => {
       console.log('User or address not found');
       return res.status(400).json({ error: 'User or address not found' });
     }
-
+    console.log('XP 2');
     const cartData = await Cart.findOne({ userid: userId });
     const totalAmount = cartData.total;
     const orderProducts = [];
@@ -181,7 +183,7 @@ const placeOrder = async (req, res) => {
         quantity: cartProduct.count,
       });
     }
-
+    console.log('XP 3');
     const newOrder = new Order({
       userid: userId,
       deliveryDetails: {
@@ -209,7 +211,7 @@ const placeOrder = async (req, res) => {
         }
       }
     }
-
+    console.log('XP 4');
     // Clear the user's cart
     await Cart.updateOne({ userid: userId }, { $set: { products: [] } });
     const successPageURL = '/order-success';
@@ -233,7 +235,7 @@ const placeOrder = async (req, res) => {
           },
           { new: true }
         );
-
+        console.log('XP 5');
         if (result) {
           // Decrease product quantities, clear the cart, and update the order
           await decreaseProductQuantities(orderProducts);
@@ -252,30 +254,24 @@ const placeOrder = async (req, res) => {
         return res.json({ walletFailed: true });
       }
     } else if (paymentMethod === 'online') {
-      console.log('inside online');
-
       const options = {
         amount: totalAmount * 100,
-        currency: "INR",
-        receipt: "" + savedOrder._id,
+        currency: 'INR',
+        receipt: ""+savedOrder._id
       };
-
-      razorpay.orders.create(options, async function (err, order) {
-        if (err) {
-          console.error(err);
-          return res.status(500).json({ error: 'Razorpay order creation failed' });
-        }
-
-        // Decrease product quantities using the function
-        await decreaseProductQuantities(orderProducts);
-
-        return res.json({ successPage: successPageURL, order: order });
-      });
-    } else if (paymentMethod === 'cod') {
-      console.log('COD payment logic');
+      console.log('XP 6');
+      razorpay.orders.create(options, function (err, order) {
+  
+        return res.json({ order });
+       });
+      
+       console.log('XP 7');
+      }else if (paymentMethod === 'cod') {
+      console.log('cod');
+      
       await decreaseProductQuantities(orderProducts);
       await Cart.deleteOne({ userid: userId });
-      return res.json({ success: true });
+      return res.json({ success : true });
     } else {
       console.log('Invalid payment method');
       return res.status(400).json({ error: 'Invalid payment method' });
@@ -299,72 +295,83 @@ const orderSuccess = async (req, res) => {
     console.log(error.message)
   }
 }
-const verifypayment = async (req, res) => {
-  try {
-    const user_id = req.session.userId
-    const paymentData = req.body
-    const cartData = await Cart.findOne({ userid: user_id })
-    console.log(cartData+"kk");
+// const verifypayment = async (req, res) => {
+//   try {
+//     const user_id =  req.session.user_id
+//     const paymentData = req.body
+//     const cartData = await Cart.findOne({ userid: user_id })
+//     console.log(cartData+"kk");
+// console.log("HHHJ"+paymentData);
+//     const hmac = crypto.createHmac("sha256", process.env.RAZORPAYSECRETKEY);
+//     hmac.update(paymentData.payment.razorpay_order_id + "|" + paymentData.payment.razorpay_payment_id);
+//     const hmacValue = hmac.digest("hex");
 
-    const hmac = crypto.createHmac("sha256", process.env.RAZORPAYSECRETKEY);
-    hmac.update(paymentData.payment.razorpay_order_id + "|" + paymentData.payment.razorpay_payment_id);
-    const hmacValue = hmac.digest("hex");
+//     if (hmacValue == paymentData.payment.razorpay_signature) {
+//       let data = cartData.items
 
-    if (hmacValue == paymentData.payment.razorpay_signature) {
-      let data = cartData.items
+//       for (let i = 0; i < data.length; i++) {
+//         let products = data[i].productid
+//         let count = data[i].count
+//         console.log(product);
 
-      for (let i = 0; i < data.length; i++) {
-        let products = data[i].productid
-        let count = data[i].count
-        console.log(product);
+//         await product.updateOne({ _id: products }, { $inc: { quantity: -count } })
+//       }
 
-        await product.updateOne({ _id: products }, { $inc: { quantity: -count } })
+//       await Order.findByIdAndUpdate(
+//         { _id: paymentData.order.receipt },
+//         { $set: { paymentStatus: "placed", paymentId: paymentData.payment.razorpay_payment_id } }
+//       );
+
+//       await Cart.deleteOne({ userid: user_id })
+//       res.json({ placed: true })
+//     }
+
+
+
+//   } catch (error) {
+//     console.log(error.message);
+//   }
+// }
+const verifypayment = async(req,res)=>{
+  try { 
+    console.log('verifff');
+    
+    const user_id =  req.session.user_id
+      const paymentData = req.body
+      const cartData = await Cart.findOne({userid:user_id})
+      console.log(cartData);
+  
+      const hmac = crypto.createHmac("sha256", process.env.RAZORPAYSECRETKEY);
+      hmac.update( paymentData.payment.razorpay_order_id  +"|" +  paymentData.payment.razorpay_payment_id );
+      const hmacValue = hmac.digest("hex");
+  
+      if(hmacValue == paymentData.payment.razorpay_signature){
+          let data = cartData.products
+          
+          for( let i=0;i<data.length;i++){
+              let products = data[i].productId
+              let count = data[i].count
+              console.log(product);
+              
+              await product.updateOne({_id:products},{$inc:{quantity:-count}})
+        }
+  
+        await Order.findByIdAndUpdate(
+          { _id: paymentData.order.receipt },
+          { $set: { paymentStatus: "placed", paymentId: paymentData.payment.razorpay_payment_id } }
+        );
+    
+        await Cart.deleteOne({userid:user_id})
+       
+        res.json({placed:true})
       }
-
-      await Order.findByIdAndUpdate(
-        { _id: paymentData.order.receipt },
-        { $set: { paymentStatus: "placed", paymentId: paymentData.payment.razorpay_payment_id } }
-      );
-
-      await Cart.deleteOne({ userid: user_id })
-      res.json({ placed: true })
-    }
-
-
-
+  
+    
+      
   } catch (error) {
-    console.log(error.message);
+      console.log(error.message);
   }
 }
-
-// const viewrazor = async (req, res) => {
-//   try {
-
-//     console.log('hello mon');
-//     const userId = req.session.user_id;
-// const { amount, currency, receipt, notes } = req.body;
-// const cartData = await Cart.findOne({ userid: userId });
-//       const totalAmount = cartData.total;
-//       console.log(totalAmount);
-//         // Create the Razorpay order
-//         const razorpayOrder = await razorpay.orders.create({
-//             amount: totalAmount * 100, // The total amount in paise (e.g., 1000 paise = 10 INR)
-//             currency: currency, // Currency code (e.g., "INR" for Indian Rupees)
-//             receipt: receipt, // A unique identifier for the order
-//             notes: notes, // Optional notes associated with the order
-//         });
-
-//         if (razorpayOrder) {
-//             res.json({ order: razorpayOrder });
-//         } else {
-//             res.status(500).json({ error: 'Error creating Razorpay order' });
-//         }
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).json({ error: 'Internal server error' });
-//     }
-//   }
-
 // ++++++++++++++++ORDER CANCEL PAGE++++++++++++++++++
 
 const orderCancel = async (req, res) => {
