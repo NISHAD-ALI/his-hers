@@ -54,7 +54,7 @@ userRoute.get('/cancelPage',orderController.orderCancel)
 userRoute.get('/returnPage',orderController.returnOrder)
 userRoute.post('/returnOrder',orderController.orderReturnPOST)
 userRoute.post('/verify-payment',orderController.verifypayment)
-// userRoute.post('/create-razorpay-order',orderController.viewrazor)
+userRoute.get('/invoice/:id',orderController.orderInvoice)
 
 
 module.exports = userRoute

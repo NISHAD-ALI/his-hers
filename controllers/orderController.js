@@ -8,6 +8,10 @@ const { log } = require('npmlog');
 const Razorpay = require('razorpay');
 const crypto = require("crypto")
 require('dotenv').config()
+const path = require('path')
+const fs = require('fs')
+const puppeteer = require('puppeteer')
+const ejs = require('ejs')
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAYKEYID,
@@ -472,45 +476,89 @@ const orderReturnPOST = async (req, res) => {
 }
 
 // ++++++++++++++++ORDER INVOICE++++++++++++++++++
+// const orderInvoice = async (req, res) => {
+//   try {
+//     const id = req.params.id;
+//     const user = req.session.user_id;
+//     const userData = await User.findOne({ _id: user });
+//     const orderData = await Order.findOne({ _id: id }).populate(
+//       "products.productId"
+//     );
+//     const date = new Date()
+    
+//     data = {
+//       order: orderData,
+//       user: userData,
+//       date
+//     };
+
+//     const filepathName = path.resolve(__dirname, "../views/user/users/invoice.ejs");
+
+//     const html = fs.readFileSync(filepathName).toString();
+//     const ejsData = ejs.render(html, data);
+
+//     const browser = await puppeteer.launch({ headless: "new"});
+//     const page = await browser.newPage();
+//     await page.setContent(ejsData, { waitUntil: "networkidle0"});
+//     const pdfBytes = await page.pdf({ format: "letter" });
+//     await browser.close();
+
+//     res.setHeader("Content-Type", "application/pdf");
+//     res.setHeader(
+//       "Content-Disposition",
+//       "attachment; filename= order invoice.pdf"
+//     );
+//     res.send(pdfBytes);
+
+//   } catch (error) {
+//     console.log(error.message);
+//     res.status(500).json({ error: 'Internal server error' });
+//   }
+// };
 const orderInvoice = async (req, res) => {
   try {
-    const id = req.params.id;
-    const user = req.session.user_id;
-    const userData = await User.findOne({ _id: user });
-    const orderData = await Order.findOne({ _id: id }).populate(
-      "products.productId"
-    );
-    const date = new Date()
-    
-    data = {
-      order: orderData,
-      user: userData,
-      date
-    };
+      const id = req.params.id;
+      const user = req.session.user_id;
+      const userData = await User.findOne({ _id: user });
+      const orderData = await Order.findOne({ _id: id }).populate(
+          "products.productId"
+      );
+      console.log(orderData);
+      const date = new Date()
 
-    const filepathName = path.resolve(__dirname, "../views/user/invoice.ejs");
+      data = {
+          order: orderData,
+          user: userData,
+          date
+      };
 
-    const html = fs.readFileSync(filepathName).toString();
-    const ejsData = ejs.render(html, data);
+      const filepathName = path.resolve(__dirname, "../views/user/users/invoice.ejs");
 
-    const browser = await puppeteer.launch({ headless: "new"});
-    const page = await browser.newPage();
-    await page.setContent(ejsData, { waitUntil: "networkidle0"});
-    const pdfBytes = await page.pdf({ format: "letter" });
-    await browser.close();
+      const html = fs.readFileSync(filepathName).toString();
+      const ejsData = ejs.render(html, data);
 
-    res.setHeader("Content-Type", "application/pdf");
-    res.setHeader(
-      "Content-Disposition",
-      "attachment; filename= order invoice.pdf"
-    );
-    res.send(pdfBytes);
+      const browser = await puppeteer.launch({ headless: "new" });
+      const page = await browser.newPage();
+      await page.setContent(ejsData, { waitUntil: "networkidle0" });
+      
+      // Set the paper format to A4 (or any other desired size)
+      const pdfBytes = await page.pdf({ format: "A4" });
+      
+      await browser.close();
+
+      res.setHeader("Content-Type", "application/pdf");
+      res.setHeader(
+          "Content-Disposition",
+          "attachment; filename=order_invoice.pdf"
+      );
+      res.send(pdfBytes);
 
   } catch (error) {
-    console.log(error.message);
-    res.status(500).json({ error: 'Internal server error' });
+      console.log(error.message);
+      res.status(500).json({ error: 'Internal server error' });
   }
 };
+
 module.exports = {
   loadCheckout,
   placeOrder,
@@ -520,6 +568,6 @@ module.exports = {
   returnOrder,
   orderReturnPOST,
   verifypayment,
-  orderInvoice,
-  
+  orderInvoice
+  // viewrazor
 }

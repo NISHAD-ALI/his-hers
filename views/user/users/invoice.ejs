@@ -10,19 +10,31 @@
       padding: 0;
     }
 
+    @page {
+      size: A4;
+      margin: 20mm;
+    }
+
     .invoice {
-      width: 210mm; /* A4 width */
-      height: 297mm; /* A4 height */
-      margin: 20mm; /* A4 margin */
+      width: 100%;
       padding: 20px;
-      border: 1px solid #ccc;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      box-sizing: border-box;
       position: relative;
     }
 
     .header {
       text-align: center;
       margin-bottom: 20px;
+    }
+
+    .logo {
+      max-width: 100px;
+      margin: 0 auto;
+      display: block;
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
     }
 
     .details {
@@ -46,23 +58,9 @@
       text-align: right;
     }
 
-    .logo {
-      max-width: 100px;
-      position: absolute;
-      bottom: 100px; /* Adjust the bottom value as needed */
-      left: 50%; /* Center the logo */
-      transform: translateX(-50%); /* Center the logo horizontally */
-    }
-
     .additional-text {
-      text-align: center;
       margin-top: 10px;
-      font-size: 12px;
-      color: #555;
-      position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
+      text-align: center;
     }
   </style>
 </head>
@@ -74,10 +72,15 @@
   </div>
 
   <div class="details">
-    <p><strong>Order ID:</strong> #123456</p>
-    <p><strong>Customer Name:</strong> John Doe</p>
+    <p><strong>Order ID:</strong></p>
+    <p><strong>Customer Name:</strong><%= user.name %></p>
     <p><strong>Address:</strong> 123 Main Street, Cityville, State, 12345</p>
+    <p><strong>Date:</strong><%= date %></p>
+    <p><strong>Payment Mode:</strong> <!-- Add the payment mode here --></p>
+    <p><strong>Company:</strong> <!-- Add the name of the company here --></p>
   </div>
+
+
 
   <table class="items-table">
     <thead>
@@ -105,16 +108,23 @@
     </tbody>
   </table>
 
+  <div class="additional-text">
+    <p>This is an additional text below the logo.</p>
+  </div>
+
+  
+
   <div class="total">
     <p><strong>Total:</strong> $130.00</p>
   </div>
-
-  <img src="public/user/images/logo.jpg" alt="Company Logo" class="logo">
-  <div class="additional-text">
-    <p>Your Motto Goes Here</p>
-    <p>This is an electronically generated invoice. No signature required.</p>
-  </div>
+</div>
+<div class="company-details details">
+  <p><strong>HIS&HERS Ltd.</strong> </p>
+  <p><strong>6th Avenue</strong></p>
+  <p><strong>Manhattan,NY</strong></p>
+  <p><strong>Date:</strong></p>
 </div>
 
+<img src="your_logo_url" alt="Company Logo" class="logo">
 </body>
 </html>
