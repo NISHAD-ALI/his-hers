@@ -336,45 +336,34 @@ const verifypayment = async(req,res)=>{
   try { 
     console.log('verifff');
     
-    const user_id =  req.session.user_id
+      const user_id =  req.session.user_id
       const paymentData = req.body
-      const cartData = await Cart.findOne({userid:user_id})
+      const cartData = await Cart.find({ userid : user_id });
+    
+      console.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
+     
       console.log(cartData);
-  
+     
       const hmac = crypto.createHmac("sha256", process.env.RAZORPAYSECRETKEY);
       hmac.update( paymentData.payment.razorpay_order_id  +"|" +  paymentData.payment.razorpay_payment_id );
       const hmacValue = hmac.digest("hex");
-  
-      if(hmacValue == paymentData.payment.razorpay_signature){
-        console.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
-        
-        const orderProducts = [];
+      if (hmacValue === paymentData.payment.razorpay_signature) {
+      
+    //     const productIds = cartData.products.map((product) => product.productId);
+    // console.log("Product IDs:", productIds);
+    //       await product.findByIdAndUpdate(
+    //         { _id: productIds },
+    //         { $inc: { quantity: -count } })
+      
 
-        for (const cartProduct of cartData.products) {
-          orderProducts.push({
-            productId: cartProduct.productId,
-            quantity: cartProduct.count,
-          });
-        }
-        async function decreaseProductQuantities(orderProducts) {
-          for (const orderProduct of orderProducts) {
-            const productData = await product.findOne({ _id: orderProduct.productId });
-    
-            if (productData) {
-              const newQuantity = productData.quantity - orderProduct.quantity;
-              await product.updateOne({ _id: orderProduct.productId }, { quantity: newQuantity });
-            }
-          }
-        }
-      await decreaseProductQuantities(orderProducts);
-    
+
         await Order.findByIdAndUpdate(
           { _id: paymentData.order.receipt },
           { $set: { paymentStatus: "placed", paymentId: paymentData.payment.razorpay_payment_id } }
         );
     
         await Cart.deleteOne({userid:user_id})
-       
+        console.log('XP 9');
         res.json({placed:true})
       }
   
@@ -482,6 +471,46 @@ const orderReturnPOST = async (req, res) => {
   }
 }
 
+// ++++++++++++++++ORDER INVOICE++++++++++++++++++
+const orderInvoice = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const user = req.session.user_id;
+    const userData = await User.findOne({ _id: user });
+    const orderData = await Order.findOne({ _id: id }).populate(
+      "products.productId"
+    );
+    const date = new Date()
+    
+    data = {
+      order: orderData,
+      user: userData,
+      date
+    };
+
+    const filepathName = path.resolve(__dirname, "../views/user/invoice.ejs");
+
+    const html = fs.readFileSync(filepathName).toString();
+    const ejsData = ejs.render(html, data);
+
+    const browser = await puppeteer.launch({ headless: "new"});
+    const page = await browser.newPage();
+    await page.setContent(ejsData, { waitUntil: "networkidle0"});
+    const pdfBytes = await page.pdf({ format: "letter" });
+    await browser.close();
+
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader(
+      "Content-Disposition",
+      "attachment; filename= order invoice.pdf"
+    );
+    res.send(pdfBytes);
+
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
 module.exports = {
   loadCheckout,
   placeOrder,
@@ -491,5 +520,6 @@ module.exports = {
   returnOrder,
   orderReturnPOST,
   verifypayment,
-  // viewrazor
+  orderInvoice,
+  
 }

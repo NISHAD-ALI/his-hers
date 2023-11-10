@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .invoice {
+      width: 210mm; /* A4 width */
+      height: 297mm; /* A4 height */
+      margin: 20mm; /* A4 margin */
+      padding: 20px;
+      border: 1px solid #ccc;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      position: relative;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .details {
+      margin-bottom: 20px;
+    }
+
+    .items-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    .items-table th, .items-table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    .total {
+      margin-top: 20px;
+      text-align: right;
+    }
+
+    .logo {
+      max-width: 100px;
+      position: absolute;
+      bottom: 100px; /* Adjust the bottom value as needed */
+      left: 50%; /* Center the logo */
+      transform: translateX(-50%); /* Center the logo horizontally */
+    }
+
+    .additional-text {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 12px;
+      color: #555;
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  </style>
+</head>
+<body>
+
+<div class="invoice">
+  <div class="header">
+    <h1>Invoice</h1>
+  </div>
+
+  <div class="details">
+    <p><strong>Order ID:</strong> #123456</p>
+    <p><strong>Customer Name:</strong> John Doe</p>
+    <p><strong>Address:</strong> 123 Main Street, Cityville, State, 12345</p>
+  </div>
+
+  <table class="items-table">
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Product 1</td>
+        <td>2</td>
+        <td>$50.00</td>
+        <td>$100.00</td>
+      </tr>
+      <tr>
+        <td>Product 2</td>
+        <td>1</td>
+        <td>$30.00</td>
+        <td>$30.00</td>
+      </tr>
+      <!-- Add more rows for additional items -->
+    </tbody>
+  </table>
+
+  <div class="total">
+    <p><strong>Total:</strong> $130.00</p>
+  </div>
+
+  <img src="public/user/images/logo.jpg" alt="Company Logo" class="logo">
+  <div class="additional-text">
+    <p>Your Motto Goes Here</p>
+    <p>This is an electronically generated invoice. No signature required.</p>
+  </div>
+</div>
+
+</body>
+</html>
