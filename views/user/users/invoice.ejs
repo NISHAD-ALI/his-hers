@@ -70,21 +70,29 @@
   <div class="header">
     <h1>Invoice</h1>
   </div>
-
+<%= let address =order.deliveryDetails  %>
+<% for(let i=0;i<address.length;i++%>{%>
+  <% let addressdata = address[i].address%>
+  <% for(let j=0;j<addressdata.length;j++){%>
   <div class="details">
-    <p><strong>Order ID:</strong></p>
+    <p><strong>Order ID:</strong><%= order._id %></p>
     <p><strong>Customer Name:</strong><%= user.name %></p>
-    <p><strong>Address:</strong> 123 Main Street, Cityville, State, 12345</p>
-    <p><strong>Date:</strong><%= date %></p>
-    <p><strong>Payment Mode:</strong> <!-- Add the payment mode here --></p>
-    <p><strong>Company:</strong> <!-- Add the name of the company here --></p>
+    <p><strong>Customer Email:</strong><%= user.email %></p>
+    <p><strong>Address:</strong> <%= orderdata[j].name %></p>
+    <p><strong>Date:</strong><%= order.purchaseDate.toLocaleDateString('en-US', { year:
+      'numeric', month: 'short', day: '2-digit'
+      }).replace(/\//g, '-') %></p>
+    <p><strong>Payment Mode:</strong><%= order.paymentMethod %></p>
+    
   </div>
-
+  <%}%>
+  <%}%>
 
 
   <table class="items-table">
     <thead>
       <tr>
+        <th>#</th>
         <th>Item</th>
         <th>Quantity</th>
         <th>Price</th>
@@ -92,24 +100,25 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>Product 1</td>
-        <td>2</td>
-        <td>$50.00</td>
-        <td>$100.00</td>
-      </tr>
-      <tr>
-        <td>Product 2</td>
-        <td>1</td>
-        <td>$30.00</td>
-        <td>$30.00</td>
-      </tr>
-      <!-- Add more rows for additional items -->
+      <% const products = order.products; %>
+      <% for (let i = 0; i < products.length; i++) { %>
+        <% const product = products[i].productId; %>
+         
+      
+          <tr>
+            <td><%= i + 1 %></td>
+            <td><%= product.productname %></td>
+            <td><%= product.count %></td>
+            <td>$<%= product.price %></td>
+            <td>$<%= order.totalAmount %></td>
+          </tr>
+        <% } %>
+
     </tbody>
   </table>
 
   <div class="additional-text">
-    <p>This is an additional text below the logo.</p>
+    <p>This is a Computer Generated Invoice.</p>
   </div>
 
   
@@ -122,9 +131,10 @@
   <p><strong>HIS&HERS Ltd.</strong> </p>
   <p><strong>6th Avenue</strong></p>
   <p><strong>Manhattan,NY</strong></p>
-  <p><strong>Date:</strong></p>
+
 </div>
 
-<img src="your_logo_url" alt="Company Logo" class="logo">
+<img src="/user/images/logo.jpg" alt="Company Logo" class="logo">
+
 </body>
 </html>

@@ -517,19 +517,32 @@ const orderReturnPOST = async (req, res) => {
 // };
 const orderInvoice = async (req, res) => {
   try {
-      const id = req.params.id;
+      const proid = req.params.id;
       const user = req.session.user_id;
+      
+  
       const userData = await User.findOne({ _id: user });
-      const orderData = await Order.findOne({ _id: id }).populate(
-          "products.productId"
-      );
-      console.log(orderData);
+    
+      const orderData = await Order.findOne({ userid: user, "products.productId": proid }).populate("products.productId");
+      const add = orderData.deliveryDetails
+    
+      console.log(address);
+      // let dat =add.address[0]
+      // console.log(dat);
+      for(let i=0;i<address.length;i++){
+    
+        console.log(+"jrfkddddfejeeejejjjejejejejejeje");
+      }
+      
+   
+      // console.log(orderData);
       const date = new Date()
 
       data = {
           order: orderData,
           user: userData,
           date
+         
       };
 
       const filepathName = path.resolve(__dirname, "../views/user/users/invoice.ejs");
