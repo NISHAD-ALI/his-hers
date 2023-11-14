@@ -17,7 +17,7 @@ adminRoute.set('view engine','ejs')
 adminRoute.set('views','./views/admin')
 adminController = require('../controllers/adminController')
 productController = require('../controllers/productController')
-
+couponController = require('../controllers/couponController')
 
 adminRoute.use((req, res, next) => {
     res.header('Cache-Control', 'private, no-store, no-cache, must-revalidate, max-age=0');
@@ -50,4 +50,10 @@ adminRoute.get('/deletePro', productController.deleteProduct);
 
 adminRoute.post('/update-order-status', adminController.updateOrderStatus);
 // adminRoute.get('*', adminController.loadAdminError);
+
+adminRoute.get('/loadCoupon', couponController.loadCoupon);
+adminRoute.get('/loadAddCoupon', couponController.loadAddCoupon);
+adminRoute.post('/addCouponDB', couponController.addCoupon);
+
+
 module.exports = adminRoute

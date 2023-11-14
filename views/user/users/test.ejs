@@ -1,79 +1,111 @@
-
 <script>
-const verifypayment = async(req,res)=>{
-    try { 
-          const user_id = req.session.userId
-        const paymentData = req.body
-        const cartData = await cart.findOne({userid:user_id})
-        console.log(cartData);
-    
-        const hmac = crypto.createHmac("sha256", 'EclX20mfIDWVRBGPneTZWpqV');
-        hmac.update( paymentData.payment.razorpay_order_id  +"|" +  paymentData.payment.razorpay_payment_id );
-        const hmacValue = hmac.digest("hex");
-    
-        if(hmacValue == paymentData.payment.razorpay_signature){
-            let data = cartData.items
-            
-            for( let i=0;i<data.length;i++){
-                let products = data[i].productid
-                let count = data[i].count
-                console.log(product);
-                
-                await product.updateOne({_id:products},{$inc:{quantity:-count}})
-          }
-    
-          await order.findByIdAndUpdate(
-            { _id: paymentData.order.receipt },
-            { $set: { paymentStatus: "placed", paymentId: paymentData.payment.razorpay_payment_id } }
-          );
-      
-          await cart.deleteOne({userid:user_id})
-          res.json({placed:true})
-        }
-    
-      
-        
+
+const couponmanagement = async (req, res) => {
+    try {
+        const coupondata = await coupon.find()
+        res.render('coupon', { coupondata });
     } catch (error) {
         console.log(error.message);
     }
 }
 
 
+const addcoupon = async (req, res) => {
+    try {
+        res.render('addcoupon')
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const coupondata = async (req, res) => {
+    try {
+
+        const data = new coupon({
+            couponname: req.body.couponname,
+            couponcode: req.body.couponcode,
+            discountamount: req.body.discountamount,
+            activationdate: req.body.activationdate,
+            expirydate: req.body.expirydate,
+            criteriaamount: req.body.criteriaamount,
+            userslimit: req.body.userslimit,
+            description: req.body.description
+
+        })
+        await data.save()
+        console.log(data);
+        res.redirect('/admin/coupon')
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const editingcoupon = async (req, res) => {
+    try {
+        const id = req.query.id
+        const coupondata = await coupon.findOne({ _id: id });
+
+        res.render('editcoupon', { coupondata })
+
+    } catch (error) {
+        console.log(error.message);
+    }
+
+}
+
+const editedcoupondata = async (req, res) => {
+    try {
+        const id = req.query.id
+
+        await coupon.updateOne({ _id: id }, {
+            $set: {
+                couponname: req.body.couponname,
+                couponcode: req.body.couponcode,
+                discountamount: req.body.discountamount,
+                activationdate: req.body.activationdate,
+                expirydate: req.body.expirydate,
+                criteriaamount: req.body.criteriaamount,
+                userslimit: req.body.userslimit,
+                description: req.body.description
+            }
+        })
+        res.redirect('/admin/coupon')
 
 
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
-if(payment == "Cash on delivery"){
-        let data = cartData.items
-            
-        for( let i=0;i<data.length;i++){
-            let products = data[i].productid
-            let count = data[i].count
-            console.log(product);
-            
-            await product.updateOne({_id:products},{$inc:{quantity:-count}})
+const blockunblockcoupon = async(req,res)=>{
+    try {
+        const id=req.body.id
+        const couponid = req.body.couponid
+        console.log(couponid,id);
+        if(id==1){
+            await coupon.updateOne({_id:couponid},{$set:{status:1}});
+            res.json({result:true})
+        }else{
+            await coupon.updateOne({_id:couponid},{$set:{status:0}})
+            res.json({result:true})
         }
-        console.log("sdfewssdgdf");
-        await cart.deleteOne({userid:id})
-       return res.json({success:true}
-       
+    } catch (error) {
+        console.log(error.message);
         
-        )
-      }else if(payment == "Wallet"){
-        return res.json({online:true})
-  
-      }else{
-        const options ={
-            amount: totalsum*100,
-            currency: "INR",
-            receipt: ""+orderdata._id,
-          }
-  
-          instance.orders.create(options, function (err, order) {
-  
-           return res.json({ order });
-          });
-  
-         }
+    }
+}
+
+const deletecoupon = async(req,res)=>{
+    try {
+        const id = req.body.id
+        console.log(id);
+        await coupon.deleteOne({_id:id})
+        res.json({result:true})
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 </script>
-
-

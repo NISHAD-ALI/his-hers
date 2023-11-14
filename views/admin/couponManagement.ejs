@@ -1,0 +1,82 @@
+<%- include('../admin/layout/adminSidebar.ejs') -%>
+<%- include('../admin/layout/adminHeader.ejs') -%>
+
+<div class="main-panel">
+  <div class="content-wrapper">
+    <div class="row">
+      <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Coupon Management</h4>
+            <div class="text">
+              <a href="/admin/loadAddCoupon">
+                <button type="button" class="btn btn-success ml-auto" data-toggle="button" aria-pressed="false"
+                  autocomplete="off">
+                  + ADD COUPONS
+                </button>
+              </a>
+            </div>
+            <br>
+            <div class="table-container" style="overflow-x: auto;">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>No.</th>
+                    <th>Name</th>
+                    <th>Coupon Code</th>
+                    <th>Discount Amount</th>
+                    <th>Activation Date</th>
+                    <th>Expiry Date</th>
+                    <th>Criteria Amount</th>
+                    <th>Users Limit</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% function formatDate(date) { %>
+                  <% return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: '2-digit' })
+                  .replace(/\//g, '-'); %>
+                  <% } %>
+
+                  <% for(let i = 0; i < coupon.length; i++) { %>
+                  <tr>
+                    <td><%= i + 1 %></td>
+                    <td><%= coupon[i].couponname %></td>
+                    <td><%= coupon[i].couponcode %></td>
+                    <td><%= coupon[i].discountamount %></td>
+                    <td><%= formatDate(coupon[i].activationdate) %></td>
+                    <td><%= formatDate(coupon[i].expirydate) %></td>
+                    <td><%= coupon[i].criteriaamount %></td>
+                    <td><%= coupon[i].description %></td>
+                    <td class="<%= coupon[i].status === 1 ? 'text-success' : 'text-danger' %>">
+                      <%= coupon[i].status === 1 ? 'Active' : 'Blocked' %>
+                    </td>
+                    <td>
+                      <% if (coupon[i].status === 1) { %>
+                      <a href="#" class="badge badge-danger"
+                        onclick="return confirm('Are you sure? Do you want to Block?')">UNLIST</a>
+                      <% } else { %>
+                      <a href="#" class="badge badge-success"
+                        onclick="return confirm('Are you sure you? Do you want to Unblock?')">LIST</a>
+                      <% } %>
+                    </td>
+                    <td>
+                      <a href="/edit-coupon"><i class="bi bi-pencil-square"></i></a>
+                    </td>
+                    <td>
+                      <a href="#" class="delete-link"><i class="bi bi-trash3"></i></a>
+                    </td>
+                  </tr>
+                  <% } %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../admin/layout/adminFooter.ejs') -%>

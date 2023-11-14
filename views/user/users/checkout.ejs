@@ -33,8 +33,48 @@
                 Have a coupon? <span>Click here to enter your code</span>
               </label>
             </form>
+         
           </div><!-- End .checkout-discount -->
+        <!-- ADD COUPONS -->
+     
 
+        <i class="bi bi-plus-square-dotted" data-toggle="modal" data-target="#filtersModal"></i>
+
+      <!-- Filters Modal -->
+<div class="modal fade" id="filtersModal" tabindex="-1" role="dialog" aria-labelledby="filtersModalLabel"
+aria-hidden="true">
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="filtersModalLabel">Available Coupons</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <!-- Coupon List -->
+            <% for(let i=0; i < coupon.length; i++) { %>
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title"><%= coupon[i].couponname %></h5>
+                        <p class="card-text">Code: <%= coupon[i].couponcode %></p>
+                        <p class="card-text">Discount: $<%= coupon[i].discountamount %></p>
+                        <p class="card-text"> <%= coupon[i].description %></p>
+                        <button class="btn btn-primary" onclick="copyToClipboard('<%= 'coupon' + (i + 1) %>')">Copy to Clipboard</button>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+        <div class="modal-footer">
+            <!-- No need for a general "Copy to Clipboard" button in this version -->
+        </div>
+    </div>
+</div>
+</div>
+
+
+
+   
           <form action="/orderPlace?id=<%= %>" method="post" id="myform">
             <div class="row">
               <div class="col-lg-9">
@@ -111,7 +151,7 @@
                                     </td>
                                   </tr><!-- End .summary-subtotal -->
                                   <tr>
-                                    <td>Shipping:</td>
+                                    <td>Coupon Discount:</td>
                                     <td>Free shipping</td>
                                   </tr>
                                   <tr class="summary-total">
@@ -368,6 +408,31 @@
     });
   }
 });
+
+
+
+async function copyToClipboard(couponId) {
+        try {
+            var textToCopy = document.getElementById(couponId).textContent;
+
+            await navigator.clipboard.writeText(textToCopy);
+
+            // Use SweetAlert for a stylish alert
+            Swal.fire({
+                icon: 'success',
+                title: 'Coupon Copied!',
+                text: 'The coupon has been copied to the clipboard.',
+            });
+        } catch (error) {
+            console.error('Unable to copy coupon to clipboard:', error);
+            // Use SweetAlert for error handling
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong while copying the coupon!',
+            });
+        }
+    }
 
 
 

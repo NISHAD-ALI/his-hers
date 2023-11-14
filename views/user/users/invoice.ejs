@@ -70,23 +70,19 @@
   <div class="header">
     <h1>Invoice</h1>
   </div>
-<%= let address =order.deliveryDetails  %>
-<% for(let i=0;i<address.length;i++%>{%>
-  <% let addressdata = address[i].address%>
-  <% for(let j=0;j<addressdata.length;j++){%>
+
   <div class="details">
     <p><strong>Order ID:</strong><%= order._id %></p>
     <p><strong>Customer Name:</strong><%= user.name %></p>
     <p><strong>Customer Email:</strong><%= user.email %></p>
-    <p><strong>Address:</strong> <%= orderdata[j].name %></p>
+
     <p><strong>Date:</strong><%= order.purchaseDate.toLocaleDateString('en-US', { year:
       'numeric', month: 'short', day: '2-digit'
       }).replace(/\//g, '-') %></p>
     <p><strong>Payment Mode:</strong><%= order.paymentMethod %></p>
     
   </div>
-  <%}%>
-  <%}%>
+
 
 
   <table class="items-table">
@@ -108,7 +104,7 @@
           <tr>
             <td><%= i + 1 %></td>
             <td><%= product.productname %></td>
-            <td><%= product.count %></td>
+            <td><%= products[i].count %></td>
             <td>$<%= product.price %></td>
             <td>$<%= order.totalAmount %></td>
           </tr>

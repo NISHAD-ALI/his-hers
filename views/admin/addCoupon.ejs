@@ -1,0 +1,69 @@
+<%- include('../admin/layout/adminSidebar.ejs') -%>
+<%- include('../admin/layout/adminHeader.ejs') -%>
+
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Add New Coupons</h4>
+            <br>
+            <form class="forms-sample" action="/admin/addCouponDB" method="post" >
+                <div class="form-group">
+                    <label for="couponname">Name Of Coupon</label>
+                    <input type="text" class="form-control" id="couponname" placeholder="Name" name="couponname">
+                </div>
+                <div class="form-group">
+                    <label for="couponcode">Coupon Code</label>
+                    <input type="text" class="form-control" id="couponcode" placeholder="Coupon Code" name="couponcode">
+                </div>
+                <div class="form-group">
+                    <label for="discountamount">Discount Amount</label>
+                    <div class="input-group" id="discountamount">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">$</span>
+                        </div>
+                        <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)"
+                            name="discountamount">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="criteriaamount">Criteria Amount</label>
+                    <div class="input-group" id="criteriaamount">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">$</span>
+                        </div>
+                        <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)"
+                            name="criteriaamount">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="userslimit">Users Limit</label>
+                    <input type="text" class="form-control" id="userslimit" placeholder="Users Limit"
+                        name="userslimit">
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <input type="text" class="form-control" id="description" placeholder="Description"
+                        name="description">
+                </div>
+
+                <div class="form-group">
+                    <label for="activationdate">Activation Date</label>
+                    <input type="date" class="form-control" id="activationdate" name="activationdate">
+                </div>
+
+                <div class="form-group">
+                    <label for="expirydate">Expiry Date</label>
+                    <input type="date" class="form-control" id="expirydate" name="expirydate">
+                </div>
+
+                <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                <button class="btn btn-dark">Cancel</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<%- include('../admin/layout/adminFooter.ejs') -%>

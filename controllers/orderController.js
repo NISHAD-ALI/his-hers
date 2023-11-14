@@ -4,6 +4,7 @@ const product = require('../models/productModel');
 const Cart = require('../models/cartModel')
 const Address = require('../models/addressModel')
 const Order = require('../models/orderModel');
+const Coupon = require('../models/couponModel')
 const { log } = require('npmlog');
 const Razorpay = require('razorpay');
 const crypto = require("crypto")
@@ -29,6 +30,7 @@ const loadCheckout = async (req, res) => {
     if (req.session.user_id) {
       const user = await User.findOne({ _id: req.session.user_id });
       const addresses = await Address.find({ User: req.session.user_id });
+ 
       console.log(addresses);
 
       if (user) {
@@ -41,7 +43,8 @@ const loadCheckout = async (req, res) => {
 
     const userId = req.session.user_id;
     const cartData = await Cart.findOne({ userid: userId }).populate("products.productId");
-
+    console.log(cartData);
+    const coupon = await Coupon.find({ status:0 })
     // total of single product
     const datatotal = cartData.products.map((products) => {
       return products.totalPrice * products.count;
@@ -63,7 +66,7 @@ const loadCheckout = async (req, res) => {
     );
     console.log('CartTotal' + updatedCart);
 
-    res.render('checkout', { accountDetails, UserAddress, userName, totalamount, datatotal, cartData: cartData });
+    res.render('checkout', { accountDetails, UserAddress, userName, totalamount, datatotal, cartData: cartData,coupon });
 
   } catch (error) {
     console.log(error.message);
@@ -524,15 +527,6 @@ const orderInvoice = async (req, res) => {
       const userData = await User.findOne({ _id: user });
     
       const orderData = await Order.findOne({ userid: user, "products.productId": proid }).populate("products.productId");
-      const add = orderData.deliveryDetails
-    
-      console.log(address);
-      // let dat =add.address[0]
-      // console.log(dat);
-      for(let i=0;i<address.length;i++){
-    
-        console.log(+"jrfkddddfejeeejejjjejejejejejeje");
-      }
       
    
       // console.log(orderData);
