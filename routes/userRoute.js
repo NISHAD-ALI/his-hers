@@ -10,6 +10,8 @@ userController = require('../controllers/userController')
 productController = require('../controllers/productController')
 cartController = require('../controllers/cartController')
 orderController = require('../controllers/orderController')
+couponController = require('../controllers/couponController')
+
 // Render the home page
 userRoute.get('/',userController.loadHome)
 userRoute.get('/login',userAuth.isLogOut,userController.loadSignup)
@@ -56,5 +58,7 @@ userRoute.post('/returnOrder',orderController.orderReturnPOST)
 userRoute.post('/verify-payment',orderController.verifypayment)
 userRoute.get('/invoice/:id',orderController.orderInvoice)
 
+
+userRoute.post('/applyCoupon',couponController.applyCoupon)
 
 module.exports = userRoute

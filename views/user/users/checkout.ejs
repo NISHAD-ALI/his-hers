@@ -27,14 +27,13 @@
             </button>
           </a>
           <div class="checkout-discount">
-            <form action="#">
-              <input type="text" class="form-control" required id="checkout-discount-input">
-              <label for="checkout-discount-input" class="text-truncate">
-                Have a coupon? <span>Click here to enter your code</span>
-              </label>
+            <form id="applyCouponForm" action="/applyCoupon" method="post">
+                <input type="text" class="form-control" required id="checkout-discount-input" name="couponCode" placeholder="Have a coupon? Click here to enter your code">
+                <button type="submit" class="btn btn-primary">Apply Coupon</button>
             </form>
-         
-          </div><!-- End .checkout-discount -->
+        </div>
+        
+        
         <!-- ADD COUPONS -->
      
 
@@ -54,6 +53,7 @@ aria-hidden="true">
         <div class="modal-body">
             <!-- Coupon List -->
             <% for(let i=0; i < coupon.length; i++) { %>
+              
                 <div class="card mb-3">
                     <div class="card-body">
                         <h5 class="card-title"><%= coupon[i].couponname %></h5>
@@ -151,9 +151,12 @@ aria-hidden="true">
                                     </td>
                                   </tr><!-- End .summary-subtotal -->
                                   <tr>
-                                    <td>Coupon Discount:</td>
-                                    <td>Free shipping</td>
+                                   
+                                    <td id="couponDiscount">Coupon Discount:</td>
+                                    <td id="couponDiscountAmount">-$<%= coupon.discountamount %></td>
+                                    
                                   </tr>
+                                 
                                   <tr class="summary-total">
                                     <td>Total:</td>
                                     <td id="total">$<%= totalamount %>
@@ -433,6 +436,49 @@ async function copyToClipboard(couponId) {
             });
         }
     }
+
+// In your client-side script
+$(document).ready(function () {
+    $('#applyCouponForm').submit(function (event) {
+        event.preventDefault();
+        var formData = $(this).serializeArray();
+
+        $.ajax({
+            url: '/applyCoupon',
+            method: 'POST',
+            data: formData,
+            success: function (response) {
+                if (response.success === true) {
+                    // Update the total amount on the page
+                    $('#total').text('$' + response.discountedTotal);
+                    $('#couponDiscountAmount').text('-$' + response.couponDiscountAmount);
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Coupon Applied!',
+                        text: 'The coupon has been applied successfully.',
+                    });
+                } else if (response.alreadyClaimed === true) {
+                    // Show a SweetAlert for already claimed coupon
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'You have already claimed this coupon.',
+                    });
+                } else {
+                    // Show a SweetAlert for other errors
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: response.message,
+                    });
+                }
+            },
+            error: function (error) {
+                console.error('Error:', error);
+            }
+        });
+    });
+});
 
 
 

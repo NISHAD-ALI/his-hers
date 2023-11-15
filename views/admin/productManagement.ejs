@@ -1,14 +1,13 @@
 <%- include('../admin/layout/adminSidebar.ejs') -%>
 <%- include('../admin/layout/adminHeader.ejs') -%>
 
-
 <div class="main-panel">
   <div class="content-wrapper">
-<div class="row">
-    
-    <div class="col-lg-12 grid-margin stretch-card">
-      <div class="card">
-        <div class="card-body">
+    <div class="container-fluid"> <!-- Add this container -->
+      <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-body">
           <h4 class="card-title">Products Management</h4>
           
           
@@ -20,8 +19,8 @@
               </button>
             </a>
           </div>
-          <div class="table-responsive">
-            <table class="table ">
+          <div class="table-container table-responsive" style="overflow-x: auto;">
+            <table class="table">
               <thead>
                 <tr>
                   <th>No.</th>

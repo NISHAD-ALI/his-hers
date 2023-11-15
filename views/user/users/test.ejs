@@ -1,111 +1,82 @@
 <script>
 
-const couponmanagement = async (req, res) => {
-    try {
-        const coupondata = await coupon.find()
-        res.render('coupon', { coupondata });
-    } catch (error) {
-        console.log(error.message);
-    }
-}
+const coupon = require('../models/couponModel');
 
-
-const addcoupon = async (req, res) => {
-    try {
-        res.render('addcoupon')
-
-    } catch (error) {
-        console.log(error.message);
-    }
-}
 
 const coupondata = async (req, res) => {
+
     try {
 
-        const data = new coupon({
-            couponname: req.body.couponname,
-            couponcode: req.body.couponcode,
-            discountamount: req.body.discountamount,
-            activationdate: req.body.activationdate,
-            expirydate: req.body.expirydate,
-            criteriaamount: req.body.criteriaamount,
-            userslimit: req.body.userslimit,
-            description: req.body.description
+        const data = req.body.val
+        const totalAmount = req.body.total
+        const coupondata = await coupon.findOne({ couponcode: data });
+        const checkcoupon =await coupon.findOne({ couponcode: data,claimedusers: req.session.userId  })
+        const  claimedusers =await coupon.findOne({couponcode:data},{_id:0,claimedusers:1}).count()
+        console.log(claimedusers);
+        const  date = Date.now()
+        // console.log(coupondata);
 
-        })
-        await data.save()
-        console.log(data);
-        res.redirect('/admin/coupon')
-
-    } catch (error) {
-        console.log(error.message);
-    }
-}
-
-const editingcoupon = async (req, res) => {
-    try {
-        const id = req.query.id
-        const coupondata = await coupon.findOne({ _id: id });
-
-        res.render('editcoupon', { coupondata })
-
-    } catch (error) {
-        console.log(error.message);
-    }
-
-}
-
-const editedcoupondata = async (req, res) => {
-    try {
-        const id = req.query.id
-
-        await coupon.updateOne({ _id: id }, {
-            $set: {
-                couponname: req.body.couponname,
-                couponcode: req.body.couponcode,
-                discountamount: req.body.discountamount,
-                activationdate: req.body.activationdate,
-                expirydate: req.body.expirydate,
-                criteriaamount: req.body.criteriaamount,
-                userslimit: req.body.userslimit,
-                description: req.body.description
-            }
-        })
-        res.redirect('/admin/coupon')
-
-
-    } catch (error) {
-        console.log(error.message);
-    }
-}
-
-const blockunblockcoupon = async(req,res)=>{
-    try {
-        const id=req.body.id
-        const couponid = req.body.couponid
-        console.log(couponid,id);
-        if(id==1){
-            await coupon.updateOne({_id:couponid},{$set:{status:1}});
-            res.json({result:true})
-        }else{
-            await coupon.updateOne({_id:couponid},{$set:{status:0}})
-            res.json({result:true})
+        const userlimit = coupondata.userslimit
+        const criteriaamount = coupondata.criteriaamount
+        if (checkcoupon ) {
+          res.json({res:false})
         }
+        else {
+                if(coupondata){
+            if (coupondata.couponcode == data) {
+                if(userlimit>=claimedusers){
+                if(criteriaamount<=totalAmount){
+                if(coupondata.expirydate >date){
+                const discountamount = coupondata.discountamount;
+                const reducedamount = totalAmount - discountamount
+
+             
+                res.json({ result: true, reducedamount: reducedamount, discountamount: discountamount })}
+                else{
+                    res.json({date:false})
+                }}
+                else{
+                    res.json({amount:false})
+                }}else{
+                    res.json({userlimit:false})
+                }
+            }
+            else {
+                res.json({ result: false })
+            }}
+
+            else{
+                res.json({ result: false })
+            }
+        }
+
+
+
     } catch (error) {
         console.log(error.message);
-        
     }
+
 }
 
-const deletecoupon = async(req,res)=>{
+const deletecoupon = async (req, res) => {
+
     try {
-        const id = req.body.id
-        console.log(id);
-        await coupon.deleteOne({_id:id})
-        res.json({result:true})
+        const total = req.body.total
+        console.log(total);
+        const value = req.body.value
+        const data = await coupon.findOne({ couponcode: value });
+       
+
+        if (data) {
+            res.json({ result: true, total: total })
+        } else {
+            res.json({ result: false })
+        }
 
     } catch (error) {
         console.log(error.message);
     }
+
 }
+
 </script>

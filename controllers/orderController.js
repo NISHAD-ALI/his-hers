@@ -45,7 +45,7 @@ const loadCheckout = async (req, res) => {
     const cartData = await Cart.findOne({ userid: userId }).populate("products.productId");
     console.log(cartData);
     const coupon = await Coupon.find({ status:0 })
-    // total of single product
+    const discAmount = coupon.discountamount
     const datatotal = cartData.products.map((products) => {
       return products.totalPrice * products.count;
     });
@@ -66,7 +66,7 @@ const loadCheckout = async (req, res) => {
     );
     console.log('CartTotal' + updatedCart);
 
-    res.render('checkout', { accountDetails, UserAddress, userName, totalamount, datatotal, cartData: cartData,coupon });
+    res.render('checkout', { accountDetails, UserAddress, userName, totalamount, datatotal, cartData: cartData,coupon,discAmount });
 
   } catch (error) {
     console.log(error.message);
@@ -268,7 +268,7 @@ const placeOrder = async (req, res) => {
       };
       console.log('XP 6');
       razorpay.orders.create(options, function (err, order) {
-  
+        // Coupon.claimedusers.push(userId);
         return res.json({ order });
        });
       
@@ -294,51 +294,38 @@ const placeOrder = async (req, res) => {
 // ++++++++++++++++ORDER PLACED PAGE++++++++++++++++++
 
 
-const orderSuccess = async (req, res) => {
-  try {
-    console.log('3');
-    res.render('orderSuccess')
-  } catch (error) {
-    console.log(error.message)
-  }
-}
-// const verifypayment = async (req, res) => {
+// const orderSuccess = async (req, res) => {
 //   try {
-//     const user_id =  req.session.user_id
-//     const paymentData = req.body
-//     const cartData = await Cart.findOne({ userid: user_id })
-//     console.log(cartData+"kk");
-// console.log("HHHJ"+paymentData);
-//     const hmac = crypto.createHmac("sha256", process.env.RAZORPAYSECRETKEY);
-//     hmac.update(paymentData.payment.razorpay_order_id + "|" + paymentData.payment.razorpay_payment_id);
-//     const hmacValue = hmac.digest("hex");
+  
+//     const userId = req.session.user_id;
+   
 
-//     if (hmacValue == paymentData.payment.razorpay_signature) {
-//       let data = cartData.items
-
-//       for (let i = 0; i < data.length; i++) {
-//         let products = data[i].productid
-//         let count = data[i].count
-//         console.log(product);
-
-//         await product.updateOne({ _id: products }, { $inc: { quantity: -count } })
-//       }
-
-//       await Order.findByIdAndUpdate(
-//         { _id: paymentData.order.receipt },
-//         { $set: { paymentStatus: "placed", paymentId: paymentData.payment.razorpay_payment_id } }
-//       );
-
-//       await Cart.deleteOne({ userid: user_id })
-//       res.json({ placed: true })
-//     }
-
-
-
+//     console.log('3');
+//     res.render('orderSuccess')
 //   } catch (error) {
-//     console.log(error.message);
+//     console.log(error.message)
 //   }
 // }
+
+const orderSuccess = async (req, res) => {
+  try {
+      const userId = req.session.user_id;
+      
+      // Assuming you have a way to get the couponCode from the order data
+      const couponCode = req.body.couponCode; 
+
+      // Update the claimedusers array only when the order is placed
+      await Coupon.updateOne(
+          { couponcode: couponCode },
+          { $push: { claimedusers: userId } }
+      );
+
+      console.log('Order placed successfully');
+      res.render('orderSuccess');
+  } catch (error) {
+      console.log(error.message);
+  }
+};
 const verifypayment = async(req,res)=>{
   try { 
     console.log('verifff');

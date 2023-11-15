@@ -18,7 +18,7 @@ adminRoute.set('views','./views/admin')
 adminController = require('../controllers/adminController')
 productController = require('../controllers/productController')
 couponController = require('../controllers/couponController')
-
+offerController = require('../controllers/offerController')
 adminRoute.use((req, res, next) => {
     res.header('Cache-Control', 'private, no-store, no-cache, must-revalidate, max-age=0');
     next();
@@ -54,6 +54,12 @@ adminRoute.post('/update-order-status', adminController.updateOrderStatus);
 adminRoute.get('/loadCoupon', couponController.loadCoupon);
 adminRoute.get('/loadAddCoupon', couponController.loadAddCoupon);
 adminRoute.post('/addCouponDB', couponController.addCoupon);
+adminRoute.post('/editCouponDB', couponController.editCoupon);
+adminRoute.get('/loadEditCoupon', couponController.loadEditCoupon);
+adminRoute.get('/blockCoupon', couponController.blockCoupon);
+adminRoute.get('/deleteCoupon', couponController.deletecoupon);
 
+
+adminRoute.get('/offers', offerController.loadOffers);
 
 module.exports = adminRoute

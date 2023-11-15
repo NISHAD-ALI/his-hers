@@ -3,22 +3,22 @@
 
 <div class="main-panel">
   <div class="content-wrapper">
-    <div class="row">
-      <div class="col-lg-12 grid-margin stretch-card">
-        <div class="card">
-          <div class="card-body">
-            <h4 class="card-title">Coupon Management</h4>
-            <div class="text">
-              <a href="/admin/loadAddCoupon">
-                <button type="button" class="btn btn-success ml-auto" data-toggle="button" aria-pressed="false"
-                  autocomplete="off">
-                  + ADD COUPONS
-                </button>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title">Coupon Management</h4>
+              <div class="text">
+                <a href="/admin/loadAddCoupon">
+                  <button type="button" class="btn btn-success ml-auto" data-toggle="button" aria-pressed="false" autocomplete="off">
+                    + ADD COUPONS
+                  </button>
               </a>
             </div>
             <br>
-            <div class="table-container" style="overflow-x: auto;">
-              <table class="table">
+            <div class="table-responsive">
+              <table class="table " s>
                 <thead>
                   <tr>
                     <th>No.</th>
@@ -35,8 +35,12 @@
                 </thead>
                 <tbody>
                   <% function formatDate(date) { %>
-                  <% return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: '2-digit' })
-                  .replace(/\//g, '-'); %>
+                    <% if (date) { %>
+                        <%= date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: '2-digit' }).replace(/\//g, '-') %>
+                    <% } else { %>
+                        N/A 
+                    <% } %>
+                  
                   <% } %>
 
                   <% for(let i = 0; i < coupon.length; i++) { %>
@@ -49,23 +53,21 @@
                     <td><%= formatDate(coupon[i].expirydate) %></td>
                     <td><%= coupon[i].criteriaamount %></td>
                     <td><%= coupon[i].description %></td>
-                    <td class="<%= coupon[i].status === 1 ? 'text-success' : 'text-danger' %>">
-                      <%= coupon[i].status === 1 ? 'Active' : 'Blocked' %>
+                    <td class="<%= coupon[i].status === 1 ? 'text-danger' : 'text-success' %>">
+                        <%= coupon[i].status === 1 ? 'Blocked' : 'Active' %>
+                      </td>
+                      <td>
+                        <a href="/admin/blockCoupon?id=<%= coupon[i]._id %>" class="badge <%= coupon[i].status === 1 ? 'badge-success' : 'badge-danger' %>"
+                          onclick="return confirm('Are you sure? <%= coupon[i].status === 1 ? 'Do you want to Unblock?': 'Do you want to Block?' %>')">
+                          <%= coupon[i].status === 1 ? 'LIST' : 'UNLIST' %>
+                        </a>
+                      </td>
+                      
+                    <td>
+                      <a href="/admin/loadEditCoupon?id=<%= coupon[i]._id %>"><i class="bi bi-pencil-square"></i></a>
                     </td>
                     <td>
-                      <% if (coupon[i].status === 1) { %>
-                      <a href="#" class="badge badge-danger"
-                        onclick="return confirm('Are you sure? Do you want to Block?')">UNLIST</a>
-                      <% } else { %>
-                      <a href="#" class="badge badge-success"
-                        onclick="return confirm('Are you sure you? Do you want to Unblock?')">LIST</a>
-                      <% } %>
-                    </td>
-                    <td>
-                      <a href="/edit-coupon"><i class="bi bi-pencil-square"></i></a>
-                    </td>
-                    <td>
-                      <a href="#" class="delete-link"><i class="bi bi-trash3"></i></a>
+                      <a href="/admin/deleteCoupon?id=<%= coupon[i]._id %>"" class="delete-link"><i class="bi bi-trash3"></i></a>
                     </td>
                   </tr>
                   <% } %>
@@ -73,6 +75,7 @@
               </table>
             </div>
           </div>
+        </div>
         </div>
       </div>
     </div>
