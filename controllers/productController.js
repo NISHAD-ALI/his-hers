@@ -33,7 +33,7 @@ const loadProduct = async (req, res) => {
     }
   };
   // ++++++++++++++++++++++++++++++++++++++ADD NEW PRODUCT LOAD ++++++++++++++++++++++++++++++++++++++++++++++
-  
+  ``
   const loadNewProduct = async (req, res) => {
     try {
       const categories = await category.find({ blocked: 0 });

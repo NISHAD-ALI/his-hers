@@ -4,60 +4,51 @@
 <div class="col-12 grid-margin stretch-card">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title">Add New Coupons</h4>
+            <h4 class="card-title">Add New Offer</h4>
             <br>
-            <form class="forms-sample" action="/admin/addCouponDB" method="post" >
+            <form class="forms-sample" action="/admin/addOfferDB" method="post" >
+
+
+                
+
                 <div class="form-group">
-                    <label for="couponname">Name Of Coupon</label>
-                    <input type="text" class="form-control" id="couponname" placeholder="Name" name="couponname">
+                    <label for="product">Product</label>
+                    <select class="form-control" id="product" name="product">
+                        <% product.forEach((item) => { %>
+                            <% if (item.blocked === 0) { %>
+                                <option value="<%= item.productname %>">
+                                    <%= item.productname %>
+                                </option>
+                            <% } %>
+                        <% }); %>
+                    </select>
                 </div>
+                
+                
+                
+
                 <div class="form-group">
-                    <label for="couponcode">Coupon Code</label>
-                    <input type="text" class="form-control" id="couponcode" placeholder="Coupon Code" name="couponcode">
-                </div>
-                <div class="form-group">
-                    <label for="discountamount">Discount Amount</label>
-                    <div class="input-group" id="discountamount">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">$</span>
-                        </div>
-                        <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)"
-                            name="discountamount">
-                    </div>
+                    <label for="percentage">Percentage of Offer</label>
+                    <select class="form-control" id="percentage" name="percentage">
+                        <option value="5">5%</option>
+                        <option value="10">10%</option>
+                        <option value="15">15%</option>
+                        <option value="20">20%</option>
+                        <option value="25">25%</option>
+                        <option value="30">30%</option>
+                        <option value="35">35%</option>
+                        <option value="40">40%</option>
+                        <option value="45">45%</option>
+                        <option value="50">50%</option>
+                       
+                    </select>
                 </div>
 
                 <div class="form-group">
-                    <label for="criteriaamount">Criteria Amount</label>
-                    <div class="input-group" id="criteriaamount">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">$</span>
-                        </div>
-                        <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)"
-                            name="criteriaamount">
-                    </div>
+                    <label for="EndingDate">Ending Date</label>
+                    <input type="date" class="form-control" id="EndingDate" name="EndingDate">
                 </div>
-
-                <div class="form-group">
-                    <label for="userslimit">Users Limit</label>
-                    <input type="text" class="form-control" id="userslimit" placeholder="Users Limit"
-                        name="userslimit">
-                </div>
-
-                <div class="form-group">
-                    <label for="description">Description</label>
-                    <input type="text" class="form-control" id="description" placeholder="Description"
-                        name="description">
-                </div>
-
-                <div class="form-group">
-                    <label for="activationdate">Activation Date</label>
-                    <input type="date" class="form-control" id="activationdate" name="activationdate">
-                </div>
-
-                <div class="form-group">
-                    <label for="expirydate">Expiry Date</label>
-                    <input type="date" class="form-control" id="expirydate" name="expirydate">
-                </div>
+                
 
                 <button type="submit" class="btn btn-primary mr-2">Submit</button>
                 <button class="btn btn-dark">Cancel</button>
@@ -65,5 +56,6 @@
         </div>
     </div>
 </div>
+
 
 <%- include('../admin/layout/adminFooter.ejs') -%>

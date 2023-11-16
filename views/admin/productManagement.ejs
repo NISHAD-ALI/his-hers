@@ -29,7 +29,7 @@
                   <th>Images</th>
                   <th>Category</th>
                   <th>Quantity</th>
-                  <th>Size</th>
+                  <!-- <th>Size</th> -->
                   <th>Price</th>
                   <th>Status</th>
                   
@@ -38,6 +38,8 @@
                 </tr>
               </thead>
               <tbody>
+                
+
                 <% if(products.length>0){
                   for(let i=0;i<products.length;i++){  %>
                 <tr>
@@ -50,7 +52,7 @@
                   </td>
                   <td><%= products[i].category %></td>
                   <td><%= products[i].quantity %></td>
-                  <td><%= products[i].size %></td>
+                  <!-- <td><%= products[i].size %></td> -->
                   <td><%= products[i].price %></td>
                   <%  if(products[i].blocked==0){ %>
                   <td class="text-success">Active</td>

@@ -61,5 +61,7 @@ adminRoute.get('/deleteCoupon', couponController.deletecoupon);
 
 
 adminRoute.get('/offers', offerController.loadOffers);
+adminRoute.get('/addOff', offerController.loadAddOffer);
+adminRoute.post('/addOfferDB', offerController.addOffers);
 
 module.exports = adminRoute
