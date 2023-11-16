@@ -128,9 +128,18 @@
                                                     <%= product.productname %>
                                                 </a>
                                             </h3>
+                                            <% if(product.discountPrice ){ %>
+                                                <div class="product-price">
+                                                    <strike>$<%= product.price %></strike>
+                                                </div>
                                             <div class="product-price">
-                                                <%= product.price %>
+                                                $<%= product.discountPrice %>
                                             </div>
+                                            <%  } else { %>
+                                            <div class="product-price">
+                                                $<%= product.price %>
+                                            </div>
+                                            <% } %>
                                             <div class="ratings-container">
                                                 <div class="ratings">
                                                     <div class="ratings-val"

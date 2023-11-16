@@ -3,7 +3,7 @@ const User = require('../models/userModel')
 const category = require("../models/categoryModel");
 const product = require('../models/productModel')
 const multer = require("../middleware/multer");
-
+const Offers = require('../models/offerModel');
 
 
 let userName
@@ -290,10 +290,10 @@ const loadProductList = async (req, res) => {
         userName = user.name;
       }
     }
-    
+    const discount = await Offers.find({ is_block: 0 })
     const productData = await product.find({ blocked: 0 }); 
     const renderData = { products: productData };
-
+    
     if (userName) {
       renderData.userName = userName;
     }

@@ -26,6 +26,7 @@
                                         <th>Offer %</th>
                                         <th>Ending Time</th>
                                         <th>Action</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -33,14 +34,21 @@
                                     <% for (let i = 0; i < offerDB.length; i++) { %>
                                     <tr>
                                         <td><%= i + 1 %></td>
-                                        <td><%= offerDB[i].product %></td>
+                                        <td><%= offerDB[i].productname %></td>
                                         <td><%= offerDB[i].percentage %> %</td>
                                         <td><%= offerDB[i].expiryDate.toLocaleDateString('en-US', {
                                             year: 'numeric',
                                             month: 'short',
                                             day: '2-digit'
                                             }).replace(/\//g, '-') %></td>
-                                        <td>Action</td>
+                                            <%  if(offerDB[i].is_block==0){ %>
+                                              
+                                            <td><a href="/admin/block-off?id=<%= offerDB[i]._id %>" class="badge badge-danger" onclick="return confirm('Are you sure? Do you want to Block>?')">UNLIST</a></td>
+                                            <% }else{ %>
+                                            
+                                             <td><a href="/admin/block-off?id=<%= offerDB[i]._id %>" class="badge badge-success" onclick="return confirm('Are you sure you? Do you want to Unblock>?')">LIST</a></td>
+                                             <% } %>
+                                        <td> <a href="/admin/delete-Off?id=<%= offerDB[i]._id %>"" class="delete-link"><i class="bi bi-trash3"></i></a></td>
                                     </tr>
                                     <% } %>
                                     <% } else { %>

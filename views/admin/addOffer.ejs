@@ -13,10 +13,10 @@
 
                 <div class="form-group">
                     <label for="product">Product</label>
-                    <select class="form-control" id="product" name="product">
+                    <select class="form-control" id="product" name="product" required>
                         <% product.forEach((item) => { %>
                             <% if (item.blocked === 0) { %>
-                                <option value="<%= item.productname %>">
+                                <option value="<%= item.productname %>" required>
                                     <%= item.productname %>
                                 </option>
                             <% } %>

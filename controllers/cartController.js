@@ -71,7 +71,7 @@ const addToCart = async (req, res) => {
           const cartItem = {
             productId: productId,
             count: 1,
-            totalPrice: productData.price,
+            totalPrice: productData.discountPrice ?  productData.discountPrice : productData.price ,
           };
 
           const newCart = await Cart.findOneAndUpdate(

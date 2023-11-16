@@ -84,9 +84,24 @@
                                             )</a>
                                     </div><!-- End .rating-container -->
 
+
+                                    <% if(viewProduct.discountPrice){ %>
+                                        <div class="product-price">
+                                            <strike>$<%= viewProduct.price %></strike>
+                                        </div>
+                                    <div class="product-price">
+                                        $<%= viewProduct.discountPrice %>
+                                    </div>
+                                    <%  } else { %>
                                     <div class="product-price">
                                         $<%= viewProduct.price %>
-                                    </div><!-- End .product-price -->
+                                    </div>
+                                    <% } %>
+
+                                    
+
+
+
 
                                     <div class="product-content">
                                         <p>
