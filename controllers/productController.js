@@ -290,10 +290,11 @@ const loadProductList = async (req, res) => {
         userName = user.name;
       }
     }
-    const discount = await Offers.find({ is_block: 0 })
+    const discount = await Offers.find({ is_block: 0  })
+
     const productData = await product.find({ blocked: 0 }); 
-    const renderData = { products: productData };
-    
+    const renderData = { products: productData,discPrice:discount };
+   
     if (userName) {
       renderData.userName = userName;
     }

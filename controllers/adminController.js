@@ -99,15 +99,16 @@ const loginAdmin = async (req, res) => {
 
 const loadAdminDash = async (req, res) => {
   try {
-   
-const orderDat = await Order.find({})
+    const orderDat = await Order.find({})
       .populate({
         path: 'userid',
-        select: 'name' // Select the 'name' field from the user document
+        select: 'name'
       })
       .populate('products.productId');
-    
+
     const orderCount = await Order.countDocuments();
+    
+    // Fetch total revenue
     const totalRevenue = await Order.aggregate([
       {
         $group: {
@@ -116,13 +117,16 @@ const orderDat = await Order.find({})
         }
       }
     ]);
-  
-        res.render('dashboard', { orderDat,orderCount,totalRevenue: totalRevenue[0].totalRevenue });
-      
+
+    // Check if totalRevenue array is not empty
+    const formattedTotalRevenue = totalRevenue.length > 0 ? totalRevenue[0].totalRevenue : 0;
+
+    res.render('dashboard', { orderDat, orderCount, totalRevenue: formattedTotalRevenue });
   } catch (error) {
     console.log(error.message);
   }
 };
+
 
 
 // ++++++++++++++++++++++++++++++++++++++LOAD USER MANAGEMENT++++++++++++++++++++++++++++++++++++++++++++++

@@ -27,38 +27,7 @@ const loadAddOffer = async (req, res) => {
     }
 }
 
-// const addOffers = async (req, res) => {
-//     try {
-//         const newOffer = new Offers({
-//             product: req.body.product,
-//             percentage: req.body.percentage,
-//             expiryDate: req.body.EndingDate,
-//         });
-//         await newOffer.save();
-//         const offerDB = await Offers.find({ }).lean();
-//         const Product = await product.find({ productname : offerDB.product})
-//         console.log('++++++++++');
-//         console.log(Product);
-//         res.redirect('/admin/offers');
-//     } catch (error) {
-//         console.log(error.message);
-//     }
-// };
 
-
-// const applyOffer  = async (req, res) => {
-//     try {
-//        const offerDB = await Offers.find({ }).lean();
-//        const Product = await product.find({ productname : offerDB.product})
-
-//           console.log(Product);
-
-
-//     } catch (error) {
-//         console.log(error.message)
-
-//     }
-// }
 const addOffers = async (req, res) => {
     try {
         const productData = await Product.findOne({ productname: req.body.product });
@@ -111,28 +80,60 @@ const blockOff = async (req, res) => {
       res.status(500).send('Error blocking/unblocking offer');
     }
   };
+  // const deleteOffer = async (req, res) => {
+  //   try {
+     
+  //     const currentData = await Offers.findOne({ _id: req.query.id });
+  
+  //     if (!currentData) {
+  //       return res.status(404).send('Offers not found');
+  //     }
+  //     await Offers.deleteOne({ _id: req.query.id });
+  //     const productDB = await Product.findOne({ _id: currentData.product });
+      
+  //       if (productDB) {
+  //          console.log('kk');
+  //          productDB.discountPrice = null;
+  //           await productDB.save();
+  //       }
+  //     res.redirect('/admin/offers');
+  //   } catch (error) {
+  //     console.log(error.message);
+  //     res.status(500).send('An error occurred');
+  //   }
+  // };
   const deleteOffer = async (req, res) => {
     try {
-     
-      const currentData = await Offers.findOne({ _id: req.query.id });
-  
-      if (!currentData) {
-        return res.status(404).send('Offers not found');
-      }
-      await Offers.deleteOne({ _id: req.query.id });
-      const productDB = await Product.findOne({ _id: currentData.product });
-      
-        if (productDB) {
-           console.log('kk');
-           productDB.discountPrice = null;
-            await productDB.save();
+        const currentData = await Offers.findOne({ _id: req.query.id });
+
+        if (!currentData) {
+            return res.status(404).send('Offers not found');
         }
-      res.redirect('/admin/offers');
+
+        // Check if the offer is expired
+        if (currentData.expiryDate < new Date()) {
+            console.log('Offer is expired');
+        } else {
+            // If the offer is not expired, update the product's discountPrice
+            const productDB = await Product.findOne({ _id: currentData.product });
+
+            if (productDB) {
+                console.log('Offer is not expired');
+                // Set the discountPrice to null
+                productDB.discountPrice = null;
+                await productDB.save();
+            }
+        }
+
+        // Delete the offer
+        await Offers.deleteOne({ _id: req.query.id });
+
+        res.redirect('/admin/offers');
     } catch (error) {
-      console.log(error.message);
-      res.status(500).send('An error occurred');
+        console.log(error.message);
+        res.status(500).send('An error occurred');
     }
-  };
+};
 
 module.exports = {
     loadOffers,

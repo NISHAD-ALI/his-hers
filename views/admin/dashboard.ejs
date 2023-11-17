@@ -1,7 +1,22 @@
 <%- include('../admin/layout/adminSidebar.ejs') -%>
 <%- include('../admin/layout/adminHeader.ejs') -%>
     
-      
+    <style>
+     
+  .product-name-cell {
+    max-width: 150px; /* Set your desired maximum width */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: hidden; /* Show an ellipsis (...) for overflowed content */
+  }
+
+  .product-name {
+    display: inline-block; /* Ensure inline-block so ellipsis works */
+    vertical-align: middle; /* Align vertically in the middle */
+  }
+
+
+    </style>  
   
       
       <!-- partial -->
@@ -276,7 +291,7 @@
                             <!-- Empty header cells -->
                            
                             <th> User Name</th>
-                            <th> Product Name</th>
+                            <th > Product Name</th>
                             <th> Price</th>
                             <th> Date</th>
                             <th> Order Status</th>
@@ -297,10 +312,11 @@
                                     <!-- Username -->
                                     <%= username %>
                                   </td>
-                                  <td>
-                                    <!-- Product Image and Name -->
+                                  <td class="product-name-cell">
                                     <img src="/products/images/<%= product.image[0] %>" alt="image" />
-                                    <span class="pl-2"> <%= product.productname %></span>
+                                    <span class="pl-2 product-name">
+                                      <%= product.productname %>
+                                    </span>
                                   </td>
                                   <td>
                                     <!-- Product Price -->
