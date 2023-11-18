@@ -111,14 +111,45 @@
         </div><!-- End .header-bottom -->
     </header><!-- End .header -->
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const searchToggle = document.querySelector('.search-toggle');
-            const searchForm = document.querySelector('.header-search-wrapper');
-    
-            searchToggle.addEventListener('click', function () {
-                searchForm.classList.toggle('active');
-            });
+
+
+
+    <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="searchModalLabel">Search Products</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/searchProducts" method="get">
+
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="productName" name="searchdata" placeholder="Enter product name" required>
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit" id="searchButton">
+                                    <i class="icon-search"></i> Search
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchToggle = document.querySelector('.search-toggle');
+        const searchForm = document.querySelector('.header-search-wrapper');
+        
+        // Open the search modal when the search icon is clicked
+        searchToggle.addEventListener('click', function () {
+            $('#searchModal').modal('show');
         });
-    </script>
+    });
+</script>
     

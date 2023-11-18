@@ -283,7 +283,10 @@ const loadAcc = async (req, res) => {
     if (req.session.user_id) {
       const user = await User.findOne({ _id: req.session.user_id });
       const addresses = await Address.find({ User: req.session.user_id });
-      const orderData = await Order.find({ userid: req.session.user_id }).populate("products.productId")
+      const orderData = await Order.find({ userid: req.session.user_id })
+      .populate("products.productId")
+      .sort({ purchaseDate: -1 });
+    
 
 
       if (user) {

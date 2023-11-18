@@ -195,7 +195,9 @@ aria-hidden="true">
                   <button type="button" id="payWithRazorpay" class="btn btn-primary" style="display: none;">Pay with
                     Razorpay</button>
                   <input type="hidden" id="total" name="total" value="<%= totalamount %>">
+                  <% if(cartData) {%>
                   <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block">Place Order</button>
+                  <% } %>
                 </div><!-- End .summary -->
               </aside><!-- End .col-lg-3 -->
             </div><!-- End .row -->

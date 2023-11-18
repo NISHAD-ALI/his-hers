@@ -24,7 +24,8 @@ userRoute.post('/verify', userController.verifymail)
 
 userRoute.get('/viewMore',productController.loadProductList)
 userRoute.get('/productView',productController.loadUserProduct)
-
+userRoute.get('/searchProducts',productController.searchProducts)
+userRoute.all('/sortProducts', productController.sortProducts);
 
 userRoute.get('/myAccount',userController.loadAcc)
 userRoute.get('/editAddress',userController.loadEditAddress)

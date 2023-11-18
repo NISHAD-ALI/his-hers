@@ -4,82 +4,83 @@ const category = require("../models/categoryModel");
 const product = require('../models/productModel')
 const multer = require("../middleware/multer");
 const Offers = require('../models/offerModel');
+const { log } = require('async');
 
 
 let userName
 // ++++++++++++++++++++++++++++++++++++++RENDER PRODUCT MANAGEMENT++++++++++++++++++++++++++++++++++++++++++++++
- 
+
 const loadProduct = async (req, res) => {
-    try {
-      if (req.session.user_id) {
-        const user = await User.findOne({ _id: req.session.user_id });
-        console.log(user);
-        if (user) {
-          userName = user.name;
-           const productData = await product.find({});
-           res.render("productManagement", { products: productData,userName });
-        }else{
-          const productData = await product.find({});
-          res.render("productManagement", { products: productData });
-        }
+  try {
+    if (req.session.user_id) {
+      const user = await User.findOne({ _id: req.session.user_id });
+      console.log(user);
+      if (user) {
+        userName = user.name;
+        const productData = await product.find({});
+        res.render("productManagement", { products: productData, userName });
+      } else {
+        const productData = await product.find({});
+        res.render("productManagement", { products: productData });
       }
-      else{
+    }
+    else {
       const productData = await product.find({});
       res.render("productManagement", { products: productData });
-      }
-    } catch (error) {
-      console.log(error.message);
-      res.status(404).render("404");
     }
-  };
-  // ++++++++++++++++++++++++++++++++++++++ADD NEW PRODUCT LOAD ++++++++++++++++++++++++++++++++++++++++++++++
-  ``
-  const loadNewProduct = async (req, res) => {
-    try {
-      const categories = await category.find({ blocked: 0 });
-      res.render("addProduct", { categories }); 
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-   // ++++++++++++++++++++++++++++++++++++++ ADD FULL DETAILS OF PRODUCTS AND SAVE TO DB ++++++++++++++++++++++++++++++++++++++++++++++
+  } catch (error) {
+    console.log(error.message);
+    res.status(404).render("404");
+  }
+};
+// ++++++++++++++++++++++++++++++++++++++ADD NEW PRODUCT LOAD ++++++++++++++++++++++++++++++++++++++++++++++
+``
+const loadNewProduct = async (req, res) => {
+  try {
+    const categories = await category.find({ blocked: 0 });
+    res.render("addProduct", { categories });
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+// ++++++++++++++++++++++++++++++++++++++ ADD FULL DETAILS OF PRODUCTS AND SAVE TO DB ++++++++++++++++++++++++++++++++++++++++++++++
 
-   const newproduct = async (req, res) => {
-    try {
-      multer.productImagesUpload(req, res, async (uploadError) => {
-        if (uploadError) {
-          console.error(uploadError);
-          return res.status(500).send('File upload error');
-        }
-  
-        try {
-          const productData = {
-            productname: req.body.proName,
-            quantity: req.body.qty,
-            price: req.body.price,
-            category: req.body.category,
-            description: req.body.description,
-            additionalInfo: req.body.additionalInfo,
-            size: req.body.options,
-          };
-  
-         
-          productData.image = req.files.map((file) => file.filename);
-  
-          const item = new product(productData);
-  
-          await item.save();
-          res.redirect('/admin/productManagement');
-        } catch (error) {
-          console.log(error.message);
-         
-        }
-      });
-    } catch (error) {
-      console.error(error);
-      res.status(500).send('An error occurred');
-    }
-  };
+const newproduct = async (req, res) => {
+  try {
+    multer.productImagesUpload(req, res, async (uploadError) => {
+      if (uploadError) {
+        console.error(uploadError);
+        return res.status(500).send('File upload error');
+      }
+
+      try {
+        const productData = {
+          productname: req.body.proName,
+          quantity: req.body.qty,
+          price: req.body.price,
+          category: req.body.category,
+          description: req.body.description,
+          additionalInfo: req.body.additionalInfo,
+          size: req.body.options,
+        };
+
+
+        productData.image = req.files.map((file) => file.filename);
+
+        const item = new product(productData);
+
+        await item.save();
+        res.redirect('/admin/productManagement');
+      } catch (error) {
+        console.log(error.message);
+
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('An error occurred');
+  }
+};
 
 
 // ++++++++++++++++++++++++++++++++++++++ BLOCK PRODUCTS ++++++++++++++++++++++++++++++++++++++++++++++
@@ -104,7 +105,7 @@ const blockPro = async (req, res) => {
 const loadEditProduct = async (req, res) => {
   try {
     const catData = await category.find({ blocked: 0 });
-   const editProducts = await product.findOne({ _id: req.query.id });
+    const editProducts = await product.findOne({ _id: req.query.id });
     res.render("editProduct", { currentData: editProducts, catData });
   } catch (error) {
     console.log(error.message);
@@ -161,17 +162,17 @@ const loadEditProduct = async (req, res) => {
 // const editProduct = async (req, res) => {
 //   try {
 
-    
+
 //     const productId = req.query.id; 
 //     console.log(productId+'productId');
-   
+
 //     const existingProduct = await product.findOne({ _id: productId });
 //    console.log(existingProduct+'existingProduct');
 //     if (!existingProduct) {
 //       return res.status(404).send('Product not found');
 //     }
 
-    
+
 //     const existingData = {
 //       productname: existingProduct.productname,
 //       quantity: existingProduct.quantity,
@@ -181,7 +182,7 @@ const loadEditProduct = async (req, res) => {
 //       additionalInfo: existingProduct.additionalInfo,
 //       size: existingProduct.size,
 //       image: existingProduct.image,
-    
+
 //     };
 
 //     // Prepare the updated product data
@@ -194,7 +195,7 @@ const loadEditProduct = async (req, res) => {
 //       additionalInfo: req.body.additionalInfo || existingData.additionalInfo,
 //       size: req.body.options || existingData.size,
 //       image: existingData.image, 
-      
+
 //     };
 
 //     // Update the product with the combined data
@@ -215,27 +216,27 @@ const loadEditProduct = async (req, res) => {
 //   }
 // };
 
-const editProduct=async(req,res)=>{
-  try{
-      const editid=req.query.id;
-      console.log(editid);
-      const newDetails = {
-        productname: req.body.proName,
-        quantity: req.body.qty,
-        price: req.body.price,
-        category: req.body.category,
-        description: req.body.description,
-        additionalInfo: req.body.additionalInfo,
-        size: req.body.options,
-        }
-        
-     const edit = await product.updateOne({_id: editid},newDetails)
-     
-      res.redirect('/admin/productManagement');
+const editProduct = async (req, res) => {
+  try {
+    const editid = req.query.id;
+    console.log(editid);
+    const newDetails = {
+      productname: req.body.proName,
+      quantity: req.body.qty,
+      price: req.body.price,
+      category: req.body.category,
+      description: req.body.description,
+      additionalInfo: req.body.additionalInfo,
+      size: req.body.options,
+    }
 
-  }catch(error){
-      console.log(error.message);
-}
+    const edit = await product.updateOne({ _id: editid }, newDetails)
+
+    res.redirect('/admin/productManagement');
+
+  } catch (error) {
+    console.log(error.message);
+  }
 }
 
 
@@ -246,7 +247,7 @@ const editProduct=async(req,res)=>{
 // ++++++++++++++++++++++++++++++++++++++ DELETE PRODUCTS ++++++++++++++++++++++++++++++++++++++++++++++
 const deleteProduct = async (req, res) => {
   try {
-   
+
     const currentData = await product.findOne({ _id: req.query.id });
 
     if (!currentData) {
@@ -282,7 +283,7 @@ const deleteProduct = async (req, res) => {
 // }
 const loadProductList = async (req, res) => {
   try {
-    let userName = ''; 
+    let userName = '';
     if (req.session.user_id) {
       const user = await User.findOne({ _id: req.session.user_id });
       console.log(user);
@@ -290,11 +291,11 @@ const loadProductList = async (req, res) => {
         userName = user.name;
       }
     }
-    const discount = await Offers.find({ is_block: 0  })
+    const discount = await Offers.find({ is_block: 0 })
 
-    const productData = await product.find({ blocked: 0 }); 
-    const renderData = { products: productData,discPrice:discount };
-   
+    const productData = await product.find({ blocked: 0 });
+    const renderData = { products: productData, discPrice: discount };
+
     if (userName) {
       renderData.userName = userName;
     }
@@ -312,11 +313,11 @@ const loadProductList = async (req, res) => {
 //     let userName = ''; // Initialize userName
 //     if (req.session.user_id) {
 //           const user = await User.findOne({ _id: req.session.user_id }); // Use 'User' with an uppercase 'U'
-          
+
 //           if (user) {
 //             userName = user.name;
 //             const viewProduct = await product.findOne({ _id: req.query.id });
-  
+
 //         if (viewProduct) {
 //           const products = await product.find({ blocked: 0 });
 //           res.render("productView", {  viewProduct,userName });
@@ -326,7 +327,7 @@ const loadProductList = async (req, res) => {
 //       }
 //     }else{
 //     const viewProduct = await product.findOne({ _id: req.query.id });
-  
+
 //     if (viewProduct) {
 //       const products = await product.find({ blocked: 0 });
 //       res.render("productView", {  viewProduct });
@@ -334,7 +335,7 @@ const loadProductList = async (req, res) => {
 //       res.status(404).render("404");
 //     }
 //   } }catch (error) {
-    
+
 //     console.log(error.message);
 //   }
 // };
@@ -351,7 +352,7 @@ const loadUserProduct = async (req, res) => {
 
   try {
     const viewProduct = await product.findOne({ _id: req.query.id });
-  
+
     if (viewProduct) {
       const products = await product.find({ blocked: 0 });
       const renderData = { viewProduct, productId: req.query.id };
@@ -370,16 +371,103 @@ const loadUserProduct = async (req, res) => {
 };
 
 
+const searchProducts = async (req, res) => {
+  try {
+    const data = req.query.searchdata
+    console.log(data)
+    const discount = await Offers.find({ is_block: 0 })
+    const productData = await product.find({
+      productname: { $regex: new RegExp(data, "i") },
+    });
+    console.log(productData);
+    const renderData = { products: productData, discPrice: discount };
+    // const isLoggedIn = req.session.user_id ? true : false;
+    res.render('productList', renderData);
 
- module.exports = {
-    loadProduct,
-    loadNewProduct,
-    newproduct,
-    blockPro,
-    loadEditProduct,
-    editProduct,
-    deleteProduct,
-    loadProductList,
-    loadUserProduct
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 
- }
+
+// const sortProducts = async (req, res) => {
+//   try {
+//     let sortOption = req.query.sortby; // Use req.query to get the value from the query parameters
+//     console.log(sortOption);
+//     let sortedProducts 
+//     // let sortCriteria = {};
+
+//     // switch (sortOption) {
+//     //   case 'priceLowToHigh':
+//     //     sortCriteria = { price: 1 };
+//     //     break;
+//     //   case 'priceHighToLow':
+//     //     sortCriteria = { price: -1 };
+//     //     break;
+//     //   default:
+//     //     sortCriteria = { productname: 1 };
+//     //     break;
+//     // }
+//     if(sortOption === 'priceHighToLow'){
+//       sortedProducts = await product.find().sort({ price: -1 })
+//     }else{
+//       sortedProducts = await product.find().sort({ price: 1 })
+//     }
+
+//     const discount = await Offers.find({ is_block: 0 })
+   
+   
+//     res.render('productList',{products:sortedProducts, discPrice: discount })
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send('Internal Server Error');
+//   }
+// };
+const sortProducts = async (req, res) => {
+  try {
+      let sortOption = req.query.sortby;
+      console.log('Sort Option:', sortOption);
+
+      let sortCriteria = {};
+
+      switch (sortOption) {
+          case 'priceLowToHigh':
+              sortCriteria = { price: 1 };
+              break;
+          case 'priceHighToLow':
+              sortCriteria = { price: -1 };
+              break;
+          default:
+              sortCriteria = { productname: 1 };
+              break;
+      }
+
+      console.log('Sort Criteria:', sortCriteria);
+
+      const discount = await Offers.find({ is_block: 0 });
+      const sortedProducts = await product.find().sort(sortCriteria);
+
+      console.log('Sorted Products:', sortedProducts);
+
+      res.json({ sortedProducts, discount });
+  } catch (error) {
+      console.error(error);
+      res.status(500).send('Internal Server Error');
+  }
+};
+
+
+module.exports = {
+  loadProduct,
+  loadNewProduct,
+  newproduct,
+  blockPro,
+  loadEditProduct,
+  editProduct,
+  deleteProduct,
+  loadProductList,
+  loadUserProduct,
+  searchProducts,
+  sortProducts,
+
+}
