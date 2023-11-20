@@ -4,7 +4,8 @@ const Order = require('../models/orderModel')
 const bcrypt = require('bcrypt')
 const nodemailer = require('nodemailer');
 const multer = require("../middleware/multer");
-
+const Cart = require('../models/cartModel')
+const Product = require('../models/productModel')
 require('dotenv').config();
 
 let email2;
@@ -284,9 +285,20 @@ const loadAcc = async (req, res) => {
       const user = await User.findOne({ _id: req.session.user_id });
       const addresses = await Address.find({ User: req.session.user_id });
       const orderData = await Order.find({ userid: req.session.user_id })
-      .populate("products.productId")
-      .sort({ purchaseDate: -1 });
-    
+        .populate("products.productId")
+        .sort({ purchaseDate: -1 });
+
+        let productId
+      orderData.forEach(order => {
+
+        order.products.forEach(product => {
+
+           price = product.productId;
+         console.log(price);
+        });
+      });
+
+
 
 
       if (user) {
@@ -294,7 +306,7 @@ const loadAcc = async (req, res) => {
         accountDetails = user;
         UserAddress = addresses;
 
-        return res.render('account', { accountDetails, orderData, UserAddress, userName });
+        return res.render('account', { accountDetails, orderData, UserAddress, userName,price });
       }
     }
 
@@ -515,7 +527,7 @@ const resetPasswordEmailLink = async (req, res) => {
       from: process.env.EMAIL_USER,
       to: user.email,
       subject: 'Password Reset Request',
-      html:`   <html>
+      html: `   <html>
       <head>
         <style>
           /* Add your custom email styles here */

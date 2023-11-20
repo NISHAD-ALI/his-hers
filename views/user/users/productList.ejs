@@ -509,7 +509,7 @@
                     // Make an AJAX request
                     $.ajax({
                         type: 'POST',
-                        url: '/filter',
+                        url: '/filter',   
                         data: formData,
                         success: function (data) {
                             // Handle the response if needed
@@ -536,7 +536,7 @@
             data: { sortby: selectedSort },
             success: function () {
                 // Reload the page after successful sorting
-                location.reload(true);
+                location.reload();
             },
             error: function (error) {
                 console.error(error);

@@ -84,7 +84,7 @@
                                                     <% let product = orderData[j].products %>
                                                     <% for (let i = 0; i < product.length; i++) { %>
                                                         <% const value = product[i].productId; %>
-                                    
+                                                        
                                                         <tr>
                                                             <td class="product-col">
                                                                 <div class="product">
@@ -100,7 +100,11 @@
                                                                     </h3>
                                                                 </div>
                                                             </td>
-                                                            <td class="price-col">$<%= orderData[j].totalAmount %></td>
+                                                            <%   if(value.discountPrice){  %>
+                                                            <td class="price-col">$<%= value.discountPrice %></td>
+                                                            <%  } else { %>
+                                                                <td class="price-col">$<%= value.price %></td>
+                                                                <% } %>
                                                             <td class="status-col">
                                                                 <%= orderData[j].status %>
                                                             </td>
