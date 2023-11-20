@@ -57,6 +57,10 @@ const orderdetails = mongoose.Schema({
   shippingFee: {
     type: String,
     required: true
+  },
+  notes: {
+    type: String,
+    
   }
 });
 

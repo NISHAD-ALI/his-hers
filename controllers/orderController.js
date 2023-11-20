@@ -383,7 +383,7 @@ const cancelOrder = async (req, res) => {
   try {
     const type = req.body.type;
     const id = req.body.id;
-
+   const reason = "REASON FOR CANCEL :"+req.body.reason;
     if (type === 'order') {
       // Handle order cancellation
       const order = await Order.findOne({ _id: id });
@@ -392,6 +392,7 @@ const cancelOrder = async (req, res) => {
 
       if (order) {
         order.status = 'cancelled';
+        order.notes = reason
         await order.save();
         for (const orderProduct of order.products) {
           const proDB = await product.findOne({ _id: orderProduct.productId });

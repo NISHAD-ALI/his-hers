@@ -29,46 +29,96 @@
                                 <i class="icon-bars"></i> Filters
                             </a>
 
-                            <!-- Modal -->
-                            <!-- Modal -->
+                            <!--  FILTER      -->
                             <div class="modal fade" id="filtersModal" tabindex="-1" role="dialog"
                                 aria-labelledby="filtersModalLabel" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
+
                                     <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="filtersModalLabel">Filters</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <!-- Category Filters -->
-                                            <h6>Categories</h6>
-                                            <div class="form-check">
-                                                <input type="checkbox" class="form-check-input" id="category1">
-                                                <label class="form-check-label" for="category1">Category 1</label>
+                                        <form action="/filter" method="post" id="filtersForm">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="filtersModalLabel">Filters</h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
                                             </div>
-                                            <div class="form-check">
-                                                <input type="checkbox" class="form-check-input" id="category2">
-                                                <label class="form-check-label" for="category2">Category 2</label>
+
+                                            <div class="modal-body">
+                                                <h6>Categories</h6>
+                                                <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input category-checkbox"
+                                                        id="category1" value="Men Shirts" name="categories">
+                                                    <label class="form-check-label" for="category1">Men Shirts</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input category-checkbox"
+                                                        id="category2" value="Men Pants" name="categories">
+                                                    <label class="form-check-label" for="category2">Men Pants</label>
+                                                </div>
+                                                <!-- Add values for the rest of the checkboxes -->
+                                                <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input category-checkbox"
+                                                        id="category3" value="Men Shoes" name="categories">
+                                                    <label class="form-check-label" for="category3">Men Shoes</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input category-checkbox"
+                                                        id="category4" value="Men Formals" name="categories">
+                                                    <label class="form-check-label" for="category4">Men Formals</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input category-checkbox"
+                                                        id="category5" value="Women Shirts" name="categories">
+                                                    <label class="form-check-label" for="category5">Women Shirts</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input category-checkbox"
+                                                        id="category6" value="Women Pants" name="categories">
+                                                    <label class="form-check-label" for="category6">Women Pants</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input category-checkbox"
+                                                        id="category7" value="Women Scarfs" name="categories">
+                                                    <label class="form-check-label" for="category7">Women Scarfs</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input category-checkbox"
+                                                        id="category8" value="Women Essentials" name="categories">
+                                                    <label class="form-check-label" for="category8">Women
+                                                        Essentials</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input category-checkbox"
+                                                        id="category9" value="Women Tops" name="categories">
+                                                    <label class="form-check-label" for="category9">Women Tops</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input category-checkbox"
+                                                        id="category10" value="Kids" name="categories">
+                                                    <label class="form-check-label" for="category10">Kids</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input category-checkbox"
+                                                        id="category11" value="Men Essentials" name="categories">
+                                                    <label class="form-check-label" for="category11">Men
+                                                        Essentials</label>
+                                                </div>
+
+                                                <!-- Price Slider -->
+                                               
                                             </div>
-                                            <!-- Add more categories as needed -->
 
-                                            <!-- Price Slider -->
-                                            <h6>Price Range</h6>
-                                            <input type="range" class="custom-range" id="priceSlider">
-                                            <p id="priceRangeLabel"></p>
-
-                                            <!-- Add your other filter options here -->
-
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-primary"
-                                                onclick="applyFilters()">Apply</button>
-                                        </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary apply-filters-btn">Apply
+                                                    Filters</button>
+                                            </div>
+                                        </form>
                                     </div>
+
+
                                 </div>
                             </div>
 
@@ -82,18 +132,19 @@
                                 <!-- Showing <span>12 of 56</span> Products -->
                             </div><!-- End .toolbox-info -->
                         </div><!-- End .toolbox-center -->
-    <!-- SORTING -->
+                        <!-- SORTING -->
                         <div class="toolbox-right">
-                            <div class="toolbox-sort"> <label for="sortby">Sort by:</label>
-                                <div class="select-custom"> 
+                            <div class="toolbox-sort">
+                                <label for="sortby">Sort by:</label>
+                                <div class="select-custom">
                                     <select name="sortby" id="sortby" class="form-control">
                                         <option value="priceLowToHigh">Price : Low - High</option>
                                         <option value="priceHighToLow">Price : High - Low</option>
-
                                     </select>
                                 </div>
                             </div><!-- End .toolbox-sort -->
                         </div><!-- End .toolbox-right -->
+
                     </div><!-- End .toolbox -->
                     <!-- PRODUCTS -->
                     <div class="products">
@@ -444,43 +495,58 @@
         </main><!-- End .main -->
 
         <script>
-//         document.addEventListener('DOMContentLoaded', function () {
-//     const sortSelect = document.getElementById('sortby');
 
-//     if (sortSelect) {
-//         sortSelect.addEventListener('change', function () {
-//             const selectedSortOption = sortSelect.value;
-//             console.log('Sort Option:', selectedSortOption);
+            $(document).ready(function () {
+                $('#filtersForm').submit(function (event) {
+                    event.preventDefault();
 
-//             // Redirect to the "viewMore" page with the selected sort option
-//             window.location.href = `/sortProducts?sortby=${selectedSortOption}`;
-//         });
-//     }
-// });
+                    // Collect selected categories and other form data
+                    const formData = $(this).serializeArray();
 
-if (sortSelect) {
-        sortSelect.addEventListener('change', function () {
-            const selectedSortOption = sortSelect.value;
-            console.log('Sort Option:', selectedSortOption);
+                    // Log the form data to the console for debugging
+                    console.log(formData);
 
-            // Make an AJAX request to the server
-            fetch(`/sortProducts?sortby=${selectedSortOption}`, {
-                method: 'GET', // Use 'GET' since it's a retrieval operation
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Handle the response data as needed
-                console.log('Sorted Products:', data);
-
-                products : sortedProducts
-                discPrice : discount 
-            })
-            .catch(error => {
-                console.error('Error:', error);
+                    // Make an AJAX request
+                    $.ajax({
+                        type: 'POST',
+                        url: '/filter',
+                        data: formData,
+                        success: function (data) {
+                            // Handle the response if needed
+                            console.log(data);
+                        },
+                        error: function (error) {
+                            console.error(error);
+                        }
+                    });
+                });
             });
+
+
+            $(document).ready(function () {
+    $('#sortby').change(function () {
+        // Get the selected value
+        const selectedSort = $(this).val();
+        console.log(selectedSort);
+
+        // Make an AJAX request to the sortProducts route
+        $.ajax({
+            type: 'GET',
+            url: '/sortProducts',
+            data: { sortby: selectedSort },
+            success: function () {
+                // Reload the page after successful sorting
+                location.reload(true);
+            },
+            error: function (error) {
+                console.error(error);
+            }
         });
-    }
+    });
 });
+
+
+
         </script>
 
         <%- include('../layout/footer.ejs') -%>

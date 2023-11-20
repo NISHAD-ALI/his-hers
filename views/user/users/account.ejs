@@ -115,7 +115,7 @@
                                                                     <a href="/viewMore" data-type="order" data-id="<%= orderData[j]._id %>"
                                                                         class="btn btn-outline-primary-2 shop-button">SHOP <i class="icon-long-arrow-right"></i></a>
                                                                 <% } else { %>
-                                                                    <a href="/cancelPage" data-type="order" data-id="<%= orderData[j]._id %>"
+                                                                    <a href="#" data-type="order" data-id="<%= orderData[j]._id %>"
                                                                         class="btn btn-outline-primary-2 cancel-button">CANCEL<i class="icon-long-arrow-right"></i></a>
                                                                 <% } %>
                                                             </td>
@@ -319,62 +319,64 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $(document).ready(function () {
-            // Handle the cancel button click event
-            $('.cancel-button').click(function () {
-                const $button = $(this);
-                const type = $button.data('type');
-                const id = $button.data('id');
+  $(document).ready(function () {
+    // Handle the cancel button click event
+    $('.cancel-button').click(function () {
+        const $button = $(this);
+        const type = $button.data('type');
+        const id = $button.data('id');
 
-                $.ajax({
+        // Display SweetAlert confirmation dialog
+        Swal.fire({
+            title: 'Cancel Order',
+            html:
+                '<div>Select a reason for cancellation:<br>' +
+                '<input type="radio" id="reason1" name="cancelReason" value="OverPriced"> <label for="reason1">OverPriced</label><br>' +
+                '<input type="radio" id="reason2" name="cancelReason" value="Not Satisfied"> <label for="reason2">Not Satisfied</label><br>' +
+                '<input type="radio" id="reason3" name="cancelReason" value="Looking for a Different Product"> <label for="reason3">Looking for a Different Product</label></div>',
+            showCancelButton: true,
+            confirmButtonText: 'Proceed',
+            cancelButtonText: 'Cancel',
+            showLoaderOnConfirm: true,
+            preConfirm: async () => {
+                // Get the selected cancel reason
+                const cancelReason = $("input[name='cancelReason']:checked").val();
+
+                // Return an object with the cancel reason
+                return { cancelReason };
+            }
+        })
+        .then(async (result) => {
+            if (result.isConfirmed) {
+                // Perform the cancel action with the selected reason
+                const response = await $.ajax({
                     type: 'POST',
                     url: '/cancelOrder',
                     data: {
                         type: type,
-                        id: id
-                    },
-                    success: function (data) {
-                        if (data.success) {
-                            // Update the status column without reloading the page
-                            $button.parent().find('span').text(type === 'order' ? 'Order Status: cancelled' : 'Product Status: cancelled');
-                        } else {
-                            console.error('Failed to cancel ' + type);
-                        }
-                    },
-                    error: function (error) {
-                        console.error(error);
+                        id: id,
+                        reason: result.value.cancelReason
                     }
                 });
-            });
-        });
-        $(document).ready(function () {
-            // Handle the cancel button click event
-            $('.return-button').click(function () {
-                const $button = $(this);
-                const type = $button.data('type');
-                const id = $button.data('id');
 
-                $.ajax({
-                    type: 'POST',
-                    url: ' /returnOrder',
-                    data: {
-                        type: type,
-                        id: id
-                    },
-                    success: function (data) {
-                        if (data.success) {
-                            // Update the status column without reloading the page
-                            $button.parent().find('span').text(type === 'order' ? 'Order Status: Returned' : 'Product Status: Returned');
-                        } else {
-                            console.error('Failed to Return ' + type);
-                        }
-                    },
-                    error: function (error) {
-                        console.error(error);
-                    }
-                });
-            });
+                if (response.success) {
+                    // Update the status column without reloading the page
+                    $button.parent().find('.status-col').text(type === 'order' ? 'Order Status: cancelled' : 'Product Status: cancelled');
+
+                    // Redirect to the order cancel page
+                    window.location.href = '/orderCancel';
+                } else {
+                    Swal.fire('Error!', 'Failed to cancel ' + type, 'error');
+                }
+            }
+        })
+        .catch((error) => {
+            console.error(error);
+            Swal.fire('Error!', 'An error occurred.', 'error');
         });
-       
+    });
+});
+
+
     </script>
     <%- include('../layout/footer.ejs') -%>

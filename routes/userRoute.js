@@ -25,7 +25,10 @@ userRoute.post('/verify', userController.verifymail)
 userRoute.get('/viewMore',productController.loadProductList)
 userRoute.get('/productView',productController.loadUserProduct)
 userRoute.get('/searchProducts',productController.searchProducts)
-userRoute.all('/sortProducts', productController.sortProducts);
+userRoute.get('/sortProducts', productController.sortProducts);
+userRoute.post('/filter',productController.filteredProducts)
+
+
 
 userRoute.get('/myAccount',userController.loadAcc)
 userRoute.get('/editAddress',userController.loadEditAddress)
@@ -53,7 +56,7 @@ userRoute.post('/orderPlace',orderController.placeOrder)
 userRoute.get('/order-success',orderController.orderSuccess)
 userRoute.get('/order-Cancel',orderController.orderCancel)
 userRoute.post('/cancelOrder',orderController.cancelOrder)
-userRoute.get('/cancelPage',orderController.orderCancel)
+userRoute.get('/orderCancel',orderController.orderCancel)
 userRoute.get('/returnPage',orderController.returnOrder)
 userRoute.post('/returnOrder',orderController.orderReturnPOST)
 userRoute.post('/verify-payment',orderController.verifypayment)

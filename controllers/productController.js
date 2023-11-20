@@ -261,26 +261,7 @@ const deleteProduct = async (req, res) => {
   }
 };
 // ++++++++++++++++++++++++++++++++++++++ LOAD LIST OF PRODUCTS++++++++++++++++++++++++++++++++++++++++++++++
-// const loadProductList = async (req, res) => {
-//   try {
-//     let userName = ''; // Initialize userName
-//     if (req.session.user_id) {
-//       const user = await User.findOne({ _id: req.session.user_id }); // Use 'User' with an uppercase 'U'
-//       console.log(user);
-//       if (user) {
-//         userName = user.name;
-//         const productData = await product.find({ blocked: 0 });
-//         res.render('productList', { products: productData, userName });
-//       }
-//     }else
-//     {
-//       const productData = await product.find({ blocked: 0 }); // Assuming you have 'Product' model
 
-//     res.render('productList', { products: productData});}
-//   } catch (error) {
-//     console.log(error.message);
-//   }
-// }
 const loadProductList = async (req, res) => {
   try {
     let userName = '';
@@ -308,39 +289,9 @@ const loadProductList = async (req, res) => {
 
 // ++++++++++++++++++++++++++++++++++++++ LOAD INDIVIDUAL PRODUCTS++++++++++++++++++++++++++++++++++++++++++++++
 
-// const loadUserProduct = async (req, res) => {
-//   try {
-//     let userName = ''; // Initialize userName
-//     if (req.session.user_id) {
-//           const user = await User.findOne({ _id: req.session.user_id }); // Use 'User' with an uppercase 'U'
 
-//           if (user) {
-//             userName = user.name;
-//             const viewProduct = await product.findOne({ _id: req.query.id });
-
-//         if (viewProduct) {
-//           const products = await product.find({ blocked: 0 });
-//           res.render("productView", {  viewProduct,userName });
-//           } else {
-//           res.status(404).render("404");
-//         }
-//       }
-//     }else{
-//     const viewProduct = await product.findOne({ _id: req.query.id });
-
-//     if (viewProduct) {
-//       const products = await product.find({ blocked: 0 });
-//       res.render("productView", {  viewProduct });
-//       } else {
-//       res.status(404).render("404");
-//     }
-//   } }catch (error) {
-
-//     console.log(error.message);
-//   }
-// };
 const loadUserProduct = async (req, res) => {
-  let userName = ''; // Initialize userName
+  let userName = ''; 
 
   if (req.session.user_id) {
     const user = await User.findOne({ _id: req.session.user_id });
@@ -390,71 +341,60 @@ const searchProducts = async (req, res) => {
 };
 
 
-// const sortProducts = async (req, res) => {
-//   try {
-//     let sortOption = req.query.sortby; // Use req.query to get the value from the query parameters
-//     console.log(sortOption);
-//     let sortedProducts 
-//     // let sortCriteria = {};
 
-//     // switch (sortOption) {
-//     //   case 'priceLowToHigh':
-//     //     sortCriteria = { price: 1 };
-//     //     break;
-//     //   case 'priceHighToLow':
-//     //     sortCriteria = { price: -1 };
-//     //     break;
-//     //   default:
-//     //     sortCriteria = { productname: 1 };
-//     //     break;
-//     // }
-//     if(sortOption === 'priceHighToLow'){
-//       sortedProducts = await product.find().sort({ price: -1 })
-//     }else{
-//       sortedProducts = await product.find().sort({ price: 1 })
-//     }
+  const sortProducts = async (req, res) => {
+    try {
+        let sortOption = req.query.sortby;
+        console.log('Sort Option:', sortOption);
 
-//     const discount = await Offers.find({ is_block: 0 })
-   
-   
-//     res.render('productList',{products:sortedProducts, discPrice: discount })
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).send('Internal Server Error');
-//   }
-// };
-const sortProducts = async (req, res) => {
-  try {
-      let sortOption = req.query.sortby;
-      console.log('Sort Option:', sortOption);
+        let sortCriteria = {};
 
-      let sortCriteria = {};
-
-      switch (sortOption) {
-          case 'priceLowToHigh':
+        switch (sortOption) {
+            case 'priceLowToHigh':
+                sortCriteria = { price: 1 };
+                break;
+            case 'priceHighToLow':
+                sortCriteria = { price: -1 };
+                break;
+            default:
               sortCriteria = { price: 1 };
-              break;
-          case 'priceHighToLow':
-              sortCriteria = { price: -1 };
-              break;
-          default:
-              sortCriteria = { productname: 1 };
-              break;
-      }
+                break;
+        }
 
-      console.log('Sort Criteria:', sortCriteria);
+        console.log('Sort Criteria:', sortCriteria);
 
+        const discount = await Offers.find({ is_block: 0 });
+        const sortedProducts = await product.find().sort(sortCriteria);
+
+        const renderData = { products: sortedProducts, discPrice: discount };
+     console.log(sortedProducts)
+        res.render('productList', renderData);
+        
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+  };
+
+
+const filteredProducts = async (req, res) => {
+  try {
+
+    console.log(req.body);
+    
+      const selectedCategories = req.body.categories;
+      const filteredProducts = await product.find({ category:selectedCategories  });
       const discount = await Offers.find({ is_block: 0 });
-      const sortedProducts = await product.find().sort(sortCriteria);
-
-      console.log('Sorted Products:', sortedProducts);
-
-      res.json({ sortedProducts, discount });
+      const renderData = { products: filteredProducts, discPrice: discount };
+     console.log(selectedCategories);
+     
+      res.render('productList', renderData);
   } catch (error) {
-      console.error(error);
-      res.status(500).send('Internal Server Error');
+      console.log(error.message);
+      res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
 
 
 module.exports = {
@@ -469,5 +409,5 @@ module.exports = {
   loadUserProduct,
   searchProducts,
   sortProducts,
-
+  filteredProducts
 }
