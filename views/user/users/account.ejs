@@ -1,5 +1,42 @@
 <%- include('../layout/header.ejs') -%>
+    <style>
+        .card {
+            margin-top: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.281);
+        }
 
+        .card-img-top {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .card-text {
+            font-size: 0.875rem;
+            color: #d3b8b8;
+        }
+
+        .capsule {
+            display: flex;
+            justify-content: space-between;
+            background-color: #dce6ef;
+            /* Set your desired background color */
+            color: #fff;
+            /* Set text color to ensure visibility */
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+
+        .field {
+            flex: 1;
+            padding: 5px;
+        }
+    </style>
     <main class="main">
         <div class="page-header text-center" style="background-image: url('user/images/page-header-bg.jpg')">
             <div class="container">
@@ -28,6 +65,10 @@
                                         aria-selected="true">Dashboard</a>
                                 </li>
                                 <li class="nav-item">
+                                    <a class="nav-link" id="tab-wallet-link" data-toggle="tab" href="#tab-wallet"
+                                        role="tab" aria-controls="tab-wallet" aria-selected="true">Wallet</a>
+                                </li>
+                                <li class="nav-item">
                                     <a class="nav-link" id="tab-orders-link" data-toggle="tab" href="#tab-orders"
                                         role="tab" aria-controls="tab-orders" aria-selected="false">Orders</a>
                                 </li>
@@ -44,7 +85,7 @@
                                         role="tab" aria-controls="tab-account" aria-selected="false">Account Details</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">Sign Out</a>
+                                    <a class="nav-link" href="/logout">Sign Out</a>
                                 </li>
                             </ul>
                         </aside><!-- End .col-lg-3 -->
@@ -65,6 +106,79 @@
                                         details</a>.</p>
                                 </div><!-- .End .tab-pane -->
 
+                                <div class="tab-pane fade show" id="tab-wallet" role="tabpanel"
+                                    aria-labelledby="tab-wallet-link">
+                                    <div class="container">
+                                        <div class="row justify-content-center">
+                                            <!-- First Card -->
+                                            <div class="col-md-6 d-flex align-items-center mb-4 mr-1">
+                                                <!-- Added 'mb-4' for margin-bottom spacing -->
+                                                <div class="card" style="width: 400px; height: 300px;">
+                                                    <!-- Adjust width and height as needed -->
+                                                    <div class="card-body text-center">
+                                                        <!-- Added 'text-center' class here -->
+                                                        <h3>My Wallet</h3>
+                                                        <!-- Added 'card-title' class for the heading -->
+                                                        <p class="card-text">Wallet Id: **** **** **** 1234</p>
+                                                        <div class="capsule">
+                                                            <h5>Avl Bal</h5>
+                                                            <h6>$00.00</h6>
+                                                        </div>
+                                                        <br>
+                                                        <a href="#" class="btn btn-outline-primary-2 shop-button"> Add
+                                                            Money To Wallet
+                                                            <i class="icon-long-arrow-right"></i></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Second Card -->
+                                            <div class="col-md-6 pl-6 d-flex align-items-center mb-4">
+                                                <div class="card" style="width: 400px; height: 300px; position: relative;">
+                                                    <div class="card-body text-center" style="overflow: scroll; max-height: 300px;">
+                                                        <h3>Recent Transactions</h3>
+                                                        <table class="table">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Date</th>
+                                                                    <th>Description</th>
+                                                                    <th>Amount</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <!-- Add rows for each transaction -->
+                                                                <tr>
+                                                                    <td>2023-01-01</td>
+                                                                    <td>Transaction 1</td>
+                                                                    <td>$50.00</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>2023-01-02</td>
+                                                                    <td>Transaction 2</td>
+                                                                    <td>$30.00</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>2023-01-01</td>
+                                                                    <td>Transaction 1</td>
+                                                                    <td>$50.00</td>
+                                                                </tr>
+                                                                <!-- Add more rows as needed -->
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+
+
+
                                 <div class="tab-pane fade" id="tab-orders" role="tabpanel"
                                     aria-labelledby="tab-orders-link">
                                     <table class="table table-cart table-mobile">
@@ -77,77 +191,108 @@
                                                 <th style="width: 20%;"></th>
                                             </tr>
                                         </thead>
-                                    
+
                                         <tbody>
                                             <% if (orderData) { %>
-                                                <% for (let j = 0; j < orderData.length; j++) { %>
-                                                    <% let product = orderData[j].products %>
-                                                    <% for (let i = 0; i < product.length; i++) { %>
-                                                        <% const value = product[i].productId; %>
-                                                        
-                                                        <tr>
-                                                            <td class="product-col">
-                                                                <div class="product">
-                                                                    <figure class="product-media">
-                                                                        <a href="#">
-                                                                            <img src="/products/images/<%= value.image[0] %>" alt="Product image">
-                                                                        </a>
-                                                                    </figure>
-                                                                    <h3 class="product-title">
-                                                                        <a href="#">
-                                                                            <%= value.productname %>
-                                                                        </a>
-                                                                    </h3>
-                                                                </div>
-                                                            </td>
-                                                            <%   if(value.discountPrice){  %>
-                                                            <td class="price-col">$<%= value.discountPrice %></td>
-                                                            <%  } else { %>
-                                                                <td class="price-col">$<%= value.price %></td>
+                                                <% for (let j=0; j < orderData.length; j++) { %>
+                                                    <% let product=orderData[j].products %>
+                                                        <% for (let i=0; i < product.length; i++) { %>
+                                                            <% const value=product[i].productId; %>
+
+                                                                <tr>
+                                                                    <td class="product-col">
+                                                                        <div class="product">
+                                                                            <figure class="product-media">
+                                                                                <a href="#">
+                                                                                    <img src="/products/images/<%= value.image[0] %>"
+                                                                                        alt="Product image">
+                                                                                </a>
+                                                                            </figure>
+                                                                            <h3 class="product-title">
+                                                                                <a href="#">
+                                                                                    <%= value.productname %>
+                                                                                </a>
+                                                                            </h3>
+                                                                        </div>
+                                                                    </td>
+                                                                    <% if(value.discountPrice){ %>
+                                                                        <td class="price-col">$<%= value.discountPrice
+                                                                                %>
+                                                                        </td>
+                                                                        <% } else { %>
+                                                                            <td class="price-col">$<%= value.price %>
+                                                                            </td>
+                                                                            <% } %>
+                                                                                <td class="status-col">
+                                                                                    <%= orderData[j].status %>
+                                                                                </td>
+                                                                                <td class="remove-col">
+                                                                                    <% if
+                                                                                        (orderData[j].status==='Delivered'
+                                                                                        ) { %>
+                                                                                        <a href="/returnPage"
+                                                                                            data-type="order"
+                                                                                            data-id="<%= orderData[j]._id %>"
+                                                                                            class="btn btn-outline-primary-2 return-button">RETURN<i
+                                                                                                class="icon-long-arrow-right"></i></a>
+                                                                                        <% } else if
+                                                                                            (orderData[j].status==='cancelled'
+                                                                                            ) { %>
+                                                                                            <a href="/viewMore"
+                                                                                                data-type="order"
+                                                                                                data-id="<%= orderData[j]._id %>"
+                                                                                                class="btn btn-outline-primary-2 shop-button">SHOP
+                                                                                                <i
+                                                                                                    class="icon-long-arrow-right"></i></a>
+                                                                                            <% } else if
+                                                                                                (orderData[j].status==='Returned'
+                                                                                                ) { %>
+                                                                                                <a href="/viewMore"
+                                                                                                    data-type="order"
+                                                                                                    data-id="<%= orderData[j]._id %>"
+                                                                                                    class="btn btn-outline-primary-2 shop-button">SHOP
+                                                                                                    <i
+                                                                                                        class="icon-long-arrow-right"></i></a>
+                                                                                                <% } else { %>
+                                                                                                    <a href="#"
+                                                                                                        data-type="order"
+                                                                                                        data-id="<%= orderData[j]._id %>"
+                                                                                                        class="btn btn-outline-primary-2 cancel-button">CANCEL<i
+                                                                                                            class="icon-long-arrow-right"></i></a>
+                                                                                                    <% } %>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <% if(orderData[j].status=="Delivered"
+                                                                                        ){ %>
+                                                                                        <div
+                                                                                            class="col-6 col-lg-4 col-xl-2">
+                                                                                            <div class="btn-wrap">
+                                                                                                <a href="/invoice/<%= value._id %>"
+                                                                                                    class="btn btn-outline-dark btn-round"
+                                                                                                    style="padding: 5px 10px; font-size: 12px;">Download
+                                                                                                    Invoice</a>
+                                                                                            </div><!-- End .btn-wrap -->
+                                                                                        </div>
+                                                                                        <!-- End .col-md-4 col-lg-2 -->
+                                                                                        <% } %>
+                                                                                </td>
+
+                                                                </tr>
                                                                 <% } %>
-                                                            <td class="status-col">
-                                                                <%= orderData[j].status %>
-                                                            </td>
-                                                            <td class="remove-col">
-                                                                <% if (orderData[j].status === 'Delivered') { %>
-                                                                    <a href="/returnPage" data-type="order" data-id="<%= orderData[j]._id %>"
-                                                                        class="btn btn-outline-primary-2 return-button">RETURN<i class="icon-long-arrow-right"></i></a>
-                                                                <% } else if (orderData[j].status === 'cancelled') { %>
-                                                                    <a href="/viewMore" data-type="order" data-id="<%= orderData[j]._id %>"
-                                                                        class="btn btn-outline-primary-2 shop-button">SHOP <i class="icon-long-arrow-right"></i></a>
-                                                                <% } else if (orderData[j].status === 'Returned') { %>
-                                                                    <a href="/viewMore" data-type="order" data-id="<%= orderData[j]._id %>"
-                                                                        class="btn btn-outline-primary-2 shop-button">SHOP <i class="icon-long-arrow-right"></i></a>
-                                                                <% } else { %>
-                                                                    <a href="#" data-type="order" data-id="<%= orderData[j]._id %>"
-                                                                        class="btn btn-outline-primary-2 cancel-button">CANCEL<i class="icon-long-arrow-right"></i></a>
-                                                                <% } %>
-                                                            </td>
-                                                            <td>
-                                                                <% if(orderData[j].status == "Delivered"){ %>
-                                                                  <div class="col-6 col-lg-4 col-xl-2">
-                                                                    <div class="btn-wrap">
-                                                                      <a href="/invoice/<%= value._id %>" class="btn btn-outline-dark btn-round" style="padding: 5px 10px; font-size: 12px;">Download Invoice</a>
-                                                                    </div><!-- End .btn-wrap -->
-                                                                  </div><!-- End .col-md-4 col-lg-2 -->
-                                                                <% } %>
-                                                              </td>
-                                                              
-                                                        </tr>
-                                                    <% } %>
-                                                <% } %>
-                                            <% } else { %>
-                                                <tr>
-                                                    <td >
-                                                        <a href="/shop-now" class="btn btn-primary">
-                                                            <button>Shop Now</button>
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                            <% } %>
+                                                                    <% } %>
+                                                                        <% } else { %>
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <a href="/shop-now"
+                                                                                        class="btn btn-primary">
+                                                                                        <button>Shop Now</button>
+                                                                                    </a>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <% } %>
                                         </tbody>
                                     </table>
-                                    
+
                                 </div>
 
 
@@ -323,63 +468,63 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-  $(document).ready(function () {
-    // Handle the cancel button click event
-    $('.cancel-button').click(function () {
-        const $button = $(this);
-        const type = $button.data('type');
-        const id = $button.data('id');
+        $(document).ready(function () {
+            // Handle the cancel button click event
+            $('.cancel-button').click(function () {
+                const $button = $(this);
+                const type = $button.data('type');
+                const id = $button.data('id');
 
-        // Display SweetAlert confirmation dialog
-        Swal.fire({
-            title: 'Cancel Order',
-            html:
-                '<div>Select a reason for cancellation:<br>' +
-                '<input type="radio" id="reason1" name="cancelReason" value="OverPriced"> <label for="reason1">OverPriced</label><br>' +
-                '<input type="radio" id="reason2" name="cancelReason" value="Not Satisfied"> <label for="reason2">Not Satisfied</label><br>' +
-                '<input type="radio" id="reason3" name="cancelReason" value="Looking for a Different Product"> <label for="reason3">Looking for a Different Product</label></div>',
-            showCancelButton: true,
-            confirmButtonText: 'Proceed',
-            cancelButtonText: 'Cancel',
-            showLoaderOnConfirm: true,
-            preConfirm: async () => {
-                // Get the selected cancel reason
-                const cancelReason = $("input[name='cancelReason']:checked").val();
+                // Display SweetAlert confirmation dialog
+                Swal.fire({
+                    title: 'Cancel Order',
+                    html:
+                        '<div>Select a reason for cancellation:<br>' +
+                        '<input type="radio" id="reason1" name="cancelReason" value="OverPriced"> <label for="reason1">OverPriced</label><br>' +
+                        '<input type="radio" id="reason2" name="cancelReason" value="Not Satisfied"> <label for="reason2">Not Satisfied</label><br>' +
+                        '<input type="radio" id="reason3" name="cancelReason" value="Looking for a Different Product"> <label for="reason3">Looking for a Different Product</label></div>',
+                    showCancelButton: true,
+                    confirmButtonText: 'Proceed',
+                    cancelButtonText: 'Cancel',
+                    showLoaderOnConfirm: true,
+                    preConfirm: async () => {
+                        // Get the selected cancel reason
+                        const cancelReason = $("input[name='cancelReason']:checked").val();
 
-                // Return an object with the cancel reason
-                return { cancelReason };
-            }
-        })
-        .then(async (result) => {
-            if (result.isConfirmed) {
-                // Perform the cancel action with the selected reason
-                const response = await $.ajax({
-                    type: 'POST',
-                    url: '/cancelOrder',
-                    data: {
-                        type: type,
-                        id: id,
-                        reason: result.value.cancelReason
+                        // Return an object with the cancel reason
+                        return { cancelReason };
                     }
-                });
+                })
+                    .then(async (result) => {
+                        if (result.isConfirmed) {
+                            // Perform the cancel action with the selected reason
+                            const response = await $.ajax({
+                                type: 'POST',
+                                url: '/cancelOrder',
+                                data: {
+                                    type: type,
+                                    id: id,
+                                    reason: result.value.cancelReason
+                                }
+                            });
 
-                if (response.success) {
-                    // Update the status column without reloading the page
-                    $button.parent().find('.status-col').text(type === 'order' ? 'Order Status: cancelled' : 'Product Status: cancelled');
+                            if (response.success) {
+                                // Update the status column without reloading the page
+                                $button.parent().find('.status-col').text(type === 'order' ? 'Order Status: cancelled' : 'Product Status: cancelled');
 
-                    // Redirect to the order cancel page
-                    window.location.href = '/orderCancel';
-                } else {
-                    Swal.fire('Error!', 'Failed to cancel ' + type, 'error');
-                }
-            }
-        })
-        .catch((error) => {
-            console.error(error);
-            Swal.fire('Error!', 'An error occurred.', 'error');
+                                // Redirect to the order cancel page
+                                window.location.href = '/orderCancel';
+                            } else {
+                                Swal.fire('Error!', 'Failed to cancel ' + type, 'error');
+                            }
+                        }
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                        Swal.fire('Error!', 'An error occurred.', 'error');
+                    });
+            });
         });
-    });
-});
 
 
     </script>

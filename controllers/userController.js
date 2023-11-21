@@ -6,6 +6,8 @@ const nodemailer = require('nodemailer');
 const multer = require("../middleware/multer");
 const Cart = require('../models/cartModel')
 const Product = require('../models/productModel')
+const Wishlist = require('../models/wishlistModel');
+const { log } = require('npmlog');
 require('dotenv').config();
 
 let email2;
@@ -288,17 +290,7 @@ const loadAcc = async (req, res) => {
         .populate("products.productId")
         .sort({ purchaseDate: -1 });
 
-        let productId
-      orderData.forEach(order => {
-
-        order.products.forEach(product => {
-
-           price = product.productId;
-         console.log(price);
-        });
-      });
-
-
+       
 
 
       if (user) {
@@ -306,7 +298,7 @@ const loadAcc = async (req, res) => {
         accountDetails = user;
         UserAddress = addresses;
 
-        return res.render('account', { accountDetails, orderData, UserAddress, userName,price });
+        return res.render('account', { accountDetails, orderData, UserAddress, userName });
       }
     }
 
@@ -673,6 +665,84 @@ const updateUserDetails = async (req, res) => {
 };
 
 
+const loadWishlist = async (req, res) => {
+  try {
+    const user = req.session.user_id;
+    let userName;
+    let wishlist
+    if (user) {
+      const userData = await User.findOne({ _id: user });
+
+      if (!userData) {
+        console.log('User not found');
+        return res.status(404).render('error', { errorMessage: 'User not found' });
+      }
+
+      userName = userData.name;
+
+       wishlist = await Wishlist.find({ userid: user }).populate('productid');
+      
+      res.render('wishlist', { wishlist, userName });
+    } else {
+      console.log('User not authenticated');
+      res.render('wishlist', { wishlist: wishlist || [], userName });
+    }
+  } catch (error) {
+    console.error(error.message);
+
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
+const addtoWishlist = async (req, res) => {
+  try {
+    const user = req.session.user_id;
+    const pro_id = req.body.id;
+    const wishlist = await Wishlist.findOne({ userid: user });
+    const checkwishlistdata = await Wishlist.findOne({ userid: user, productid: pro_id });
+
+    if (user) {
+      if (wishlist) {
+        if (checkwishlistdata) {
+          res.json({ result: false });
+        } else {
+          await Wishlist.updateOne({ userid: user }, { $push: { productid: pro_id } });
+          res.json({ result: true });
+        }
+      } else {
+        const data = new Wishlist({
+          userid: user,
+          productid: [pro_id],
+        });
+
+        await data.save();
+        res.json({ result: true });
+      }
+    } else {
+      res.json({ result: false });
+    }
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
+const deleteWishproduct = async(req,res) => {
+  try {
+    const user = req.session.user_id;
+    const pro_id = req.query.id;
+     console.log(user);
+     console.log(pro_id);
+     await Wishlist.updateOne({ userid: user }, { $pull: { productid: pro_id } });
+    res.redirect('/wishlist')
+    
+  } catch (error) {
+    console.log(error.message)
+  }
+}
+
 module.exports = {
   loadSignup,
   insertNewUser,
@@ -693,6 +763,9 @@ module.exports = {
   updateUserDetails,
   loadResetPassEmail,
   loadpassReset,
-  resetPasswordPost
+  resetPasswordPost,
+  loadWishlist,
+  addtoWishlist,
+  deleteWishproduct,
 };
 

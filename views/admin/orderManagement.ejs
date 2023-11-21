@@ -1,0 +1,92 @@
+<%- include('../admin/layout/adminSidebar.ejs') -%>
+<%- include('../admin/layout/adminHeader.ejs') -%>
+
+<div class="row ">
+    <div class="col-12 grid-margin">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Order Status</h4>
+          <div class="table-responsive">
+            <table class="table" style="color: white;">
+              <thead>
+                <tr>
+                  <!-- Empty header cells -->
+                 
+                  <th> User Name</th>
+                  <th > Product Name</th>
+                  <th> Price</th>
+                  <th> Date</th>
+                  <th> Order Status</th>
+                  <th> Payment</th>
+                  <th> Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if (orderDat) { %>
+                  <% for (let j = 0; j < orderDat.length; j++) { %>
+                    <% let products = orderDat[j].products; %>
+                    <% const username = orderDat[j].userid.name; %>
+                    <% for (let i = 0; i < products.length; i++) { %>
+                      <% const product = products[i].productId; %>
+                      <tr>
+                       
+                        <td>
+                          <!-- Username -->
+                          <%= username %>
+                        </td>
+                        <td class="product-name-cell">
+                          <img src="/products/images/<%= product.image[0] %>" alt="image" />
+                          <span class="pl-2 product-name">
+                            <%= product.productname %>
+                          </span>
+                        </td>
+                        <td>
+                          <!-- Product Price -->
+                          <%= product.price %>
+                        </td>
+                        <td>
+                          <!-- Purchase Date -->
+                          <%= orderDat[j].purchaseDate.toLocaleString('en-US', {
+                            year: 'numeric',
+                            month: 'short',
+                            day: '2-digit',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            second: '2-digit'
+                          }).replace(/,/, '').replace(/\//g, '-') %>
+                        </td>
+                        <td>
+                          <!-- Order Status -->
+                          <%= orderDat[j].status %>
+                        </td>
+                        <td>
+                          <!-- Payment Method -->
+                          <%= orderDat[j].paymentMethod %>
+                        </td>
+                        <td>
+                          <!-- Order Status Select -->
+                          <div class="form-group">
+                            <select class="form-control order-status-select" data-order-id="<%= orderDat[j]._id %>">
+                              <option value="Pending" <%= orderDat[j].status === "Pending" ? 'selected' : '' %>>Pending</option>
+                              <option value="Processing" <%= orderDat[j].status === "Processing" ? 'selected' : '' %>>Processing</option>
+                              <option value="Shipped" <%= orderDat[j].status === "Shipped" ? 'selected' : '' %>>Shipped</option>
+                              <option value="Delivered" <%= orderDat[j].status === "Delivered" ? 'selected' : '' %>>Delivered</option>
+                              <option value="cancelled" <%= orderDat[j].status === "cancelled" ? 'selected' : '' %>>cancelled</option>
+                              <option value="Returned" <%= orderDat[j].status === "Returned" ? 'selected' : '' %>>Returned</option>
+                              <!-- Add more options as needed -->
+                            </select>
+                          </div>
+                        </td>
+                      </tr>
+                    <% } %>
+                  <% } %>
+                <% } %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%- include('../admin/layout/adminFooter.ejs') -%>

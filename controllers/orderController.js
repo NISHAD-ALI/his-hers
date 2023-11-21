@@ -554,6 +554,15 @@ const orderInvoice = async (req, res) => {
   }
 };
 
+
+
+const loadOrderList = async(req,res) =>{
+  try {
+    
+  } catch (error) {
+    
+  }
+}
 module.exports = {
   loadCheckout,
   placeOrder,
@@ -563,6 +572,7 @@ module.exports = {
   returnOrder,
   orderReturnPOST,
   verifypayment,
-  orderInvoice
-  // viewrazor
+  orderInvoice,
+  // viewrazor,
+  loadOrderList
 }

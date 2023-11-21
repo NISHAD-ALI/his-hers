@@ -152,13 +152,11 @@
                                                     Cart</span></button>
                                         </a>
 
-
+   <!-- ADD TO WISHLIST -->
 
                                         <div class="details-action-wrapper">
-                                            <a href="#" class="btn-product btn-wishlist" title="Wishlist"><span>Add to
-                                                    Wishlist</span></a>
-                                            <a href="#" class="btn-product btn-compare" title="Compare"><span>Add to
-                                                    Compare</span></a>
+                                            <button type="button" class="btn btn-primary" onclick="addToWishlist('<%= viewProduct._id %>')">Add To Wishlist</button>
+                                           
                                         </div><!-- End .details-action-wrapper -->
                                     </div><!-- End .product-details-action -->
 
@@ -538,7 +536,7 @@
                                 </a>
 
                                 <div class="product-action-vertical">
-                                    <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to
+                                    <a href="/addToWishlist" class="btn-product-icon btn-wishlist btn-expandable"><span>add to
                                             wishlist</span></a>
                                     <a href="popup/quickView.html" class="btn-product-icon btn-quickview"
                                         title="Quick view"><span>Quick view</span></a>
@@ -584,7 +582,7 @@
                                 </a>
 
                                 <div class="product-action-vertical">
-                                    <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to
+                                    <a href="/addToWishlist" class="btn-product-icon btn-wishlist btn-expandable"><span>add to
                                             wishlist</span></a>
                                     <a href="popup/quickView.html" class="btn-product-icon btn-quickview"
                                         title="Quick view"><span>Quick view</span></a>
@@ -710,6 +708,42 @@
                 },
             });
         }
+    
+  // Function to handle adding to wishlist via AJAX
+  function addToWishlist(productId) {
+
+        $.ajax({
+    url: '/addToWishlist',
+    type: 'POST',
+    data: { id: productId },
+    success: function (data) {
+      if (data.result) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Added to Wishlist!',
+          text: 'Product has been added to your Wishlist successfully!',
+        });
+      } else {
+        Swal.fire({
+          icon: 'info',
+          title: 'Failed to Add to Wishlist',
+          text: 'Product may already be in the Wishlist.',
+        });
+      }
+    },
+    error: function () {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Error adding to Wishlist. Please try again later.',
+      });
+    }
+  });
+}
+
+
+
+
 
     </script>
 

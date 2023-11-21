@@ -62,7 +62,11 @@ userRoute.post('/returnOrder',orderController.orderReturnPOST)
 userRoute.post('/verify-payment',orderController.verifypayment)
 userRoute.get('/invoice/:id',orderController.orderInvoice)
 
-
 userRoute.post('/applyCoupon',couponController.applyCoupon)
+
+userRoute.get('/wishlist',userController.loadWishlist)
+userRoute.post('/addToWishlist', userController.addtoWishlist);
+userRoute.get('/deleteWishproduct',userController.deleteWishproduct)
+
 
 module.exports = userRoute
