@@ -54,8 +54,14 @@ const insertNewUser = async (req, res) => {
     // Validate email using regex
     const validEmail = validateEmail(req.body.newEmail);
     if (!validEmail) {
-      return res.render('login', { message: 'Invalid email format' });
+      return res.render('login', { message1: 'Invalid email format' });
     }
+    const user = await User.findOne({ email: req.body.newEmail });
+    console.log(user);
+    if (user) {
+      return res.render('login', { message1: 'Email is already Registered' });
+    }
+
 
     const secPass = await hashPassword(req.body.newPassword);
     const userNew = new User({
@@ -67,6 +73,7 @@ const insertNewUser = async (req, res) => {
     });
 
     const userData = await userNew.save();
+  const newuser = await User.findOne({email:req.body.newEmail})
 
     if (userData) {
       // Send verification email
@@ -74,9 +81,10 @@ const insertNewUser = async (req, res) => {
       email2 = req.body.newEmail;
       nameResend = req.body.newUsername;
       user_id = userData._id;
-      res.render('otppage', { message: 'Check your email for the OTP.' });
+
+      res.render('otppage', { message: 'Check your email for the OTP.',newuser });
     } else {
-      res.render('login', { message: 'Failed to register' });
+      res.render('login', { message1: 'Failed to register' });
     }
   } catch (error) {
     console.log(error.message);
@@ -90,6 +98,7 @@ const insertNewUser = async (req, res) => {
 
 function otpgenerator() {
   otpsend = Math.floor(100000 + Math.random() * 900000);
+  console.log(otpsend);
 }
 
 const sendVerifyMail = async (name, email) => {
@@ -125,6 +134,7 @@ const sendVerifyMail = async (name, email) => {
 
 const resendOTP = async (req, res) => {
   try {
+    
     otp = await Math.floor(10000 + Math.random() * 90000);
     console.log(otp)
     sendVerifyMail(nameResend, email2, user_id);
@@ -143,9 +153,11 @@ const verifymail = async (req, res) => {
   try {
     console.log('Current OTP:', otpsend);
     console.log('User entered OTP:', req.body.otp);
-
+  
+   
     if (req.body.otp == otpsend) {
-      const updateinfo = await User.updateOne({ _id: req.query.id }, { $set: { is_verified: 1 } });
+      const use = req.body.usermon
+      const updateinfo = await User.updateOne({ _id: use }, { $set: { is_verified: 1 } });
       console.log(updateinfo);
       // res.redirect('/login');
       res.render('login', { message: 'Your Account has been created.' });
@@ -182,6 +194,11 @@ const loginUser = async (req, res) => {
     }
     if (user.is_block == 1) {
       return res.render('login', { message: "Your account has been BLOCKED" })
+    }
+    if (user.is_verified === 0) {
+      
+      sendVerifyMail(user.name, user.email, user._id);
+      return res.render('otppage', { message: 'Check your email for the OTP.',user });
     }
     const passwordMatch = await bcrypt.compare(newPassword, user.password);
 
@@ -633,6 +650,7 @@ const resetPasswordPost = async (req, res) => {
     user.resetPasswordToken = null;
     user.resetPasswordExpires = null;
     await user.save();
+    req.session.passwordUpdateSuccess = true; 
     res.redirect('/login');
   } catch (error) {
     console.error(error);

@@ -107,7 +107,7 @@ const loadAdminDash = async (req, res) => {
       .populate('products.productId');
 
     const orderCount = await Order.countDocuments();
-    
+    const userCount = await user.countDocuments();
     // Fetch total revenue
     const totalRevenue = await Order.aggregate([
       {
@@ -121,7 +121,7 @@ const loadAdminDash = async (req, res) => {
     // Check if totalRevenue array is not empty
     const formattedTotalRevenue = totalRevenue.length > 0 ? totalRevenue[0].totalRevenue : 0;
 
-    res.render('dashboard', { orderDat, orderCount, totalRevenue: formattedTotalRevenue });
+    res.render('dashboard', { orderDat, orderCount, totalRevenue: formattedTotalRevenue ,userCount});
   } catch (error) {
     console.log(error.message);
   }
@@ -290,7 +290,21 @@ const updateOrderStatus = async (req, res) => {
   }
 };
 
+const loadOrder = async (req,res) => {
+  try {
+    const orderDat = await Order.find({})
+      .populate({
+        path: 'userid',
+        select: 'name'
+      })
+      .populate('products.productId');
 
+    res.render('orderManagement',{ orderDat })
+  } catch (error) {
+    console.log(error.message)
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
   
  module.exports = {
     loadAdminSignin,
@@ -306,5 +320,6 @@ const updateOrderStatus = async (req, res) => {
     editcat,
     editcatPOST,
     loadAdminError,
-    updateOrderStatus
+    updateOrderStatus,
+    loadOrder
   }

@@ -28,7 +28,9 @@ userRoute.get('/searchProducts',productController.searchProducts)
 userRoute.get('/sortProducts', productController.sortProducts);
 userRoute.post('/filter',productController.filteredProducts)
 
-
+userRoute.get('/categoryMen', productController.menCat);
+userRoute.get('/categorywoMen', productController.womenCat);
+userRoute.get('/freshArrivals', productController.loadfreshArrivals);
 
 userRoute.get('/myAccount',userController.loadAcc)
 userRoute.get('/editAddress',userController.loadEditAddress)

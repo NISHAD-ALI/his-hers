@@ -247,13 +247,13 @@ const placeOrder = async (req, res) => {
           // Decrease product quantities, clear the cart, and update the order
           await decreaseProductQuantities(orderProducts);
 
-          if (req.session.code) {
-            const coupon = await Coupon.findOne({ couponCode: req.session.code });
+          // if (req.session.code) {
+          //   const coupon = await Coupon.findOne({ couponCode: req.session.code });
 
-            if (coupon) {
-              await Order.updateOne({ _id: savedOrder._id }, { discount: coupon.discountAmount });
-            }
-          }
+          //   if (coupon) {
+          //     await Order.updateOne({ _id: savedOrder._id }, { discount: coupon.discountAmount });
+          //   }
+          // }
 
           return res.json({ success: true, orderid: savedOrder._id });
         }
@@ -268,7 +268,7 @@ const placeOrder = async (req, res) => {
       };
       console.log('XP 6');
       razorpay.orders.create(options, function (err, order) {
-        // Coupon.claimedusers.push(userId);
+   
         return res.json({ order });
        });
       
@@ -294,27 +294,14 @@ const placeOrder = async (req, res) => {
 // ++++++++++++++++ORDER PLACED PAGE++++++++++++++++++
 
 
-// const orderSuccess = async (req, res) => {
-//   try {
-  
-//     const userId = req.session.user_id;
-   
-
-//     console.log('3');
-//     res.render('orderSuccess')
-//   } catch (error) {
-//     console.log(error.message)
-//   }
-// }
-
 const orderSuccess = async (req, res) => {
   try {
       const userId = req.session.user_id;
       
-      // Assuming you have a way to get the couponCode from the order data
+
       const couponCode = req.body.couponCode; 
 
-      // Update the claimedusers array only when the order is placed
+      
       await Coupon.updateOne(
           { couponcode: couponCode },
           { $push: { claimedusers: userId } }
@@ -333,25 +320,11 @@ const verifypayment = async(req,res)=>{
       const user_id =  req.session.user_id
       const paymentData = req.body
       const cartData = await Cart.find({ userid : user_id });
-    
-      console.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
-     
-      console.log(cartData);
-     
       const hmac = crypto.createHmac("sha256", process.env.RAZORPAYSECRETKEY);
       hmac.update( paymentData.payment.razorpay_order_id  +"|" +  paymentData.payment.razorpay_payment_id );
       const hmacValue = hmac.digest("hex");
       if (hmacValue === paymentData.payment.razorpay_signature) {
-      
-    //     const productIds = cartData.products.map((product) => product.productId);
-    // console.log("Product IDs:", productIds);
-    //       await product.findByIdAndUpdate(
-    //         { _id: productIds },
-    //         { $inc: { quantity: -count } })
-      
-
-
-        await Order.findByIdAndUpdate(
+    await Order.findByIdAndUpdate(
           { _id: paymentData.order.receipt },
           { $set: { paymentStatus: "placed", paymentId: paymentData.payment.razorpay_payment_id } }
         );
@@ -556,13 +529,7 @@ const orderInvoice = async (req, res) => {
 
 
 
-const loadOrderList = async(req,res) =>{
-  try {
-    
-  } catch (error) {
-    
-  }
-}
+
 module.exports = {
   loadCheckout,
   placeOrder,
@@ -574,5 +541,5 @@ module.exports = {
   verifypayment,
   orderInvoice,
   // viewrazor,
-  loadOrderList
+
 }

@@ -49,6 +49,8 @@ adminRoute.post('/edit-Pro', productController.editProduct);
 adminRoute.get('/deletePro', productController.deleteProduct);
 
 adminRoute.post('/update-order-status', adminController.updateOrderStatus);
+adminRoute.get('/orderManagement', adminController.loadOrder);
+
 // adminRoute.get('*', adminController.loadAdminError);
 
 adminRoute.get('/loadCoupon', couponController.loadCoupon);

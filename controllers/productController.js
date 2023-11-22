@@ -114,107 +114,7 @@ const loadEditProduct = async (req, res) => {
 };
 
 // ++++++++++++++++++++++++++++++++++++++ EDIT PRODUCTS ++++++++++++++++++++++++++++++++++++++++++++++
-// const editProduct = async (req, res) => {
-//   try {
-//     const productId = req.query._id;
 
-//     const images = req.body.image; // Assuming 'image' is an array of strings in the request body
-
-//     if (!Array.isArray(images)) {
-//       console.error('The "image" field should be an array of strings');
-//       res.status(400).send('Invalid image data provided.');
-//       return;
-//     }
-
-//     // Create an array of valid image strings
-//     const validImages = images.filter((image) => typeof image === 'string');
-
-//     const updatedData = {
-//       productname: req.body.productname,
-//       quantity: req.body.quantity,
-//       price: req.body.price,
-//       category: req.body.category,
-//       description: req.body.description,
-//       additionalInfo: req.body.additionalInfo,
-//       size: req.body.size,
-//       image: validImages, // Use the validImages array
-//     };
-
-//     // You can optionally add validation here to ensure that required fields are not empty
-
-//     // Find and update the product
-//     const update = await product.updateOne({ _id: productId }, { $set: updatedData }, { new: true });
-
-//     if (update.nModified > 0) {
-//       // Update was successful, redirect to the appropriate page
-//       res.redirect('/admin/productManagement');
-//     } else {
-//       // Handle the case where the update failed
-//       console.error('Product update failed:', update);
-//       res.status(400).send('Product update failed');
-//     }
-//   } catch (error) {
-//     console.error('Error in editProduct:', error.message);
-//     // Handle the error appropriately (e.g., send an error response)
-//     res.status(500).send('An error occurred');
-//   }
-// };
-// const editProduct = async (req, res) => {
-//   try {
-
-
-//     const productId = req.query.id; 
-//     console.log(productId+'productId');
-
-//     const existingProduct = await product.findOne({ _id: productId });
-//    console.log(existingProduct+'existingProduct');
-//     if (!existingProduct) {
-//       return res.status(404).send('Product not found');
-//     }
-
-
-//     const existingData = {
-//       productname: existingProduct.productname,
-//       quantity: existingProduct.quantity,
-//       price: existingProduct.price,
-//       category: existingProduct.category,
-//       description: existingProduct.description,
-//       additionalInfo: existingProduct.additionalInfo,
-//       size: existingProduct.size,
-//       image: existingProduct.image,
-
-//     };
-
-//     // Prepare the updated product data
-//     const updatedData = {
-//       productname: req.body.proName || existingData.productname,
-//       quantity: req.body.qty || existingData.quantity,
-//       price: req.body.price || existingData.price,
-//       category: req.body.category || existingData.category,
-//       description: req.body.description || existingData.description,
-//       additionalInfo: req.body.additionalInfo || existingData.additionalInfo,
-//       size: req.body.options || existingData.size,
-//       image: existingData.image, 
-
-//     };
-
-//     // Update the product with the combined data
-//     const update = await product.updateOne({ _id: productId }, { $set: updatedData });
-// console.log(update+"update");
-//     if (update) {
-//       // Update was successful, redirect to the appropriate page
-//       res.redirect('/admin/productManagement');
-//     } else {
-//       // Handle the case where the update failed
-//       console.error('Product update failed:', update);
-//       res.status(400).send('Product update failed');
-//     }
-//   } catch (error) {
-//     console.error('Error in editProduct:', error.message);
-//     // Handle the error appropriately (e.g., send an error response)
-//     res.status(500).send('An error occurred');
-//   }
-// };
 
 const editProduct = async (req, res) => {
   try {
@@ -396,6 +296,98 @@ const filteredProducts = async (req, res) => {
 };
 
 
+const menCat = async (req, res) => {
+  try {
+    let userName = '';
+
+    if (req.session.user_id) {
+      const user = await User.findOne({ _id: req.session.user_id });
+
+      if (user) {
+        userName = user.name;
+      }
+    }
+
+    const discount = await Offers.find({ is_block: 0 });
+    
+  
+    const productData = await product.find({
+      blocked: 0,
+      category: { $regex: /^men/, $options: 'i' } 
+    });
+
+    const renderData = { products: productData, discPrice: discount };
+
+    if (userName) {
+      renderData.userName = userName;
+    }
+
+    res.render('menCategory', renderData);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const womenCat = async (req, res) => {
+  try {
+    let userName = '';
+
+    if (req.session.user_id) {
+      const user = await User.findOne({ _id: req.session.user_id });
+
+      if (user) {
+        userName = user.name;
+      }
+    }
+
+    const discount = await Offers.find({ is_block: 0 });
+
+    const productData = await product.find({
+      blocked: 0,
+      category: { $regex: 'women', $options: 'i' } 
+    });
+
+    const renderData = { products: productData, discPrice: discount };
+
+    if (userName) {
+      renderData.userName = userName;
+    }
+
+    res.render('womenCategory', renderData);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+
+const loadfreshArrivals = async(req,res) => {
+  try {
+    let userName = '';
+
+    if (req.session.user_id) {
+      const user = await User.findOne({ _id: req.session.user_id });
+
+      if (user) {
+        userName = user.name;
+      }
+    }
+
+    const discount = await Offers.find({ is_block: 0 });
+    
+ 
+    const productData = await product.find({ blocked: 0 }).sort({ _id: -1 }).limit(8)
+    const renderData = { products: productData, discPrice: discount };
+
+    if (userName) {
+      renderData.userName = userName;
+    }
+
+    res.render('freshArrivals', renderData);
+  } catch (error) {
+    console.log(error.message)
+
+  }
+}
 
 module.exports = {
   loadProduct,
@@ -409,5 +401,8 @@ module.exports = {
   loadUserProduct,
   searchProducts,
   sortProducts,
-  filteredProducts
+  filteredProducts,
+  menCat,
+  womenCat,
+  loadfreshArrivals,
 }
