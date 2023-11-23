@@ -298,7 +298,7 @@ const loadOrder = async (req,res) => {
         select: 'name'
       })
       .populate('products.productId');
-
+     
     res.render('orderManagement',{ orderDat })
   } catch (error) {
     console.log(error.message)

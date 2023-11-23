@@ -182,19 +182,13 @@ aria-hidden="true">
                         <label class="custom-control-label" for="payment-online">Online Payment (Razorpay)</label>
                       </div>
                       <div class="custom-control custom-radio">
-                        <input type="radio" id="payment-netbanking" name="payment-method" class="custom-control-input"
-                          value="netbanking">
-                        <label class="custom-control-label" for="payment-netbanking">Net Banking</label>
-                      </div>
-                      <div class="custom-control custom-radio">
-                        <input type="radio" id="payment-creditcard" name="payment-method" class="custom-control-input"
-                          value="creditcard">
-                        <label class="custom-control-label" for="payment-creditcard">Credit Card</label>
-                      </div>
+                        <input type="radio" id="payment-Wallet" name="payment-method" class="custom-control-input"
+                          value="Wallet">
+                        <label class="custom-control-label" for="payment-Wallet">Wallet</label>
+                      
                     </div>
                   </div><!-- End .accordion -->
-                  <button type="button" id="payWithRazorpay" class="btn btn-primary" style="display: none;">Pay with
-                    Razorpay</button>
+                 
                   <input type="hidden" id="total" name="total" value="<%= totalamount %>">
                   <% if(cartData) {%>
                   <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block">Place Order</button>
@@ -345,7 +339,14 @@ aria-hidden="true">
             console.log('online');
             // razorpayPayment(response.order);
             window.location.href = '/order-success';
-          } else {
+          }else if (response.error === 'Insufficient funds in wallet') {
+            // Display SweetAlert for insufficient funds
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Insufficient funds in wallet. Please add funds.',
+            });
+           } else {
             console.log('HO');
             razorpayPayment(response.order);
           }

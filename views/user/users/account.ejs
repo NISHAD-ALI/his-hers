@@ -110,7 +110,9 @@
                                     aria-labelledby="tab-wallet-link">
                                     <div class="container">
                                         <div class="row justify-content-center">
-                                            <!-- First Card -->
+                                     
+                                           <% if (walletData) { %>
+                                            
                                             <div class="col-md-6 d-flex align-items-center mb-4 mr-1">
                                                 <!-- Added 'mb-4' for margin-bottom spacing -->
                                                 <div class="card" style="width: 400px; height: 300px;">
@@ -122,7 +124,7 @@
                                                         <p class="card-text">Wallet Id: **** **** **** 1234</p>
                                                         <div class="capsule">
                                                             <h5>Avl Bal</h5>
-                                                            <h6>$00.00</h6>
+                                                            <h6>$<%= walletData.balance %>.00</h6>
                                                         </div>
                                                         <br>
                                                         <a href="#" class="btn btn-outline-primary-2 shop-button"> Add
@@ -146,29 +148,27 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                <!-- Add rows for each transaction -->
+                                                           <% for (let j=0; j < walletData.length; j++) { %>
+                                                            <% const wallet = walletData[j].items %>
+                                                            <% for (let i=0; i < wallet.length; i++) { %>
+                                                                <% const value=wallet[i].type; %>
                                                                 <tr>
                                                                     <td>2023-01-01</td>
-                                                                    <td>Transaction 1</td>
+                                                                    <td> <%= walletData.balance %></td>
                                                                     <td>$50.00</td>
                                                                 </tr>
-                                                                <tr>
-                                                                    <td>2023-01-02</td>
-                                                                    <td>Transaction 2</td>
-                                                                    <td>$30.00</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>2023-01-01</td>
-                                                                    <td>Transaction 1</td>
-                                                                    <td>$50.00</td>
-                                                                </tr>
-                                                                <!-- Add more rows as needed -->
+                                                                
+                                                                <% } %>
+                                                                <% } %>
+
                                                             </tbody>
                                                         </table>
                                                     </div>
                                                 </div>
                                             </div>
-                                            
+                                            <% } else { %>
+                                                <p>No wallet found.</p>
+                                                <% } %>
                                         </div>
                                     </div>
                                 </div>
@@ -378,7 +378,7 @@
                                 </div>
                                 <div class="tab-pane fade" id="tab-account" role="tabpanel"
                                     aria-labelledby="tab-account-link">
-
+          <% if (accountDetails) { %>
                                     <div class="row">
 
                                         <!-- IMAGE UPLOAD AND UPDATE -->
@@ -453,6 +453,9 @@
                                     </a>
                                   
                                 </div> -->
+                                <% } else { %>
+                                    <p>No user  found.</p>
+                                    <% } %>
                                     </div>
 
                                 </div>

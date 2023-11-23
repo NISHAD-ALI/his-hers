@@ -7,6 +7,8 @@ const multer = require("../middleware/multer");
 const Cart = require('../models/cartModel')
 const Product = require('../models/productModel')
 const Wishlist = require('../models/wishlistModel');
+const Wallet = require('../models/walletModel')
+const Offers = require('../models/offerModel');
 const { log } = require('npmlog');
 require('dotenv').config();
 
@@ -73,7 +75,7 @@ const insertNewUser = async (req, res) => {
     });
 
     const userData = await userNew.save();
-  const newuser = await User.findOne({email:req.body.newEmail})
+    const newuser = await User.findOne({ email: req.body.newEmail })
 
     if (userData) {
       // Send verification email
@@ -82,7 +84,7 @@ const insertNewUser = async (req, res) => {
       nameResend = req.body.newUsername;
       user_id = userData._id;
 
-      res.render('otppage', { message: 'Check your email for the OTP.',newuser });
+      res.render('otppage', { message: 'Check your email for the OTP.', newuser });
     } else {
       res.render('login', { message1: 'Failed to register' });
     }
@@ -134,7 +136,7 @@ const sendVerifyMail = async (name, email) => {
 
 const resendOTP = async (req, res) => {
   try {
-    
+
     otp = await Math.floor(10000 + Math.random() * 90000);
     console.log(otp)
     sendVerifyMail(nameResend, email2, user_id);
@@ -153,8 +155,8 @@ const verifymail = async (req, res) => {
   try {
     console.log('Current OTP:', otpsend);
     console.log('User entered OTP:', req.body.otp);
-  
-   
+
+
     if (req.body.otp == otpsend) {
       const use = req.body.usermon
       const updateinfo = await User.updateOne({ _id: use }, { $set: { is_verified: 1 } });
@@ -196,9 +198,9 @@ const loginUser = async (req, res) => {
       return res.render('login', { message: "Your account has been BLOCKED" })
     }
     if (user.is_verified === 0) {
-      
+
       sendVerifyMail(user.name, user.email, user._id);
-      return res.render('otppage', { message: 'Check your email for the OTP.',user });
+      return res.render('otppage', { message: 'Check your email for the OTP.', user });
     }
     const passwordMatch = await bcrypt.compare(newPassword, user.password);
 
@@ -222,16 +224,26 @@ const loginUser = async (req, res) => {
 const loadHome = async (req, res) => {
   try {
     let userName
+    const discount = await Offers.find({ is_block: 0 })
+    const productData = await Product.find({
+      $and: [
+        { blocked: 0 },
+        { discountPrice: { $exists: true, $ne: null } }
+      ]
+    });
+
+
+    console.log(productData);
     if (req.session.user_id) {
       const user = await User.findOne({ _id: req.session.user_id });
 
       if (user) {
         userName = user.name;
-        return res.render('home', { userName });
+        return res.render('home', { userName, products: productData, discPrice: discount });
       }
     }
     else {
-      res.render('home', { userName });
+      res.render('home', { userName, products: productData, discPrice: discount });
     }
   } catch (error) {
     console.log(error.message)
@@ -296,6 +308,7 @@ const loadUserError = async (req, res) => {
 // }
 const loadAcc = async (req, res) => {
   try {
+          
     let accountDetails;
     let userName;
     let UserAddress;
@@ -306,8 +319,8 @@ const loadAcc = async (req, res) => {
       const orderData = await Order.find({ userid: req.session.user_id })
         .populate("products.productId")
         .sort({ purchaseDate: -1 });
-
-       
+      const walletData = await Wallet.findOne({ userid: req.session.user_id })
+      console.log(walletData.balance);
 
 
       if (user) {
@@ -315,15 +328,16 @@ const loadAcc = async (req, res) => {
         accountDetails = user;
         UserAddress = addresses;
 
-        return res.render('account', { accountDetails, orderData, UserAddress, userName });
+        return res.render('account', { accountDetails, orderData, UserAddress, userName ,walletData});
       }
     }
 
     // If user or address is not found
-    res.render('account', { userName: 'Please Login!', UserAddress: [] });
+    res.render('account', { userName: 'Please Login!', UserAddress: [] ,accountDetails: [],orderData: [],userName,walletData: []});
   } catch (error) {
     console.error(error.message);
-    res.render('account', { userName: 'An error occurred', UserAddress: [] });
+    
+    res.render('account', { userName: 'An error occurred!', UserAddress: [] ,accountDetails: [],orderData: [],userName,walletData: []});
   }
 };
 
@@ -650,7 +664,7 @@ const resetPasswordPost = async (req, res) => {
     user.resetPasswordToken = null;
     user.resetPasswordExpires = null;
     await user.save();
-    req.session.passwordUpdateSuccess = true; 
+    req.session.passwordUpdateSuccess = true;
     res.redirect('/login');
   } catch (error) {
     console.error(error);
@@ -698,8 +712,8 @@ const loadWishlist = async (req, res) => {
 
       userName = userData.name;
 
-       wishlist = await Wishlist.find({ userid: user }).populate('productid');
-      
+      wishlist = await Wishlist.find({ userid: user }).populate('productid');
+
       res.render('wishlist', { wishlist, userName });
     } else {
       console.log('User not authenticated');
@@ -747,15 +761,15 @@ const addtoWishlist = async (req, res) => {
 };
 
 
-const deleteWishproduct = async(req,res) => {
+const deleteWishproduct = async (req, res) => {
   try {
     const user = req.session.user_id;
     const pro_id = req.query.id;
-     console.log(user);
-     console.log(pro_id);
-     await Wishlist.updateOne({ userid: user }, { $pull: { productid: pro_id } });
+    console.log(user);
+    console.log(pro_id);
+    await Wishlist.updateOne({ userid: user }, { $pull: { productid: pro_id } });
     res.redirect('/wishlist')
-    
+
   } catch (error) {
     console.log(error.message)
   }

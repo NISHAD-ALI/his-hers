@@ -5,6 +5,7 @@ const Cart = require('../models/cartModel')
 const Address = require('../models/addressModel')
 const Order = require('../models/orderModel');
 const Coupon = require('../models/couponModel')
+const Wallet = require('../models/walletModel')
 const { log } = require('npmlog');
 const Razorpay = require('razorpay');
 const crypto = require("crypto")
@@ -168,7 +169,8 @@ const placeOrder = async (req, res) => {
     const userId = req.session.user_id;
     const addressId = req.body.selectedAddress;
     const paymentMethod = req.body['payment-method'];
-    const status = paymentMethod === 'cod' ? 'placed' : 'pending';
+    const status = paymentMethod === 'cod' || paymentMethod === 'Wallet' ? 'placed' : 'pending';
+
     const statusLevel = status === 'placed' ? 1 : 0;
      console.log('XP 1');
      
@@ -223,42 +225,26 @@ const placeOrder = async (req, res) => {
     await Cart.updateOne({ userid: userId }, { $set: { products: [] } });
     const successPageURL = '/order-success';
 
-    if (paymentMethod === 'wallet') {
-      const walletBalance = user.wallet;
+    if (paymentMethod === 'Wallet') {
+      const walletData = await Wallet.findOne({ userid: userId });
+      const balWallet = walletData.balance;
 
-      if (walletBalance >= totalAmount) {
-        // Handle payment using wallet balance
-        const result = await User.findOneAndUpdate(
-          { _id: userId },
-          {
-            $inc: { wallet: -totalAmount },
-            $push: {
-              walletHistory: {
-                date: new Date(),
-                amount: totalAmount,
-                reason: 'Purchased Amount Debited.',
-              },
-            },
-          },
-          { new: true }
-        );
-        console.log('XP 5');
-        if (result) {
-          // Decrease product quantities, clear the cart, and update the order
-          await decreaseProductQuantities(orderProducts);
+      if (balWallet >= totalAmount) {
+        const newObject = {
+          userid: userId,
+          balance: balWallet - totalAmount,
+          items: [{
+            date: new Date(),
+            amount: totalAmount,
+            type: 'debit',
+          }],
+        };
 
-          // if (req.session.code) {
-          //   const coupon = await Coupon.findOne({ couponCode: req.session.code });
+        await Wallet.updateOne({ userid: userId }, { $set: newObject }, { upsert: true });
 
-          //   if (coupon) {
-          //     await Order.updateOne({ _id: savedOrder._id }, { discount: coupon.discountAmount });
-          //   }
-          // }
-
-          return res.json({ success: true, orderid: savedOrder._id });
-        }
+        return res.status(201).json({ success: true, orderId: savedOrder._id });
       } else {
-        return res.json({ walletFailed: true });
+        res.json({ error: 'Insufficient funds in wallet' });
       }
     } else if (paymentMethod === 'online') {
       const options = {
@@ -360,12 +346,38 @@ const cancelOrder = async (req, res) => {
     if (type === 'order') {
       // Handle order cancellation
       const order = await Order.findOne({ _id: id });
+      const user = order.userid
+      const tAmount = order.totalAmount
       const count = order.products[0].count;
-
+      const walletData = await Wallet.findOne({ userid: user })
 
       if (order) {
         order.status = 'cancelled';
         order.notes = reason
+        if(order.paymentMethod === 'online'){
+
+          const updateObject = {
+            userid: user,
+            balance: walletData.balance + tAmount,
+            items: [
+              {
+                date: new Date(), 
+                amount: tAmount, 
+
+              }
+             
+            ]
+          };
+          
+           await Wallet.updateOne(
+            { userid: user },
+            { $set: updateObject },
+            { upsert: true }
+          );
+          
+
+      
+        }
         await order.save();
         for (const orderProduct of order.products) {
           const proDB = await product.findOne({ _id: orderProduct.productId });
