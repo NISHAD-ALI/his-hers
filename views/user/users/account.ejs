@@ -148,18 +148,24 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                           <% for (let j=0; j < walletData.length; j++) { %>
-                                                            <% const wallet = walletData[j].items %>
+                                                                 
+                                                                 
+                                                                         
+                                                      
+                                                           <% const wallet = walletData.items  %>
+                                                            
                                                             <% for (let i=0; i < wallet.length; i++) { %>
-                                                                <% const value=wallet[i].type; %>
+                                                                <% const value = wallet[i]; %>
                                                                 <tr>
-                                                                    <td>2023-01-01</td>
-                                                                    <td> <%= walletData.balance %></td>
-                                                                    <td>$50.00</td>
+                                                                    <td><%= value.date.toLocaleString('en-US', { year: 'numeric' ,
+                                                                        month: 'short' , day: '2-digit' , hour: '2-digit' , minute: '2-digit' ,
+                                                                        second: '2-digit' }).replace(/,/, '' ).replace(/\//g, '-' ) %></td>
+                                                                    <td> <%= value.type %></td>
+                                                                    <td>$<%= value.amount %>.00</td>
                                                                 </tr>
                                                                 
                                                                 <% } %>
-                                                                <% } %>
+                                                               
 
                                                             </tbody>
                                                         </table>
@@ -230,7 +236,7 @@
                                                                                     <% if
                                                                                         (orderData[j].status==='Delivered'
                                                                                         ) { %>
-                                                                                        <a href="/returnPage"
+                                                                                        <a href=""
                                                                                             data-type="order"
                                                                                             data-id="<%= orderData[j]._id %>"
                                                                                             class="btn btn-outline-primary-2 return-button">RETURN<i
@@ -528,6 +534,67 @@
                     });
             });
         });
+   
+        $(document).ready(function () {
+    // Handle the return button click event
+    $('.return-button').click(function (event) {
+        event.preventDefault(); // Prevent the default form submission behavior
+
+        const $button = $(this);
+        const type = $button.data('type');
+        const id = $button.data('id');
+
+        // Display SweetAlert confirmation dialog
+        Swal.fire({
+            title: 'Return Order',
+            html:
+                '<div>Select a reason for return:<br>' +
+                '<input type="radio" id="reason1" name="returnReason" value="Defective"> <label for="reason1">Defective</label><br>' +
+                '<input type="radio" id="reason2" name="returnReason" value="Not as Expected"> <label for="reason2">Not as Expected</label><br>' +
+                '<input type="radio" id="reason3" name="returnReason" value="Changed Mind"> <label for="reason3">Changed Mind</label></div>',
+            showCancelButton: true,
+            confirmButtonText: 'Proceed',
+            cancelButtonText: 'Cancel',
+            showLoaderOnConfirm: true,
+            preConfirm: async () => {
+                // Get the selected return reason
+                const returnReason = $("input[name='returnReason']:checked").val();
+
+                // Return an object with the return reason
+                return { returnReason };
+            }
+        })
+        .then(async (result) => {
+            if (result.isConfirmed) {
+                // Perform the return action with the selected reason
+                const response = await $.ajax({
+                    type: 'POST',
+                    url: '/returnOrder',
+                    data: {
+                        type: type,
+                        id: id,
+                        reason: result.value.returnReason
+                    }
+                });
+
+                if (response.success === true) {
+                    // Update the status column without reloading the page
+                    $button.parent().find('.status-col').text('Order Status: Returned');
+
+                    // Redirect to the order return page
+                    window.location.href = '/returnPage';
+                } else {
+                    Swal.fire('Error!', 'Failed to return ' + type, 'error');
+                }
+            }
+        })
+        .catch((error) => {
+            console.error(error);
+            Swal.fire('Error!', 'An error occurred.', 'error');
+        });
+    });
+});
+
 
 
     </script>

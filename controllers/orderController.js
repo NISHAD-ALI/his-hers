@@ -216,10 +216,13 @@ const placeOrder = async (req, res) => {
 
         if (productData) {
           const newQuantity = productData.quantity - orderProduct.quantity;
-          await product.updateOne({ _id: orderProduct.productId }, { quantity: newQuantity });
+          const qa = await product.updateOne({ _id: orderProduct.productId }, { quantity: newQuantity });
+          console.log(qa);
         }
       }
     }
+
+
     console.log('XP 4');
     // Clear the user's cart
     await Cart.updateOne({ userid: userId }, { $set: { products: [] } });
@@ -230,19 +233,18 @@ const placeOrder = async (req, res) => {
       const balWallet = walletData.balance;
 
       if (balWallet >= totalAmount) {
-        const newObject = {
-          userid: userId,
-          balance: balWallet - totalAmount,
-          items: [{
-            date: new Date(),
-            amount: totalAmount,
-            type: 'debit',
-          }],
+        const newTransaction = {
+          date: new Date(),
+          amount: totalAmount,
+          type: 'debit',
         };
-
-        await Wallet.updateOne({ userid: userId }, { $set: newObject }, { upsert: true });
-
-        return res.status(201).json({ success: true, orderId: savedOrder._id });
+      
+        const updatedWallet = await Wallet.updateOne(
+          { userid: userId },
+          { $push: { items: newTransaction }, $set: { balance: balWallet - totalAmount } }
+        );
+        await decreaseProductQuantities(orderProducts);
+        return res.json({ success: true, orderId: savedOrder._id });
       } else {
         res.json({ error: 'Insufficient funds in wallet' });
       }
@@ -257,7 +259,7 @@ const placeOrder = async (req, res) => {
    
         return res.json({ order });
        });
-      
+      await decreaseProductQuantities(orderProducts);
        console.log('XP 7');
       }else if (paymentMethod === 'cod') {
       console.log('cod');
@@ -269,6 +271,7 @@ const placeOrder = async (req, res) => {
       console.log('Invalid payment method');
       return res.status(400).json({ error: 'Invalid payment method' });
     }
+  
   } catch (error) {
     console.log(error.message);
     return res.status(500).json({ error: 'Internal server error' });
@@ -348,32 +351,25 @@ const cancelOrder = async (req, res) => {
       const order = await Order.findOne({ _id: id });
       const user = order.userid
       const tAmount = order.totalAmount
+      console.log(tAmount);
       const count = order.products[0].count;
       const walletData = await Wallet.findOne({ userid: user })
-
+      const balWallet =  walletData.balance
       if (order) {
         order.status = 'cancelled';
         order.notes = reason
         if(order.paymentMethod === 'online'){
-
-          const updateObject = {
-            userid: user,
-            balance: walletData.balance + tAmount,
-            items: [
-              {
-                date: new Date(), 
-                amount: tAmount, 
-
-              }
-             
-            ]
-          };
-          
-           await Wallet.updateOne(
-            { userid: user },
-            { $set: updateObject },
-            { upsert: true }
-          );
+    
+          const newTransaction = {
+          date: new Date(),
+          amount: tAmount,
+          type: 'credit',
+        };
+      
+        const updatedWallet = await Wallet.updateOne(
+          { userid: user },
+          { $push: { items: newTransaction }, $set: { balance: balWallet + tAmount } },{ upsert : true} 
+        );
           
 
       
@@ -417,13 +413,15 @@ const orderReturnPOST = async (req, res) => {
   try {
     const type = req.body.type;
     const id = req.body.id;
-
+   
     if (type === 'order') {
       // Handle order return
       const order = await Order.findOne({ _id: id });
       const count = order.products[0].count;
-
-
+      const tAmount = order.totalAmount
+      const user = order.userid
+      const walletData = await Wallet.findOne({ userid: user })
+      const balWallet =  walletData.balance
       if (order) {
         order.status = 'Returned';
         await order.save();
@@ -434,6 +432,17 @@ const orderReturnPOST = async (req, res) => {
             await proDB.save();
           }
         }
+        const newTransaction = {
+          date: new Date(),
+          amount: tAmount,
+          type: 'credit',
+        };
+      
+        const updatedWallet = await Wallet.updateOne(
+          { userid: user },
+          { $push: { items: newTransaction }, $set: { balance: balWallet + tAmount } },{ upsert : true} 
+        );
+
         res.json({ success: true });
 
       }
@@ -512,26 +521,7 @@ const orderInvoice = async (req, res) => {
          
       };
 
-      const filepathName = path.resolve(__dirname, "../views/user/users/invoice.ejs");
-
-      const html = fs.readFileSync(filepathName).toString();
-      const ejsData = ejs.render(html, data);
-
-      const browser = await puppeteer.launch({ headless: "new" });
-      const page = await browser.newPage();
-      await page.setContent(ejsData, { waitUntil: "networkidle0" });
-      
-      // Set the paper format to A4 (or any other desired size)
-      const pdfBytes = await page.pdf({ format: "A4" });
-      
-      await browser.close();
-
-      res.setHeader("Content-Type", "application/pdf");
-      res.setHeader(
-          "Content-Disposition",
-          "attachment; filename=order_invoice.pdf"
-      );
-      res.send(pdfBytes);
+     res.render('invoice',{order:orderData ,user:userData,date})
 
   } catch (error) {
       console.log(error.message);

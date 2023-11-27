@@ -75,8 +75,18 @@ const insertNewUser = async (req, res) => {
     });
 
     const userData = await userNew.save();
+
     const newuser = await User.findOne({ email: req.body.newEmail })
 
+    const defaultWallet = new Wallet({
+      userid: newuser._id,
+      balance: 0,
+      items: [], 
+    });
+  
+    // Save the default wallet
+    const savedWallet = await defaultWallet.save();
+   console.log(savedWallet+"ppppppppppppppppp");
     if (userData) {
       // Send verification email
       sendVerifyMail(req.body.newUsername, req.body.newEmail, userData._id);
@@ -233,7 +243,7 @@ const loadHome = async (req, res) => {
     });
 
 
-    console.log(productData);
+  
     if (req.session.user_id) {
       const user = await User.findOne({ _id: req.session.user_id });
 
@@ -320,8 +330,10 @@ const loadAcc = async (req, res) => {
         .populate("products.productId")
         .sort({ purchaseDate: -1 });
       const walletData = await Wallet.findOne({ userid: req.session.user_id })
-      console.log(walletData.balance);
-
+   
+   
+       
+         
 
       if (user) {
         userName = user.name;
@@ -333,11 +345,11 @@ const loadAcc = async (req, res) => {
     }
 
     // If user or address is not found
-    res.render('account', { userName: 'Please Login!', UserAddress: [] ,accountDetails: [],orderData: [],userName,walletData: []});
+    res.render('account', { userName, UserAddress: [] ,accountDetails: [],orderData: [],walletData: []});
   } catch (error) {
     console.error(error.message);
     
-    res.render('account', { userName: 'An error occurred!', UserAddress: [] ,accountDetails: [],orderData: [],userName,walletData: []});
+    res.render('account', { userName, UserAddress: [] ,accountDetails: [],orderData: [],walletData: []});
   }
 };
 

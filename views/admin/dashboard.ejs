@@ -457,37 +457,5 @@
           <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
           
 
-<script>
-          $(document).ready(function () {
-            $('.order-status-select').change(function () {
-              const newStatus = $(this).val();
-              const orderId = $(this).data('order-id');
-          
-              $.ajax({
-                type: 'POST',
-                url: '/admin/update-order-status',
-                data: {
-                  orderId: orderId,
-                  newStatus: newStatus,
-                },
-                success: function (data) {
-                 
-                  Swal.fire({
-                   icon: "success",
-          
-                  });
-                },
-                error: function () {
-                 
-                  Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Error updating order status.',
-                  });
-                },
-              });
-            });
-          });
-          
-        </script>
+
           <%- include('../admin/layout/adminFooter.ejs') -%>
