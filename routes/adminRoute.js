@@ -68,4 +68,9 @@ adminRoute.post('/addOfferDB', offerController.addOffers);
 adminRoute.get('/block-off', offerController.blockOff);
 adminRoute.get('/delete-Off', offerController.deleteOffer);
 
+adminRoute.get('/offersCat', offerController.loadCategoryOffers);
+adminRoute.get('/addoffersCat', offerController.loadAddCategoryOffer);
+adminRoute.post('/addOfferCatDB', offerController.addCategoryOffer);
+adminRoute.get('/deletecatOff', offerController.deleteCategoryOffer);
+
 module.exports = adminRoute

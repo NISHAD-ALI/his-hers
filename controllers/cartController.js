@@ -68,10 +68,15 @@ const addToCart = async (req, res) => {
           console.log("Cart product count increased");
           res.json({ alreadyAdded: true });
         } else {
+
+
+          const discountPrices = [productData.discountPricepro, productData.price, productData.discountPricecat];
+          const smallestDiscount = Math.min(...discountPrices);
+    
           const cartItem = {
             productId: productId,
             count: 1,
-            totalPrice: productData.discountPrice ?  productData.discountPrice : productData.price ,
+            totalPrice: smallestDiscount !== undefined ? smallestDiscount : productData.price,
           };
 
           const newCart = await Cart.findOneAndUpdate(

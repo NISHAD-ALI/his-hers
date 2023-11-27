@@ -15,18 +15,18 @@
         <div class="card-body">
             <h4 class="card-title">Add New Offer</h4>
             <br>
-            <form class="forms-sample" action="/admin/addOfferDB" method="post" >
+            <form class="forms-sample" action="/admin/addOfferCatDB" method="post" >
 
 
                 
 
                 <div class="form-group">
-                    <label for="product">Product</label>
-                    <select class="form-control" id="product" name="product" required>
-                        <% product.forEach((item) => { %>
+                    <label for="categories">categories</label>
+                    <select class="form-control" id="categories" name="categories" required>
+                        <% categories.forEach((item) => { %>
                             <% if (item.blocked === 0) { %>
-                                <option value="<%= item.productname %>" required>
-                                    <%= item.productname %>
+                                <option value="<%= item.name %>" required>
+                                    <%= item.name %>
                                 </option>
                             <% } %>
                         <% }); %>

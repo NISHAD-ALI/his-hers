@@ -3,7 +3,8 @@ const User = require('../models/userModel')
 const category = require("../models/categoryModel");
 const product = require('../models/productModel')
 const multer = require("../middleware/multer");
-const Offers = require('../models/offerModel');
+const Offers = require('../models/productOfferModel');
+const CategoryOffer = require('../models/categoryOfferModel');
 const { log } = require('async');
 
 
@@ -173,9 +174,9 @@ const loadProductList = async (req, res) => {
       }
     }
     const discount = await Offers.find({ is_block: 0 })
-
+    const discountcategory = await CategoryOffer.find({ is_block: 0 });
     const productData = await product.find({ blocked: 0 });
-    const renderData = { products: productData, discPrice: discount };
+    const renderData = { products: productData, discPrice: discount ,discCat : discountcategory};
 
     if (userName) {
       renderData.userName = userName;
@@ -263,7 +264,8 @@ const searchProducts = async (req, res) => {
 
         console.log('Sort Criteria:', sortCriteria);
 
-        const discount = await Offers.find({ is_block: 0 });
+        const discountProducts = await Offers.find({ is_block: 0 });
+        const discountcategory = await CategoryOffer.find({ is_block: 0 });
         const sortedProducts = await product.find().sort(sortCriteria);
 
         const renderData = { products: sortedProducts, discPrice: discount };

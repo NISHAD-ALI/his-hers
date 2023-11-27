@@ -1,0 +1,69 @@
+<%- include('../admin/layout/adminSidebar.ejs') -%>
+<%- include('../admin/layout/adminHeader.ejs') -%>
+
+<div class="main-panel">
+    <div class="content-wrapper">
+        <div class="row">
+            <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Offer Management of Categories</h4>
+                        <br>
+                        <div class="text-right">
+                            <a href="/admin/addoffersCat">
+                                <button type="button" class="btn btn-success ml-auto" data-toggle="button"
+                                    aria-pressed="false" autocomplete="off">
+                                    + ADD OFFERS
+                                </button>
+                            </a>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>No.</th>
+                                        <th>Category Name</th>
+                                        <th>Offer %</th>
+                                        <th>Ending Time</th>
+                                        <!-- <th>Action</th> -->
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if (categoryOffers && categoryOffers.length > 0) { %>
+                                    <% for (let i = 0; i < categoryOffers.length; i++) { %>
+                                    <tr>
+                                        <td><%= i + 1 %></td>
+                                        <td><%= categoryOffers[i].categoryname %></td>
+                                        <td><%= categoryOffers[i].percentage %> %</td>
+                                        <td><%= categoryOffers[i].expiryDate.toLocaleDateString('en-US', {
+                                            year: 'numeric',
+                                            month: 'short',
+                                            day: '2-digit'
+                                            }).replace(/\//g, '-') %></td>
+                                            <!-- <%  if(categoryOffers[i].is_block==0){ %>
+                                              
+                                            <td><a href="/admin/block-off?id=<%= categoryOffers[i]._id %>" class="badge badge-danger" onclick="return confirm('Are you sure? Do you want to Block>?')">UNLIST</a></td>
+                                            <% }else{ %>
+                                            
+                                             <td><a href="/admin/block-off?id=<%= categoryOffers[i]._id %>" class="badge badge-success" onclick="return confirm('Are you sure you? Do you want to Unblock>?')">LIST</a></td>
+                                             <% } %> -->
+                                        <td> <a href="/admin/deletecatOff?id=<%= categoryOffers[i]._id %>"" class="delete-link"><i class="bi bi-trash3"></i></a></td>
+                                    </tr>
+                                    <% } %>
+                                    <% } else { %>
+                                    <tr>
+                                        <td colspan="6">Offers Not Found</td>
+                                    </tr>
+                                    <% } %>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%- include('../admin/layout/adminFooter.ejs') -%>

@@ -149,77 +149,58 @@
                     <div class="products">
                         <div class="row">
                             <div class="row">
-                                <% products.forEach((product, i)=> { %>
+                                <% products.forEach((product, i) => { %>
                                     <div class="col-6 col-md-4 col-lg-4 col-xl-3">
                                         <div class="product">
                                             <figure class="product-media">
-                                                <% const productDiscount=discPrice.find(x=> x.product.toString() ===
-                                                    product._id.toString() && x.is_block === 0); %>
-                                                    <% if (productDiscount) { %>
-                                                        <span class="product-label label-new">
-                                                            <%= productDiscount.percentage %>% off
-                                                        </span>
-                                                        <% } %>
-                                                            <a href="/productView?id=<%= product._id %>">
-                                                                <img src="/products/images/<%= product.image[0] %>"
-                                                                    alt="">
-                                                            </a>
-                                                            <div class="product-action action-icon-top">
-                                                                <a href="/addToCart?id=<%= product._id %>"
-                                                                    class="btn-product btn-cart"><span>add to
-                                                                        cart</span></a>
-                                                                <a href="/productView?id=<%= product._id %>"
-                                                                    class="btn-product btn-quickview"
-                                                                    title="Quick view"><span>quick view</span></a>
-                                                                <a href="#" class="btn-product btn-compare"
-                                                                    title="Compare"><span>compare</span></a>
-                                                            </div><!-- End .product-action -->
+                                                <% const productDiscount = discPrice.find(x => x.product.toString() === product._id.toString() && x.is_block === 0); %>
+                                                <% if (productDiscount) { %>
+                                                    <span class="product-label label-new">
+                                                        <%= productDiscount.percentage %>% off
+                                                    </span>
+                                                <% } %>
+                                                <a href="/productView?id=<%= product._id %>">
+                                                    <img src="/products/images/<%= product.image[0] %>" alt="">
+                                                </a>
+                                                <div class="product-action action-icon-top">
+                                                    <a href="/addToCart?id=<%= product._id %>" class="btn-product btn-cart"><span>add to cart</span></a>
+                                                    <a href="/productView?id=<%= product._id %>" class="btn-product btn-quickview" title="Quick view"><span>quick view</span></a>
+                                                    <a href="#" class="btn-product btn-compare" title="Compare"><span>compare</span></a>
+                                                </div><!-- End .product-action -->
                                             </figure>
                                             <div class="product-body">
                                                 <div class="product-cat">
-                                                    <a href="#">
-                                                        <%= product.category %>
-                                                    </a>
+                                                    <a href="#"><%= product.category %></a>
                                                 </div>
                                                 <h3 class="product-title">
-                                                    <a href="product.html">
-                                                        <%= product.productname %>
-                                                    </a>
+                                                    <a href="product.html"><%= product.productname %></a>
                                                 </h3>
-                                                <% if (product.discountPrice && productDiscount) { %>
-                                                    <div class="product-price">
-                                                        <strike>$<%= product.price %></strike>
-                                                    </div>
-                                                    <div class="product-price">
-                                                        <b>$<%= product.discountPrice %></b>
-                                                    </div>
+                                                <% let smallestPrice = Math.min(product.price, product.discountPricepro || Infinity, product.discountPricecat || Infinity); %>
+                                                <div class="product-price">
+                                                    <% if (smallestPrice && smallestPrice < product.price) { %>
+                                                        <strike>$<%= product.price %></strike> <br>
+                                                       <b>$<%= smallestPrice %></b>
                                                     <% } else { %>
-                                                        <div class="product-price">
-                                                            $<%= product.price %>
-                                                        </div>
-                                                        <% } %>
-                                                            <div class="ratings-container">
-                                                                <div class="ratings">
-                                                                    <div class="ratings-val"
-                                                                        style="width: <%= (product.ratings * 20) %>%;">
-                                                                    </div>
-                                                                </div>
-                                                                <span class="ratings-text">( <%= product.ratings %>
-                                                                        Reviews )</span>
-                                                            </div>
-                                                            <div class="product-nav product-nav-dots">
-                                                                <a href="#" style="background: <%= product.color %>;">
-                                                                    <span class="sr-only">Color name</span>
-                                                                </a>
-
-                                                            </div>
+                                                        $<%= product.price %>
+                                                    <% } %>
+                                                </div>
+                                                <div class="ratings-container">
+                                                    <div class="ratings">
+                                                        <div class="ratings-val" style="width: <%= (product.ratings * 20) %>%;"></div>
+                                                    </div>
+                                                    <span class="ratings-text">( <%= product.ratings %> Reviews )</span>
+                                                </div>
+                                                <div class="product-nav product-nav-dots">
+                                                    <a href="#" style="background: <%= product.color %>;">
+                                                        <span class="sr-only">Color name</span>
+                                                    </a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <% }); %>
+                                <% }); %>
                             </div>
                         </div>
-
                     </div>
 
                 </div><!-- End .container -->

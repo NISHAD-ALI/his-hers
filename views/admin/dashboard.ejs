@@ -1,6 +1,6 @@
 <%- include('../admin/layout/adminSidebar.ejs') -%>
 <%- include('../admin/layout/adminHeader.ejs') -%>
-    
+
     <style>
      
   .product-name-cell {
@@ -281,12 +281,25 @@
             </div>
             <div class="row ">
               <div class="col-12 grid-margin">
+                <div
+                class="col-md-3 col-xl-3 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
-                    <h4 class="card-title">comming soon</h4>
-                    sdd
+                    <div
+                      class="d-flex flex-row justify-content-between">
+                      <h4 class="card-title">Revenue Overview
+                      </h4>
+                      <p class="text-muted mb-1 small"></p>
+                    </div>
+  
+                    <div id="chart-container">
+                      <canvas id="myChart"
+                        class="chart"></canvas>
+                    </div>
+  
                   </div>
                 </div>
+              </div>
               </div>
             </div>
             <div class="row">
@@ -455,7 +468,33 @@
           <!-- partial:partials/_footer.html -->
           <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
           <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-          
+     
+      
+
+
+    <script
+          src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+          let COD = '<%= totalCod %>',
+           Online = '<%= totalOnline %>'
+    console.log(COD);
+        var data = {
+            labels: ['COD', 'Online', 'Wallet'],
+            datasets: [{
+              data: [COD, Online, 0],
+              backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+            }]
+          };
+
+          // Get the context of the canvas element
+          var ctx = document.getElementById('myChart').getContext('2d');
+
+          // Create a pie chart
+          var myPieChart = new Chart(ctx, {
+            type: 'pie',
+            data: data
+          });
+        </script>
 
 
           <%- include('../admin/layout/adminFooter.ejs') -%>

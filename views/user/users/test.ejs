@@ -1,544 +1,111 @@
 <script>
-    const search = async (req, res) => {
-
-try {
-    console.log("fsfsfsdfds");
-    const data = req.body.product
-    const id = req.session.userId
-    const productdata = await product.find({ productname: { $regex: data, $options: 'i' } });
-
-    const cartdata = await cart.find({ userid: id }).populate("items.productid")
-
-    res.render('shop', { user: req.session.name, productdata, cartdata, id })
-
-} catch (error) {
-    console.log(error.message);
-}
-
-}
-
-const pricesort = async (req, res) => {
-try {
-    const val = req.body.val
-    if (val == -1) {
-        res.json({ result: true })
-    } else if (val == 1) {
-        res.json({ result: false })
-    }
-
-} catch (error) {
-
-    console.log(error.message);
-}
-}
-
-const pricehightolow = async (req, res) => {
-try {
-    const id = req.session.id
-
-    const productcategory = await category.find()
-    const productdata = await product.find().sort({ price: -1 })
-
-    const cartdata = await cart.find({ userid: id }).populate("items.productid")
-
-    res.render('shop', { user: req.session.name, cartdata, productdata, id, productcategory })
-
-
-} catch (error) {
-    console.log(error.message);
-}
-}
-
-const pricelowtohigh = async (req, res) => {
-try {
-    const id = req.session.id
-
-    const productcategory = await category.find()
-    const productdata = await product.find().sort({ price: 1 })
-
-    const cartdata = await cart.find({ userid: id }).populate("items.productid")
-
-    res.render('shop', { user: req.session.name, cartdata, productdata, id, productcategory })
-
-
-} catch (error) {
-    console.log(error.message);
-
-}
-}
-const pricelowtohigh = async (req, res) => {
+    const dashboard = async (req, res) => {
     try {
-        const id = req.session.id
-
-        const productcategory = await category.find()
-        const productdata = await product.find().sort({ price: 1 })
-
-        const cartdata = await cart.find({ userid: id }).populate("items.productid")
-
-        res.render('shop', { user: req.session.name, cartdata, productdata, id, productcategory })
-
-
-    } catch (error) {
-        console.log(error.message);
-
-    }
-}
-
-const Menformalshoes = async (req, res) => {
-    try {
-
-        const id = req.session.id
-
-        const productdata = await product.find({ category: "Men's Formal Shoes" });
-        console.log(productdata);
-        const productcategory = await category.find()
-        const cartdata = await cart.find({ userid: id }).populate("items.productid")
-        res.render('filter', { user: req.session.name, cartdata, productdata, id, productcategory })
-
-    } catch (error) {
-        console.log(error.message);
-    }
-}
-
-const Mencasualshoes = async (req, res) => {
-    try {
-        const id = req.session.id
-
-        const productdata = await product.find({ category: "Men's Casual Shoes" });
-        console.log(productdata);
-        const productcategory = await category.find()
-        const cartdata = await cart.find({ userid: id }).populate("items.productid")
-        res.render('filter', { user: req.session.name, cartdata, productdata, id, productcategory })
-
-
-    } catch (error) {
-        console.log(error.message);
-    }
-}
-
-const Mensportsshoes = async (req, res) => {
-    try {
-        const id = req.session.id
-
-        const productdata = await product.find({ category: "Men's Sport Shoes" });
-        console.log(productdata);
-        const productcategory = await category.find()
-        const cartdata = await cart.find({ userid: id }).populate("items.productid")
-        res.render('filter', { user: req.session.name, cartdata, productdata, id, productcategory })
-
-
-    } catch (error) {
-        console.log(error.message);
-    }
-
-}
-const Womencasualshoes = async (req, res) => {
-    try {
-        const id = req.session.id
-
-        const productdata = await product.find({ category: "Women's casual" });
-        console.log(productdata);
-        const productcategory = await category.find()
-        const cartdata = await cart.find({ userid: id }).populate("items.productid")
-        res.render('filter', { user: req.session.name, cartdata, productdata, id, productcategory })
-
-
-    } catch (error) {
-        console.log(error.message);
-    }
-
-}
-
-
-const categorysort = async (req, res) => {
-
-    try {
-        console.log("uiujhhjjh");
-        const id = req.session.id
-        const categorys = req.query.category
-        const categories = req.query.categories
-
-        if (categorys) {
-            const productdata = await product.find({ category: categorys }).sort({ price: 1 });
-            console.log(productdata);
-            const productcategory = await category.find()
-            const cartdata = await cart.find({ userid: id }).populate("items.productid")
-            res.render('filter', { user: req.session.name, cartdata, productdata, id, productcategory })
-        }
-        else {
-            const productdata = await product.find({ category: categories }).sort({ price: -1 });
-            console.log(productdata);
-            const productcategory = await category.find()
-            const cartdata = await cart.find({ userid: id }).populate("items.productid")
-            res.render('filter', { user: req.session.name, cartdata, productdata, id, productcategory })
-        }
-
-
-    } catch (error) {
-        console.log(error.message);
-    }
-}
-
-
-
-
-
-router.get('/shop',usercontroller.shop);
-router.post('/pricesort',usercontroller.pricesort);
-router.get('/pricehightolow',usercontroller.pricehightolow);
-router.get('/pricelowtohigh',usercontroller.pricelowtohigh);
-router.get('/Mformalshoes',usercontroller.Menformalshoes)
-router.get('/Mcasualshoes',usercontroller.Mencasualshoes)
-router.get('/Msportshoes',usercontroller.Mensportsshoes)
- router.get('/Wcasualshoes',usercontroller.Womencasualshoes)
-router.get('/categorysort',usercontroller.categorysort)
-
-
-
-
-
-
-</script>
-
-
-
-<%- include('../user/layout/header.ejs') -%>
-    <main class="main">
-        <div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
-            <div class="container">
-                <h1 class="page-title">Products<span>Shop</span></h1>
-            </div><!-- End .container -->
-        </div><!-- End .page-header -->
-        <nav aria-label="breadcrumb" class="breadcrumb-nav mb-2">
-            <div class="container">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="/">Home</a></li>
-                    <li class="breadcrumb-item"><a href="#">Shop</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Grid 3 Columns</li>
-                </ol>
-            </div><!-- End .container -->
-        </nav><!-- End .breadcrumb-nav -->
-
-        <div class="page-content">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-9" id="shop-reload">
-                        <div class="toolbox">
-                            <div class="toolbox-left">
-                                <div class="toolbox-info">
-                                    Showing <span>9 of 56</span> Products
-                                </div><!-- End .toolbox-info -->
-                            </div><!-- End .toolbox-left -->
-
-                            <div class="toolbox-right">
-                                <!-- <div class="toolbox-sort">
-                                    <label for="sortby">Sort by:</label>
-                                    <div class="select-custom">
-                                        <select name="sortby" id="sortby" class="form-control">
-                                            <option value="popularity" selected="selected">Most Popular</option>
-                                            <option value="rating">Most Rated</option>
-                                            <option value="date">Date</option>
-                                        </select>
-                                    </div>
-                                </div> -->
-                                <div class="toolbox-layout">
-                                    <a href="category-list.html" class="btn-layout">
-                                        <svg width="16" height="10">
-                                            <rect x="0" y="0" width="4" height="4" />
-                                            <rect x="6" y="0" width="10" height="4" />
-                                            <rect x="0" y="6" width="4" height="4" />
-                                            <rect x="6" y="6" width="10" height="4" />
-                                        </svg>
-                                    </a>
-
-                                    <a href="category-2cols.html" class="btn-layout">
-                                        <svg width="10" height="10">
-                                            <rect x="0" y="0" width="4" height="4" />
-                                            <rect x="6" y="0" width="4" height="4" />
-                                            <rect x="0" y="6" width="4" height="4" />
-                                            <rect x="6" y="6" width="4" height="4" />
-                                        </svg>
-                                    </a>
-
-                                    <a href="category.html" class="btn-layout active">
-                                        <svg width="16" height="10">
-                                            <rect x="0" y="0" width="4" height="4" />
-                                            <rect x="6" y="0" width="4" height="4" />
-                                            <rect x="12" y="0" width="4" height="4" />
-                                            <rect x="0" y="6" width="4" height="4" />
-                                            <rect x="6" y="6" width="4" height="4" />
-                                            <rect x="12" y="6" width="4" height="4" />
-                                        </svg>
-                                    </a>
-
-                                    <a href="category-4cols.html" class="btn-layout">
-                                        <svg width="22" height="10">
-                                            <rect x="0" y="0" width="4" height="4" />
-                                            <rect x="6" y="0" width="4" height="4" />
-                                            <rect x="12" y="0" width="4" height="4" />
-                                            <rect x="18" y="0" width="4" height="4" />
-                                            <rect x="0" y="6" width="4" height="4" />
-                                            <rect x="6" y="6" width="4" height="4" />
-                                            <rect x="12" y="6" width="4" height="4" />
-                                            <rect x="18" y="6" width="4" height="4" />
-                                        </svg>
-                                    </a>
-                                </div><!-- End .toolbox-layout -->
-                            </div><!-- End .toolbox-right -->
-                        </div><!-- End .toolbox -->
-
-                        <div class="products mb-3">
-                            <div class="row justify-content-center">
-                                <% for(let i=0; i<productdata.length;i++){%>
-                                    <% if(productdata[i].status==0){%>
-                                        <input type="hidden" id="category" name="yourHiddenField" value="<%= productdata[i].category %>">
-
-                                <div class="col-6 col-md-4 col-lg-4">
-                                    <div class="product product-7 text-center">
-                                        <figure class="product-media">
-                                            <span class="product-label label-new">New</span>
-                                            <a href="product.html">
-                                                <img src="/productimages/<%= productdata[i].image[0]%>" alt="Product image"
-                                                    class="product-image">
-                                            </a>
-
-                                            <div class="product-action-vertical">
-                                                <a href="#"
-                                                    class="btn-product-icon btn-wishlist btn-expandable"><span>add to
-                                                        wishlist</span></a>
-                                                <a href="popup/quickView.html" class="btn-product-icon btn-quickview"
-                                                    title="Quick view"><span>Quick view</span></a>
-                                                <a href="#" class="btn-product-icon btn-compare"
-                                                    title="Compare"><span>Compare</span></a>
-                                            </div><!-- End .product-action-vertical -->
-
-                                            <div class="product-action">
-                                                <% if (id){%>
-                                                    <a href="#" onclick="toAddCart('<%= productdata[i]._id %>')" class="btn-product btn-cart"><span>add to cart</span></a>  
-                                                    <%}
-                                                    else{%>
-                                                        <a href="#" class="carts"><span> cart</span></a>  
-
-                                                        <%}
-                                                    %>
-                                                
-                                            </div><!-- End .product-action -->
-                                        </figure><!-- End .product-media -->
-
-                                        <div class="product-body">
-                                            <div class="product-cat">
-                                                <a href="#"><%= productdata[i].category %></a>
-                                            </div><!-- End .product-cat -->
-                                            <h3 class="product-title"><a href="/productdetails?id=<%= productdata[i]._id %>"><%= productdata[i].productname%>
-                                                    skirt</a></h3><!-- End .product-title -->
-                                            <div class="product-price">
-                                                Rs.<%= productdata[i].price%>
-                                            </div><!-- End .product-price -->
-                                            <div class="ratings-container">
-                                                <div class="ratings">
-                                                    <div class="ratings-val" style="width: 20%;"></div>
-                                                    <!-- End .ratings-val -->
-                                                </div><!-- End .ratings -->
-                                                <span class="ratings-text">( 2 Reviews )</span>
-                                            </div><!-- End .rating-container -->
-
-                                            <div class="product-nav product-nav-thumbs">
-                                                <a href="#" class="active">
-                                                    <img src="/productimages/<%= productdata[i].image[1]%>"
-                                                        alt="product desc">
-                                                </a>
-                                                <a href="#">
-                                                    <img src="/productimages/<%= productdata[i].image[2]%>"
-                                                        alt="product desc">
-                                                </a>
-
-                                                <a href="#">
-                                                    <img src="/productimages/<%= productdata[i].image[3]%>"
-                                                        alt="product desc">
-                                                </a>
-                                            </div><!-- End .product-nav -->
-                                        </div><!-- End .product-body -->
-                                    </div><!-- End .product -->
-                                </div><!-- End .col-sm-6 col-lg-4 -->
-
-                              
-
-
-                                
-                                <%} %>
-                                
-                                <%}%>
-                                
-                            </div><!-- End .row -->
-                        </div><!-- End .products -->
-
-                        <nav aria-label="Page navigation">
-                            <ul class="pagination justify-content-center">
-                                <li class="page-item disabled">
-                                    <a class="page-link page-link-prev" href="#" aria-label="Previous" tabindex="-1"
-                                        aria-disabled="true">
-                                        <span aria-hidden="true"><i class="icon-long-arrow-left"></i></span>Prev
-                                    </a>
-                                </li>
-                                <li class="page-item active" aria-current="page"><a class="page-link" href="#">1</a>
-                                </li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item-total">of 6</li>
-                                <li class="page-item">
-                                    <a class="page-link page-link-next" href="#" aria-label="Next">
-                                        Next <span aria-hidden="true"><i class="icon-long-arrow-right"></i></span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div><!-- End .col-lg-9 -->
-                    <aside class="col-lg-3 order-lg-first">
-                        <div class="sidebar sidebar-shop">
-                            <div class="widget widget-clean">
-                                <label>Filters:</label>
-                                <a href="#" class="sidebar-filter-clear">Clean All</a>
-                            </div>
-
-                           
-                				
- 
-                            
-                          
-
-                            <div class="widget widget-collapsible">
-                                <h3 class="widget-title">
-                                    <a data-toggle="collapse" href="#widget-4" role="button" aria-expanded="true"
-                                        aria-controls="widget-4">
-                                        Price
-                                    </a>
-                                </h3><!-- End .widget-title -->
-
-                                <div class="collapse show" id="widget-4">
-                                    <div class="widget-body">
-                                        <div class="filter-items">
-                                            <!-- <div class="filter-item"> -->
-                                                <!-- <div class="custom-control custom-checkbox" > -->
-                                                    <!-- <input type="checkbox" class="custom-control-input" id="brand-1"> -->
-                                                    <a style="cursor:pointer;" href="/categorysort?category=<%= productdata[0].category%>">Price low to high</a>
-                                                <!-- </div>End .custom-checkbox -->
-                                            <!-- </div>End .filter-item -->
-
-                                            <div class="filter-item">
-                                                <!-- <div class="custom-control custom-checkbox"> -->
-                                                    <!-- <input type="checkbox" class="custom-control-input" id="brand-2"> -->
-                                                    <a style="cursor:pointer;" href="/categorysort?categories=<%= productdata[0].category%>"> Price high to low</a> 
-                                                        
-                                                <!-- </div>End .custom-checkbox -->
-                                            </div><!-- End .filter-item -->
-
-                                           
-                                            
-
-                                            
-
-                                            
-                                        </div><!-- End .filter-items -->
-                                    </div><!-- End .widget-body -->
-                                </div><!-- End .collapse -->
-                            </div><!-- End .widget -->
-
-                            <!-- <button onclick="filter()" style="margin-top: 20px; font-size: 16px; padding: 10px 20px; background-color: #3498db; color: #ffffff; border: none; border-radius: 5px; cursor: pointer;"> Filter</button> -->
-
-                        </div><!-- End .sidebar sidebar-shop -->
-                    </aside><!-- End .col-lg-3 -->
-                </div><!-- End .row -->
-            </div><!-- End .container -->
+        const orders = await order.find().sort({ purchaseDate: -1 }).populate("items.productid");
+        console.log(orders);
+        if(orders.length!=0){
+            const customer = await user.find().count();
+            const ordercount = await order.find().count();
+            const cancelledorders = await order.find({ status: 'cancelled' }).count();
+          
+        const orderdata = await order.aggregate([{ $match: { status: "delivered" } },
+        { $group: { _id: null, total: { $sum: '$totalAmount' } } }])
+      var data
+          if(orderdata!=0){
+             data = orderdata[0].total
+        }else{
+             data=0
             
-        </div><!-- End .page-content -->
-    </main><!-- End .main -->
-    <script>
-
-        function toAddCart(id) {
-            console.log("add to cart function started");
-            $.ajax({
-                method: "post",
-                url: "/addToCart",
-                data: JSON.stringify({ id: id }),
-                contentType: 'application/json',
-                success: function (response) {
-                    if (response.result === true) {
-                        $('#downCart').load('/ #downCart');
-                        Swal.fire({
-                            title: 'success',
-                            text: 'product added to cart',
-                            icon: 'success',
-                            confirmButtonText: 'OK'
-                        });
-
-                    } else {
-                        Swal.fire({
-                            title: 'error',
-                            text: 'product is out of stock',
-                            icon: 'failed',
-                            confirmButtonText: 'OK'
-                        });
-                    }
-                },
-                error: function (error) {
-                    console.error(error);
-                }
-
-            });
+          }
+       var codtotal
+        const cod = await order.aggregate([{ $match: { status: 'delivered', paymentMethod: 'Cash on delivery' } }, { $group: { _id: null, total: { $sum: '$totalAmount' } } }])
+        if(cod!=0){
+         codtotal = cod[0].total
+        }else{
+             codtotal =0 
         }
-
-        const carts = document.querySelectorAll('.carts');
-        for(let i=0 ; i<productdata.length; i++){
-            productdata[i].addEventListener("click", loginrequired);
-        }
-
-        function loginrequired() {
-            Swal.fire({
-                title: 'Login required',
-                text: 'Please login',
-                icon: 'error',
-                confirmButtonText: 'OK'
-            }).then((result) => {
-                if (result.isConfirmed) {
-
-                    window.location.href = '/signin';
-                }
-            });
-
-        }
-
-
-function filter(){
-    console.log("ihhkh");
-    const checkboxes = document.querySelectorAll('.custom-control custom-checkbox').value;
-console.log(checkboxes);
-
     
-}
+        
+       var value
+        const totalcodorder = await order.aggregate([{ $match: { status: 'delivered' } }, { $group: { _id: null, total: { $sum: 1 } } }])
+     if(totalcodorder !=0){
+        value = totalcodorder[0].total
+     }else{
+         value=0
+     }
 
-// function lowtohigh(id){
-//     const category=  document.getElementById('category').value
-//     console.log(id,category);
-//     $.ajax({
-//         method:'get',
-//         url:'/categorysort',
-//         data:({val:id,category:category})
+        
+        var stock
+        const totalstock = await product.aggregate([{ $group: { _id: null, total: { $sum: "$quantity" } } }])
+        if(totalstock!=0){
+        stock = totalstock[0].total
+        }else{
+            stock=0
+        }
+      
+        var codcount
+        const codtotalcount = await order.aggregate([{ $match: { status: 'delivered', paymentMethod: 'Cash on delivery' } }, { $group: { _id: null, total: { $sum: 1 } } }])
+        if(codtotalcount!=0){
+         codcount = codtotalcount[0].total
        
-//     })
-// }
+        }else{
+             codcount =0
+        }
 
-// function formalshoes(){
-//     $.ajax({
-//         method:'post',
-//         url:'/formal',
-//         success:function(response){
-//             if(response.result == true){
-                
-//             }
-//         }
-//     })
-// }
+        var onlinecount
+        const onlinetotalcount = await order.aggregate([{ $match: { paymentMethod: 'Online Payment', status: 'delivered' } }, { $group: { _id: null, total: { $sum: 1 } } }])
+        if(onlinetotalcount!=0){
+         onlinecount = onlinetotalcount[0].total
+        }
+        else{
+             onlinecount =0
+        }
+        
+        var onlinetotal
+        const online = await order.aggregate([{ $match: { status: 'delivered', paymentMethod: 'Online Payment' } }, { $group: { _id: null, total: { $sum: '$totalAmount' } } }])
+          if(online!=0){
+         onlinetotal = online[0].total
+          }else{
+             onlinetotal =0
+          }
+        
 
-
-    </script>
-    <%- include('../user/layout/footer.ejs') -%>
+        res.render('dashboard', {
+            orders,
+            data,
+            value,
+            stock,
+            codcount,
+            onlinecount,
+            codtotal,
+            onlinetotal,
+            customer,
+            ordercount,
+            cancelledorders
+        })
+    }
+    else{
+        res.render('dashboard', {
+            orders,
+            data:0,
+            value:0,
+            stock:0,
+            codcount:0,
+            onlinecount:0,
+            codtotal:0,
+            onlinetotal:0,
+            customer:0,
+            ordercount:0,
+            cancelledorders:0
+        })
+    }
+        
+   
+    
+         
+    }
+    catch (error) {
+       console.log(error.message);
+   }
+}
+</script>

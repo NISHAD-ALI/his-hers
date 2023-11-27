@@ -8,7 +8,7 @@ const Cart = require('../models/cartModel')
 const Product = require('../models/productModel')
 const Wishlist = require('../models/wishlistModel');
 const Wallet = require('../models/walletModel')
-const Offers = require('../models/offerModel');
+const Offers = require('../models/productOfferModel');
 const { log } = require('npmlog');
 require('dotenv').config();
 
@@ -238,7 +238,7 @@ const loadHome = async (req, res) => {
     const productData = await Product.find({
       $and: [
         { blocked: 0 },
-        { discountPrice: { $exists: true, $ne: null } }
+        { discountPricepro: { $exists: true, $ne: null } }
       ]
     });
 
