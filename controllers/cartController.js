@@ -69,15 +69,17 @@ const addToCart = async (req, res) => {
           res.json({ alreadyAdded: true });
         } else {
 
-
           const discountPrices = [productData.discountPricepro, productData.price, productData.discountPricecat];
-          const smallestDiscount = Math.min(...discountPrices);
-    
+          const validDiscounts = discountPrices.filter(discount => discount !== null && discount !== undefined);
+        
+          let smallestDiscount = validDiscounts ? Math.min(...validDiscounts) : undefined;
+          console.log(smallestDiscount+"00000000");
           const cartItem = {
             productId: productId,
             count: 1,
-            totalPrice: smallestDiscount !== undefined ? smallestDiscount : productData.price,
+            totalPrice: smallestDiscount  ? smallestDiscount : productData.price,
           };
+          
 
           const newCart = await Cart.findOneAndUpdate(
             { userid: userId },

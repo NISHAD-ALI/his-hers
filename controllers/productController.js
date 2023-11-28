@@ -205,9 +205,14 @@ const loadUserProduct = async (req, res) => {
   try {
     const viewProduct = await product.findOne({ _id: req.query.id });
 
+    const discount = await Offers.find({ is_block: 0 })
+    const discountcategory = await CategoryOffer.find({ is_block: 0 });
+    
+    
+
     if (viewProduct) {
       const products = await product.find({ blocked: 0 });
-      const renderData = { viewProduct, productId: req.query.id };
+      const renderData = { viewProduct, productId: req.query.id,discPrice: discount ,discCat : discountcategory };
 
       if (userName) {
         renderData.userName = userName;
@@ -222,24 +227,23 @@ const loadUserProduct = async (req, res) => {
   }
 };
 
-
 const searchProducts = async (req, res) => {
   try {
-    const data = req.query.searchdata
-    console.log(data)
-    const discount = await Offers.find({ is_block: 0 })
-    const productData = await product.find({
-      productname: { $regex: new RegExp(data, "i") },
-    });
-    console.log(productData);
-    const renderData = { products: productData, discPrice: discount };
-    // const isLoggedIn = req.session.user_id ? true : false;
-    res.render('productList', renderData);
-
+      const data = req.query.searchdata;
+      console.log(data);
+      const discount = await Offers.find({ is_block: 0 });
+      const productData = await product.find({
+          productname: { $regex: new RegExp(data, "i") },
+      });
+      console.log(productData);
+      const renderData = { products: productData, discPrice: discount };
+      res.render('productList', renderData); 
   } catch (error) {
-    console.log(error.message);
+      console.log(error.message);
+      res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
 
 
 

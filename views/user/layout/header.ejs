@@ -34,6 +34,7 @@
 </head>
 
 <body>
+         <div class="product-list-container">
     <header class="header">
         <div class="header-bottom sticky-header">
             <div class="container">
@@ -124,32 +125,19 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="/searchProducts" method="get">
-
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="productName" name="searchdata" placeholder="Enter product name" required>
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="submit" id="searchButton">
-                                    <i class="icon-search"></i> Search
-                                </button>
-                            </div>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="productName" placeholder="Enter product name" required>
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="button" id="searchButton">
+                                <i class="icon-search"></i> Search
+                            </button>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    
 
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const searchToggle = document.querySelector('.search-toggle');
-        const searchForm = document.querySelector('.header-search-wrapper');
-        
-        // Open the search modal when the search icon is clicked
-        searchToggle.addEventListener('click', function () {
-            $('#searchModal').modal('show');
-        });
-    });
-</script>
     

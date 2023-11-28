@@ -105,7 +105,8 @@ const loadAdminDash = async (req, res) => {
         select: 'name'
       })
       .populate('products.productId');
-
+    const newProduct = await product.find({}).sort({ _id : -1 }).limit(1)
+   
     const orderCount = await Order.countDocuments();
     const userCount = await user.countDocuments();
     // Fetch total revenue
@@ -119,24 +120,116 @@ const loadAdminDash = async (req, res) => {
     ]);
 
 
-    const totalCod = await Order.aggregate([{ $match: { status: 'Delivered' ,paymentMethod: 'cod'} },
-    { $group: { _id: null, total: { $sum: 1 } } }])
-    const totalOnline = await Order.aggregate([{ $match: { status: 'Delivered', paymentMethod: 'online' } },
-    { $group: { _id: null, total: { $sum: 1 } } }])
-    const totalWallet = await Order.aggregate([{ $match: { status: 'Delivered', paymentMethod: 'Wallet' } },
-    { $group: { _id: null, total: { $sum: 1 } } }])
+    let totalCod = await Order.aggregate([
+           { $match: { status: 'Delivered' ,paymentMethod: 'cod'} },
 
+           { $group: { _id: null, total: { $sum: 1 } } }
+          ])
+
+    let totalOnline = await Order.aggregate([
+          { $match: { status: 'Delivered', paymentMethod: 'online' } },
+
+          { $group: { _id: null, total: { $sum: 1 } } }
+        ])
+
+    let totalWallet = await Order.aggregate([
+          { $match: { status: 'Delivered', paymentMethod: 'Wallet' } },
+
+          { $group: { _id: null, total: { $sum: 1 } } }
+        ])
+    totalCod=totalCod[0].total
+    totalOnline=totalOnline[0].total
+    totalWallet=totalWallet[0].total
 
     const formattedTotalRevenue = totalRevenue.length > 0 ? totalRevenue[0].totalRevenue : 0;
 
-    res.render('dashboard', { orderDat, orderCount, totalRevenue: formattedTotalRevenue, userCount, totalCod, totalOnline, totalWallet });
+    res.render('dashboard', { orderDat, orderCount, totalRevenue: formattedTotalRevenue, userCount, totalCod, totalOnline, totalWallet ,newProduct});
   } catch (error) {
     console.log(error.message);
   }
 };
 
+const chartFilterWeek = async( req ,res) => {
+  try {
+    const totalCodWeek = await Order.countDocuments({
+      status: 'Delivered',
+      paymentMethod: 'cod',
+      
+      purchaseDate: { $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) }
+    });
 
+    const totalOnlineWeek = await Order.countDocuments({
+      status: 'Delivered',
+      paymentMethod: 'online',
+      
+      purchaseDate: { $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) }
+    });
 
+    const totalWalletWeek = await Order.countDocuments({
+      status: 'Delivered',
+      paymentMethod: 'Wallet',
+      
+      purchaseDate: { $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) }
+    });
+  
+    res.json([totalCodWeek, totalOnlineWeek, totalWalletWeek]);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
+
+const chartFilterMonth = async( req ,res) => {
+  try {
+    const totalCodMonth = await Order.countDocuments({
+      status: 'Delivered',
+      paymentMethod: 'cod',
+      purchaseDate: { $gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) }
+    });
+
+    const totalOnlineMonth = await Order.countDocuments({
+      status: 'Delivered',
+      paymentMethod: 'online',
+      purchaseDate: { $gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) }
+    });
+
+    const totalWalletMonth = await Order.countDocuments({
+      status: 'Delivered',
+      paymentMethod: 'Wallet',
+      purchaseDate: { $gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) }
+    });
+    res.json([totalCodMonth, totalOnlineMonth, totalWalletMonth]);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
+const chartFilterYear = async( req ,res) => {
+  try {
+    const totalCodYear = await Order.countDocuments({
+      status: 'Delivered',
+      paymentMethod: 'cod',
+      purchaseDate: { $gte: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000) }
+    });
+
+    const totalOnlineYear = await Order.countDocuments({
+      status: 'Delivered',
+      paymentMethod: 'online',
+      purchaseDate: { $gte: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000) }
+    });
+
+    const totalWalletYear = await Order.countDocuments({
+      status: 'Delivered',
+      paymentMethod: 'Wallet',
+      purchaseDate: { $gte: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000) }
+    });
+  
+    res.json([totalCodYear, totalOnlineYear, totalWalletYear]);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
 // ++++++++++++++++++++++++++++++++++++++LOAD USER MANAGEMENT++++++++++++++++++++++++++++++++++++++++++++++
 
 
@@ -329,5 +422,8 @@ module.exports = {
   editcatPOST,
   loadAdminError,
   updateOrderStatus,
-  loadOrder
+  loadOrder,
+  chartFilterWeek,
+  chartFilterMonth,
+  chartFilterYear
 }

@@ -9,6 +9,7 @@ const Product = require('../models/productModel')
 const Wishlist = require('../models/wishlistModel');
 const Wallet = require('../models/walletModel')
 const Offers = require('../models/productOfferModel');
+const CategoryOffer = require('../models/categoryOfferModel');
 const { log } = require('npmlog');
 require('dotenv').config();
 
@@ -235,21 +236,27 @@ const loadHome = async (req, res) => {
   try {
     let userName
     const discount = await Offers.find({ is_block: 0 })
+    const discountcategory = await CategoryOffer.find({ is_block: 0 });
     const productData = await Product.find({
       $and: [
         { blocked: 0 },
-        { discountPricepro: { $exists: true, $ne: null } }
+        {
+          $or: [
+            { discountPricepro: { $exists: true, $ne: null } },
+            { discountPricecat: { $exists: true, $ne: null } }
+          ]
+        }
       ]
     });
-
-
+    
+   
   
     if (req.session.user_id) {
       const user = await User.findOne({ _id: req.session.user_id });
 
       if (user) {
         userName = user.name;
-        return res.render('home', { userName, products: productData, discPrice: discount });
+        return res.render('home', { userName, products: productData, discPrice: discount ,discCat :discountcategory });
       }
     }
     else {

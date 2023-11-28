@@ -15,11 +15,11 @@ const productSchema = new mongoose.Schema({
     },
     discountPricepro: {
         type: Number,
-
+        
     },
     discountPricecat: {
         type: Number,
-
+        
     },
     category: {
         type: String,

@@ -40,6 +40,11 @@ adminRoute.get('/block-cat', adminController.blockCat);
 adminRoute.get('/edit-cat', adminController.editcat);
 adminRoute.post('/edit-cat', adminController.editcatPOST);
 
+adminRoute.get('/chartWeek', adminController.chartFilterWeek);
+adminRoute.get('/chartMonth', adminController.chartFilterMonth);
+adminRoute.get('/chartYear', adminController.chartFilterYear);
+
+
 adminRoute.get('/productManagement', productController.loadProduct);
 adminRoute.get('/addPro', productController.loadNewProduct)
 adminRoute.post('/addPro', productController.newproduct)

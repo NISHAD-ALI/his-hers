@@ -83,21 +83,19 @@
                                         <a class="ratings-text" href="#product-review-link" id="review-link">( 2 Reviews
                                             )</a>
                                     </div><!-- End .rating-container -->
-
-
-                                    <% if(viewProduct.discountPricepro){ %>
-                                        <div class="product-price">
+                                    <% let smallestPrice = Math.min(viewProduct.price, viewProduct.discountPricepro || Infinity, viewProduct.discountPricecat || Infinity); %>
+                                    <div class="product-price">
+                                        <% if (smallestPrice && smallestPrice < viewProduct.price) { %>
                                             <strike>$<%= viewProduct.price %></strike>
-                                        </div>
-                                    <div class="product-price">
-                                        $<%= viewProduct.discountPricepro %>
                                     </div>
-                                    <%  } else { %>
                                     <div class="product-price">
-                                        $<%= viewProduct.price %>
+                                            <b>$<%= smallestPrice %></b>
+                                            <% } else { %>
+                                                $<%= viewProduct.price %>
+                                            <% } %>
                                     </div>
-                                    <% } %>
 
+                                    
                                     
 
 
