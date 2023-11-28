@@ -53,7 +53,7 @@ const addOffers = async (req, res) => {
 
         console.log(productDB);
         const offerPrice = Math.floor((productDB.price * percent) / 100);
-        const updateProductPrice = await product.updateOne({ _id: productData._id }, { $set: { discountPricepro: offerPrice } })
+        const updateProductPrice = await product.updateOne({ _id: productData._id }, { $set: { discountPricepro: productDB.price - offerPrice } })
         console.log(updateProductPrice);
 
         console.log('Offer added successfully');
