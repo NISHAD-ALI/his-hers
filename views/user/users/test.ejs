@@ -1,111 +1,106 @@
-<script>
-    const dashboard = async (req, res) => {
-    try {
-        const orders = await order.find().sort({ purchaseDate: -1 }).populate("items.productid");
-        console.log(orders);
-        if(orders.length!=0){
-            const customer = await user.find().count();
-            const ordercount = await order.find().count();
-            const cancelledorders = await order.find({ status: 'cancelled' }).count();
+[9:56 am, 28/11/2023] Adil Brototype: <script>
+    // Download the reports repending the buttons clicked
+    function downloadCustomReport() {
+      let start=document.getElementById("fromDate").value
+      let end=document.getElementById("toDate").value
+      $.ajax({
+        type: "GET",
+        url: "/admin/downloadSalesReport?button=custom",
+        data: {
+          fromDate:start,
+          toDate:end
+        },
+        contentType: "application/json",
+        success: function (data) {
+          //sweetalert("success")
           
-        const orderdata = await order.aggregate([{ $match: { status: "delivered" } },
-        { $group: { _id: null, total: { $sum: '$totalAmount' } } }])
-      var data
-          if(orderdata!=0){
-             data = orderdata[0].total
-        }else{
-             data=0
-            
-          }
-       var codtotal
-        const cod = await order.aggregate([{ $match: { status: 'delivered', paymentMethod: 'Cash on delivery' } }, { $group: { _id: null, total: { $sum: '$totalAmount' } } }])
-        if(cod!=0){
-         codtotal = cod[0].total
-        }else{
-             codtotal =0 
+          window.location.href = data
+        },
+        error: function (data) {
+          console.log(data)
         }
-    
-        
-       var value
-        const totalcodorder = await order.aggregate([{ $match: { status: 'delivered' } }, { $group: { _id: null, total: { $sum: 1 } } }])
-     if(totalcodorder !=0){
-        value = totalcodorder[0].total
-     }else{
-         value=0
-     }
-
-        
-        var stock
-        const totalstock = await product.aggregate([{ $group: { _id: null, total: { $sum: "$quantity" } } }])
-        if(totalstock!=0){
-        stock = totalstock[0].total
-        }else{
-            stock=0
-        }
-      
-        var codcount
-        const codtotalcount = await order.aggregate([{ $match: { status: 'delivered', paymentMethod: 'Cash on delivery' } }, { $group: { _id: null, total: { $sum: 1 } } }])
-        if(codtotalcount!=0){
-         codcount = codtotalcount[0].total
-       
-        }else{
-             codcount =0
-        }
-
-        var onlinecount
-        const onlinetotalcount = await order.aggregate([{ $match: { paymentMethod: 'Online Payment', status: 'delivered' } }, { $group: { _id: null, total: { $sum: 1 } } }])
-        if(onlinetotalcount!=0){
-         onlinecount = onlinetotalcount[0].total
-        }
-        else{
-             onlinecount =0
-        }
-        
-        var onlinetotal
-        const online = await order.aggregate([{ $match: { status: 'delivered', paymentMethod: 'Online Payment' } }, { $group: { _id: null, total: { $sum: '$totalAmount' } } }])
-          if(online!=0){
-         onlinetotal = online[0].total
-          }else{
-             onlinetotal =0
-          }
-        
-
-        res.render('dashboard', {
-            orders,
-            data,
-            value,
-            stock,
-            codcount,
-            onlinecount,
-            codtotal,
-            onlinetotal,
-            customer,
-            ordercount,
-            cancelledorders
-        })
+      })
     }
-    else{
-        res.render('dashboard', {
-            orders,
-            data:0,
-            value:0,
-            stock:0,
-            codcount:0,
-            onlinecount:0,
-            codtotal:0,
-            onlinetotal:0,
-            customer:0,
-            ordercount:0,
-            cancelledorders:0
-        })
-    }
-        
-   
-    
-         
-    }
-    catch (error) {
-       console.log(error.message);
-   }
-}
-</script>
+  </script>
+[9:57 am, 28/11/2023] Adil Brototype: <div class="row">
+      <div
+        class="col-md-6 col-xl-6 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <div
+              class="d-flex flex-row justify-content-between">
+              <h4 class="card-title">Download Sales Report</h4>
+              <p class="text-muted mb-1 small"></p>
+            </div>
+            <div class="btns">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <input type="date"
+                      class="form-control" id="fromDate"
+                      placeholder="From"
+                      name="fromDate" required>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <div class="input-group">
+                      <input type="date"
+                        class="form-control" id="toDate"
+                        placeholder="To" name="toDate" required>
+                      <button type="button" class="btn btn-primary"
+                        onclick="downloadCustomReport()">Download</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+      <div
+        class="col-md-6 col-xl-6 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <div
+              class="d-flex flex-row justify-content-between">
+              <h4 class="card-title">Quick Reports</h4>
+              <p class="text-muted mb-1 small"><a href="/admin/downloadSalesReport"><i class="fa fa-download"></i></a></p>
+            </div>
+            <div class="btns">
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <a 
+                      href="/admin/downloadSalesReport?button=lastWeek"
+                      class="btn btn-primary btn-block"
+                      onclick="downloadReport('lastWeek')">Last
+                      Week</a>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <a 
+                      href="/admin/downloadSalesReport?button=lastMonth"
+                      class="btn btn-primary btn-block"
+                      onclick="downloadReport('lastMonth')">Last
+                      Month</a>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <a
+                      href="/admin/downloadSalesReport?button=lastYear"
+                      class="btn btn-primary btn-block"
+                      onclick="downloadReport('lastYear')">Last
+                      Year</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>

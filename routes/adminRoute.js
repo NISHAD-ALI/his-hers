@@ -78,4 +78,8 @@ adminRoute.get('/addoffersCat', offerController.loadAddCategoryOffer);
 adminRoute.post('/addOfferCatDB', offerController.addCategoryOffer);
 adminRoute.get('/deletecatOff', offerController.deleteCategoryOffer);
 
+adminRoute.get('/salesSum', adminController.loadSalesSum);
+adminRoute.get('/sales', adminController.filterSaleYear);
+
+
 module.exports = adminRoute

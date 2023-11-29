@@ -28,6 +28,7 @@
       }
 
 
+
     </style>  
   
       
@@ -319,21 +320,20 @@
                   <div class="col-12 col-md-4 grid-margin">
                     <div class="card">
                       <div class="card-body">
-                        <h5>Fresh Product</h5>
-                       
+                        <h5>Newly Added</h5>
+                       <br>
                           <!-- Image column (100% on smaller screens, 70% on larger screens) -->
                           <div class="col-12 col-md-8">
-                            <img src="/products/images/<%= newProduct[0].image[0] %>" class="img-fluid" alt="Product Image">
+                            <img src="/products/images/<%= newProduct[0].image[0] %>" class="img-fluid custom-image" alt="Product Image">
                             <br>
-                            <p>Product details...</p>
+                            <p></p>
                           </div>
-                        <br>
-                          <div class="col-12 col-md-4">
-                          
-                            
-                            <p>Product details...</p>
-                            <p>Product details...</p>
-                        </div>
+                        
+                        
+                        <p><%= newProduct[0].productname %></p>
+                        <p>Actual Price : <%= newProduct[0].price %></p>
+                        <p>Available Stocks : <%= newProduct[0].quantity %></p>
+                        <p>Category : <%= newProduct[0].category %></p>
                       </div>
                     </div>
                   </div>

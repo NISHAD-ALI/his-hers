@@ -104,6 +104,7 @@
                                             <figure class="product-media">
                                                 <% const productDiscount=discPrice.find(x=> x.product.toString() ===
                                                     product._id.toString() && x.is_block === 0); %>
+                                                    <% let smallestPrice = Math.min(product.price, product.discountPricepro || Infinity, product.discountPricecat || Infinity); %>
                                                     <% if (productDiscount) { %>
                                                         <span class="product-label label-new">
                                                             <%= productDiscount.percentage %>% off
@@ -137,9 +138,18 @@
                                                 <h3 class="product-title"><%= product.productname %></h3>
                                                 <!-- End .product-title -->
                                                 <div class="product-price">
-                                                    <span class="new-price">Now $<b><%= product.discountPricepro ? product.discountPricepro:product.discountPricecat %></b></span>
-                                                    <span class="old-price">Was $<%= product.price %></span>
-                                            
+                                                   
+
+                                                   
+                                                        <% if (smallestPrice && smallestPrice < product.price) { %>
+                                                            <span class="old-price"> Was<strike>$<%= product.price %></strike></span>
+                                                    </div>
+                                                    <div class="product-price">
+                                                        <span class="new-price">Now<b>$<%= smallestPrice %></b></span>
+                                                            <% } else { %>
+                                                                $<%= product.price %>
+                                                            <% } %>
+                                                    </div>
                                                 </div><!-- End .product-price -->
                                             </div><!-- End .product-body -->
                                         </div><!-- End .product -->

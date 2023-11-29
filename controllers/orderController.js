@@ -190,6 +190,7 @@ const placeOrder = async (req, res) => {
       orderProducts.push({
         productId: cartProduct.productId,
         quantity: cartProduct.count,
+        total:cartProduct.totalPrice
       });
     }
     console.log('XP 3');

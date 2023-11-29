@@ -5,6 +5,11 @@ const category = require("../models/categoryModel");
 const product = require('../models/productModel')
 const Order = require('../models/orderModel')
 const Address = require('../models/addressModel')
+let pdf = require('html-pdf')
+let ejs = require('ejs')
+let path = require('path')
+const ExcelJS = require('exceljs');
+const zip = require('express-zip'); 
 // require('dotenv').config();
 
 
@@ -105,8 +110,8 @@ const loadAdminDash = async (req, res) => {
         select: 'name'
       })
       .populate('products.productId');
-    const newProduct = await product.find({}).sort({ _id : -1 }).limit(1)
-   
+    const newProduct = await product.find({}).sort({ _id: -1 }).limit(1)
+
     const orderCount = await Order.countDocuments();
     const userCount = await user.countDocuments();
     // Fetch total revenue
@@ -121,57 +126,57 @@ const loadAdminDash = async (req, res) => {
 
 
     let totalCod = await Order.aggregate([
-           { $match: { status: 'Delivered' ,paymentMethod: 'cod'} },
+      { $match: { status: 'Delivered', paymentMethod: 'cod' } },
 
-           { $group: { _id: null, total: { $sum: 1 } } }
-          ])
+      { $group: { _id: null, total: { $sum: 1 } } }
+    ])
 
     let totalOnline = await Order.aggregate([
-          { $match: { status: 'Delivered', paymentMethod: 'online' } },
+      { $match: { status: 'Delivered', paymentMethod: 'online' } },
 
-          { $group: { _id: null, total: { $sum: 1 } } }
-        ])
+      { $group: { _id: null, total: { $sum: 1 } } }
+    ])
 
     let totalWallet = await Order.aggregate([
-          { $match: { status: 'Delivered', paymentMethod: 'Wallet' } },
+      { $match: { status: 'Delivered', paymentMethod: 'Wallet' } },
 
-          { $group: { _id: null, total: { $sum: 1 } } }
-        ])
-    totalCod=totalCod[0].total
-    totalOnline=totalOnline[0].total
-    totalWallet=totalWallet[0].total
+      { $group: { _id: null, total: { $sum: 1 } } }
+    ])
+    totalCod = totalCod[0].total
+    totalOnline = totalOnline[0].total
+    totalWallet = totalWallet[0].total
 
     const formattedTotalRevenue = totalRevenue.length > 0 ? totalRevenue[0].totalRevenue : 0;
 
-    res.render('dashboard', { orderDat, orderCount, totalRevenue: formattedTotalRevenue, userCount, totalCod, totalOnline, totalWallet ,newProduct});
+    res.render('dashboard', { orderDat, orderCount, totalRevenue: formattedTotalRevenue, userCount, totalCod, totalOnline, totalWallet, newProduct });
   } catch (error) {
     console.log(error.message);
   }
 };
 
-const chartFilterWeek = async( req ,res) => {
+const chartFilterWeek = async (req, res) => {
   try {
     const totalCodWeek = await Order.countDocuments({
       status: 'Delivered',
       paymentMethod: 'cod',
-      
+
       purchaseDate: { $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) }
     });
 
     const totalOnlineWeek = await Order.countDocuments({
       status: 'Delivered',
       paymentMethod: 'online',
-      
+
       purchaseDate: { $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) }
     });
 
     const totalWalletWeek = await Order.countDocuments({
       status: 'Delivered',
       paymentMethod: 'Wallet',
-      
+
       purchaseDate: { $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) }
     });
-  
+
     res.json([totalCodWeek, totalOnlineWeek, totalWalletWeek]);
   } catch (error) {
     console.log(error.message);
@@ -179,7 +184,7 @@ const chartFilterWeek = async( req ,res) => {
   }
 }
 
-const chartFilterMonth = async( req ,res) => {
+const chartFilterMonth = async (req, res) => {
   try {
     const totalCodMonth = await Order.countDocuments({
       status: 'Delivered',
@@ -204,7 +209,7 @@ const chartFilterMonth = async( req ,res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 }
-const chartFilterYear = async( req ,res) => {
+const chartFilterYear = async (req, res) => {
   try {
     const totalCodYear = await Order.countDocuments({
       status: 'Delivered',
@@ -223,7 +228,7 @@ const chartFilterYear = async( req ,res) => {
       paymentMethod: 'Wallet',
       purchaseDate: { $gte: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000) }
     });
-  
+
     res.json([totalCodYear, totalOnlineYear, totalWalletYear]);
   } catch (error) {
     console.log(error.message);
@@ -407,6 +412,169 @@ const loadOrder = async (req, res) => {
   }
 }
 
+const loadSalesSum = async (req, res) => {
+  try {
+    const orderDat = await Order.find({})
+      .populate({
+        path: 'userid',
+        select: 'name'
+      })
+      .populate('products.productId');
+    const newProduct = await product.find({})
+    res.render('salesSummary', { orderDat, newProduct })
+  } catch (error) {
+    console.log(error.message)
+  }
+}
+
+
+const filterSaleYear = async (req, res) => {
+  try {
+    let filter = {};
+
+    if (req.query.filter) {
+      const filterType = req.query.filter;
+
+      switch (filterType) {
+        case 'week':
+          filter = {
+            purchaseDate: {
+              $gte: new Date(new Date() - 7 * 24 * 60 * 60 * 1000),
+            },
+          };
+          break;
+
+        case 'month':
+          filter = {
+            purchaseDate: {
+              $gte: new Date(new Date() - 30 * 24 * 60 * 60 * 1000),
+            },
+          };
+          break;
+
+        case 'year':
+          filter = {
+            purchaseDate: {
+              $gte: new Date(new Date() - 365 * 24 * 60 * 60 * 1000),
+            },
+          };
+          break;
+
+        case 'custom':
+          if (req.query.fromDate && req.query.toDate) {
+            filter = {
+              purchaseDate: {
+                $gte: new Date(req.query.fromDate),
+                $lte: new Date(req.query.toDate),
+              },
+            };
+          }
+          break;
+
+        default:
+          break;
+      }
+    }
+
+    const orderDat = await Order.find(filter)
+      .populate({
+        path: 'userid',
+        select: 'name',
+      })
+      .populate('products.productId');
+
+    // Render EJS template
+    ejs.renderFile(
+      path.join(__dirname, '..', 'views', 'admin', 'salesReport.ejs'),
+      { orderDat },
+      async (err, data) => {
+        if (err) {
+          console.log(err);
+          res.status(500).send('Internal Server Error');
+        }
+
+        // Generate PDF
+        const pdfOptions = {
+          height: '11.25in',
+          width: '8.5in',
+          header: {
+            height: '0mm',
+          },
+          footer: {
+            height: '0mm',
+          },
+        };
+
+        const pdfPromise = new Promise((resolve, reject) => {
+          pdf.create(data, pdfOptions).toFile((err, pdfPath) => {
+            if (err) {
+              console.log(err);
+              reject('Error generating PDF');
+            } else {
+              resolve(pdfPath.filename);
+            }
+          });
+        });
+
+        // Generate Excel
+        const excelOptions = {
+          filename: 'report.xlsx',
+          useStyles: true,
+          useSharedStrings: true,
+        };
+
+        const excelPromise = new Promise((resolve, reject) => {
+          const workbook = new ExcelJS.Workbook();
+          const worksheet = workbook.addWorksheet('Sales Report');
+
+          // Add headers
+          worksheet.addRow(['Order Date', 'Product Name', 'Quantity', 'Price', 'Total Price']);
+
+          // Add data
+          orderDat.forEach(order => {
+            order.products.forEach(product => {
+              worksheet.addRow([
+                order.purchaseDate.toLocaleString('en-US'),
+                product.productId.productname,
+                product.count,
+                `$${product.productId.price.toFixed(2)}`,
+                `$${(product.count * product.productId.price).toFixed(2)}`,
+              ]);
+            });
+          });
+
+          workbook.xlsx.writeFile(excelOptions.filename).then(() => {
+            resolve(excelOptions.filename);
+          }).catch((err) => {
+            console.log(err);
+            reject('Error generating Excel');
+          });
+        });
+
+        // Wait for both promises to resolve
+        try {
+          const [pdfPath, excelPath] = await Promise.all([pdfPromise, excelPromise]);
+
+          // Send both files using express-zip
+          res.zip([
+            { path: pdfPath, name: 'sales_report.pdf' },
+            { path: excelPath, name: 'sales_report.xlsx' },
+          ]);
+        } catch (error) {
+          console.log(error);
+          res.status(500).send('Error sending files');
+        }
+      }
+    );
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send('Internal Server Error');
+  }
+};
+
+
+
+
 module.exports = {
   loadAdminSignin,
   loginAdmin,
@@ -425,5 +593,7 @@ module.exports = {
   loadOrder,
   chartFilterWeek,
   chartFilterMonth,
-  chartFilterYear
+  chartFilterYear,
+  loadSalesSum,
+  filterSaleYear
 }

@@ -34,7 +34,7 @@ app.use(session({
 
 
 
-mongoose.connect('mongodb://127.0.0.1:27017/his&hers')
+mongoose.connect(process.env.MONGODBURL)
   .then(() => {
     console.log('mongoDb connected');
   })
