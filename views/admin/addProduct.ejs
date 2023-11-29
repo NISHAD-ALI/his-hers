@@ -1,6 +1,16 @@
 <%- include('../admin/layout/adminSidebar.ejs') -%>
 <%- include('../admin/layout/adminHeader.ejs') -%>
 
+<style>
+  .error {
+    color: red;
+  }
+</style>
+
+
+
+
+
 <div class="col-12 grid-margin stretch-card">
     <div class="card">
         <div class="card-body">
@@ -10,6 +20,7 @@
             <div class="form-group">
               <label for="exampleInputName1">Name Of Product</label>
               <input type="text" class="form-control" id="exampleInputName1" placeholder="Name" name="proName">
+              
             </div>
             <div class="form-group">
               <label for="exampleInputEmail3">Quantity</label>
@@ -84,7 +95,7 @@
               <label for="images">Upload Images</label>
               <input type="file" class="form-control-file" id="images" name="images" multiple>
             </div> 
-
+            <div id="errorMessages"></div>
             <button type="submit" class="btn btn-primary mr-2">Submit</button>
             <button class="btn btn-dark">Cancel</button>
           </form>
@@ -92,5 +103,63 @@
       </div>
   </div>
 
-
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      // Function to update the submit button based on validations and show error messages
+      function updateSubmitButton() {
+        var submitButton = $('button[type="submit"]');
+        var proName = $('#exampleInputName1').val();
+        var qty = $('#exampleInputEmail3').val();
+        var price = $('#price input').val();
+        var description = $('#exampleTextarea1').val();
+        var additionalInfo = $('textarea[name="additionalInfo"]').val();
+        var errorMessages = $('#errorMessages');
+  
+        // Validate conditions
+        var isProNameValid = proName.length > 0 && proName.length <= 20;
+        var isQtyValid = !isNaN(qty) && qty >= 0;
+        var isPriceValid = !isNaN(price) && price >= 0;
+        var isDescriptionValid = description.length >= 10;
+        var isAdditionalInfoValid = additionalInfo.length >= 10;
+  
+        // Show or hide error messages
+        errorMessages.empty();
+        if (!isProNameValid) {
+          errorMessages.append('<span class="error" id="e1">Name must be between 1 and 20 characters.</span><br>');
+        }
+        if (!isQtyValid) {
+          errorMessages.append('<span class="error" id="e2">Quantity must be a non-negative number.</span><br>');
+        }
+        if (!isPriceValid) {
+          errorMessages.append('<span class="error" id="e3">Price must be a non-negative number.</span><br>');
+        }
+        if (!isDescriptionValid) {
+          errorMessages.append('<span class="error" id="e4">Description must be at least 10 characters.</span><br>');
+        }
+        if (!isAdditionalInfoValid) {
+          errorMessages.append('<span class="error" id="e5">Additional Details must be at least 10 characters.</span><br>');
+        }
+  
+        // Enable or disable the submit button
+        submitButton.prop(
+          'disabled',
+          !(isProNameValid && isQtyValid && isPriceValid && isDescriptionValid && isAdditionalInfoValid)
+        );
+      }
+  
+      // Attach event listeners to form inputs
+      $('#exampleInputName1, #exampleInputEmail3, #price input, #exampleTextarea1, textarea[name="additionalInfo"]').on(
+        'input',
+        function () {
+          updateSubmitButton();
+        }
+      );
+  
+      // Initial validation on page load
+      updateSubmitButton();
+    });
+  </script>
+ 
+  
   <%- include('../admin/layout/adminFooter.ejs') -%>

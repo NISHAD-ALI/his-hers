@@ -32,13 +32,13 @@ userRoute.get('/categoryMen', productController.menCat);
 userRoute.get('/categorywoMen', productController.womenCat);
 userRoute.get('/freshArrivals', productController.loadfreshArrivals);
 
-userRoute.get('/myAccount',userController.loadAcc)
-userRoute.get('/editAddress',userController.loadEditAddress)
-userRoute.post('/editAddress',userController.editAddress)
-userRoute.get('/addAddress',userController.loadAddAddress)
-userRoute.post('/addAddress',userController.addAddress)
-userRoute.get('/deleteAddress',userController.deleteAddress)
-userRoute.post('/updateUserDetails',userController.updateUserDetails)
+userRoute.get('/myAccount',userAuth.isLogin,userController.loadAcc)
+userRoute.get('/editAddress',userAuth.isLogin,userController.loadEditAddress)
+userRoute.post('/editAddress',userAuth.isLogin,userController.editAddress)
+userRoute.get('/addAddress',userAuth.isLogin,userController.loadAddAddress)
+userRoute.post('/addAddress',userAuth.isLogin,userController.addAddress)
+userRoute.get('/deleteAddress',userAuth.isLogin,userController.deleteAddress)
+userRoute.post('/updateUserDetails',userAuth.isLogin,userController.updateUserDetails)
 
 
 // userRoute.post('/editImage',userController.updateProfilePhoto)
@@ -48,27 +48,27 @@ userRoute.post('/verify', userController.verifymail)
 userRoute.get('/loadpassReset',userController.loadpassReset)
 userRoute.post('/resetpassPost',userController.resetPasswordPost)
 
-userRoute.get('/cart',cartController.loadCart)
-userRoute.post('/addToCart',cartController.addToCart)
-userRoute.post('/updateCartQuantity',cartController.updateCartQuantity)
-userRoute.get('/deleteCartProduct',cartController.deleteCartProduct)
+userRoute.get('/cart',userAuth.isLogin,cartController.loadCart)
+userRoute.post('/addToCart',userAuth.isLogin,cartController.addToCart)
+userRoute.post('/updateCartQuantity',userAuth.isLogin,cartController.updateCartQuantity)
+userRoute.get('/deleteCartProduct',userAuth.isLogin,cartController.deleteCartProduct)
 
-userRoute.get('/checkout',orderController.loadCheckout)
-userRoute.post('/orderPlace',orderController.placeOrder)
-userRoute.get('/order-success',orderController.orderSuccess)
-userRoute.get('/order-Cancel',orderController.orderCancel)
-userRoute.post('/cancelOrder',orderController.cancelOrder)
-userRoute.get('/orderCancel',orderController.orderCancel)
-userRoute.get('/returnPage',orderController.returnOrder)
-userRoute.post('/returnOrder',orderController.orderReturnPOST)
+userRoute.get('/checkout',userAuth.isLogin,orderController.loadCheckout)
+userRoute.post('/orderPlace',userAuth.isLogin,orderController.placeOrder)
+userRoute.get('/order-success',userAuth.isLogin,orderController.orderSuccess)
+userRoute.get('/order-Cancel',userAuth.isLogin,orderController.orderCancel)
+userRoute.post('/cancelOrder',userAuth.isLogin,orderController.cancelOrder)
+userRoute.get('/orderCancel',userAuth.isLogin,orderController.orderCancel)
+userRoute.get('/returnPage',userAuth.isLogin,orderController.returnOrder)
+userRoute.post('/returnOrder',userAuth.isLogin,orderController.orderReturnPOST)
 userRoute.post('/verify-payment',orderController.verifypayment)
 userRoute.get('/invoice/:id',orderController.orderInvoice)
 
-userRoute.post('/applyCoupon',couponController.applyCoupon)
+userRoute.post('/applyCoupon',userAuth.isLogin,couponController.applyCoupon)
 
-userRoute.get('/wishlist',userController.loadWishlist)
-userRoute.post('/addToWishlist', userController.addtoWishlist);
-userRoute.get('/deleteWishproduct',userController.deleteWishproduct)
+userRoute.get('/wishlist',userAuth.isLogin,userController.loadWishlist)
+userRoute.post('/addToWishlist',userAuth.isLogin, userController.addtoWishlist);
+userRoute.get('/deleteWishproduct',userAuth.isLogin,userController.deleteWishproduct)
 
 
 module.exports = userRoute

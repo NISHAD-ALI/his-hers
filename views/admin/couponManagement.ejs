@@ -22,13 +22,13 @@
               <table class="table " >
                 <thead>
                   <tr>
-                    <th>No.</th>
+              
                     <th>Name</th>
-                    <th>Coupon Code</th>
-                    <th>Discount Amount</th>
-                    <th>Activation Date</th>
+                    <th>Code</th>
+                    <th>Disc.Amount</th>
+                    <th>Active Date</th>
                     <th>Expiry Date</th>
-                    <th>Criteria Amount</th>
+                    <th>Min Sale</th>
                     <th>Users Limit</th>
                     <th>Status</th>
                     <th>Actions</th>
@@ -46,7 +46,7 @@
 
                   <% for(let i = 0; i < coupon.length; i++) { %>
                   <tr>
-                    <td><%= i + 1 %></td>
+       
                     <td><%= coupon[i].couponname %></td>
                     <td><%= coupon[i].couponcode %></td>
                     <td><%= coupon[i].discountamount %></td>

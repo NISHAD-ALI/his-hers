@@ -108,8 +108,8 @@
          <a href="/admin/sales?filter=week"> <button type="button" class="btn btn-primary" id="generateWeek">Last Week</button></a>
          <a href="/admin/sales?filter=month"><button type="button" class="btn btn-primary" id="generateMonth">Last Month</button></a>
             <a href="/admin/sales?filter=year"><button type="button" class="btn btn-primary" id="generateYear">Last Year</button></a>
-     
-         
+     <br>
+          
           <form action="/admin/sales" method="get" id="reportForm" class="mt-3">
            
             <div class="form-group">
@@ -121,7 +121,8 @@
               <input type="date" class="form-control" id="toDate" name="toDate" required>
             </div>
           
-           
+            <span id="dateError" style="color: red;"></span>
+            <br>
             <button type="submit" class="btn btn-success" name="filter" value="custom" id="submitDateRangeBtn">Submit Date Range</button>
           </form>
           
@@ -131,5 +132,111 @@
     </div>
   </div>
 
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      // Function to update the error span and submit button
+      function updateValidation() {
+        var fromDate = $('#fromDate').val();
+        var toDate = $('#toDate').val();
+        var submitButton = $('#submitDateRangeBtn');
+        var errorSpan = $('#dateError');
   
+        if (fromDate && toDate && new Date(fromDate) < new Date(toDate) && new Date(toDate) <= new Date() && new Date(fromDate) < new Date()) {
+          submitButton.prop('disabled', false);
+          errorSpan.text('');
+        } else {
+          submitButton.prop('disabled', true);
+          if (!fromDate || !toDate) {
+            errorSpan.text('Both From Date and To Date are required.');
+          } else if (new Date(fromDate) >= new Date(toDate)) {
+            errorSpan.text('From Date must be earlier than To Date.');
+          } else if (new Date(toDate) > new Date()) {
+            errorSpan.text('To Date cannot be in the future.');
+          } else if (new Date(fromDate) >= new Date()) {
+            errorSpan.text('From Date must be earlier than the current date.');
+          }
+        }
+      }
+  
+      // Attach event listeners to date inputs
+      $('#fromDate, #toDate').on('input', function () {
+        updateValidation();
+      });
+  
+      // Attach event listener to the form for initial validation
+      $('#reportForm').on('submit', function (event) {
+        var fromDate = $('#fromDate').val();
+        var toDate = $('#toDate').val();
+  
+        if (!fromDate || !toDate || new Date(fromDate) >= new Date(toDate)) {
+          $('#dateError').text('Invalid date range. Please check your dates.');
+          event.preventDefault();
+        }
+      });
+  
+      // Initial validation on page load
+      updateValidation();
+    });
+  </script>
+  <!-- <script>
+    $(document).ready(function () {
+      // Function to check if a date is valid
+      function isValidDate(dateString) {
+        var regex = /^\d{4}-\d{2}-\d{2}$/;
+        return dateString.match(regex) !== null;
+      }
+  
+      // Function to update the error span and submit button
+      function updateValidation() {
+        var fromDate = $('#fromDate').val();
+        var toDate = $('#toDate').val();
+        var submitButton = $('#submitDateRangeBtn');
+        var errorSpan = $('#dateError');
+  
+        if (
+          isValidDate(fromDate) &&
+          isValidDate(toDate) &&
+          new Date(fromDate) < new Date(toDate) &&
+          new Date(toDate) <= new Date() &&
+          new Date(fromDate) < new Date()
+        ) {
+          submitButton.prop('disabled', false);
+          errorSpan.text('');
+        } else {
+          submitButton.prop('disabled', true);
+          if (!isValidDate(fromDate) || !isValidDate(toDate)) {
+            errorSpan.text('Invalid date format. Please use YYYY-MM-DD.');
+          } else if (new Date(fromDate) >= new Date(toDate)) {
+            errorSpan.text('From Date must be earlier than To Date.');
+          } else if (new Date(toDate) > new Date()) {
+            errorSpan.text('To Date cannot be in the future.');
+          } else if (new Date(fromDate) >= new Date()) {
+            errorSpan.text('From Date must be earlier than the current date.');
+          }
+        }
+      }
+  
+      // Attach event listeners to date inputs
+      $('#fromDate, #toDate').on('input', function () {
+        updateValidation();
+      });
+  
+      // Attach event listener to the form for initial validation
+      $('#reportForm').on('submit', function (event) {
+        var fromDate = $('#fromDate').val();
+        var toDate = $('#toDate').val();
+  
+        if (!isValidDate(fromDate) || !isValidDate(toDate) || new Date(fromDate) >= new Date(toDate)) {
+          $('#dateError').text('Invalid date range. Please check your dates.');
+          event.preventDefault();
+        }
+      });
+  
+      // Initial validation on page load
+      updateValidation();
+    });
+  </script> -->
+  
+
 <%- include('../admin/layout/adminFooter.ejs') -%>
