@@ -1,97 +1,123 @@
-
 <%- include('../admin/layout/adminHeader.ejs') -%>
 
-<style>
-  .error {
-    color: red;
-  }
-</style>
+  <style>
+    .error {
+      color: red;
+    }
+  </style>
 
-<div class="col-12 grid-margin stretch-card">
+  <div class="col-12 grid-margin stretch-card">
     <div class="card">
-        <div class="card-body">
-          <h4 class="card-title">Edit Product</h4>
-          <br>
-          <form  action="/admin/edit-Pro?id=<%= currentData._id %>" method="post">
-          
-            <div class="form-group">
-              <label for="exampleInputName1">Name Of Product</label>
-              <input type="text" class="form-control" id="name"  placeholder="Name" name="proName" value="<%= currentData.productname %>">
-            </div>
-            <input type="hidden" name="product_id" value="<%= currentData._id %>">
-            <div class="form-group">
-              <label for="exampleInputEmail3">Quantity</label>
-              <input type="text" class="form-control" id="exampleInputEmail3" placeholder="Quantity" name="qty" value="<%= currentData.quantity %>">
-            </div>
-            <div class="form-group">
-              <label for="price">Price</label>
-              <div class="input-group" id="price">
-                <div class="input-group-prepend">
-                  <span class="input-group-text">$</span>
-                </div>
-                <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" name="price" value="<%= currentData.price %>">
+      <div class="card-body">
+        <h4 class="card-title">Edit Product</h4>
+        <br>
+        <form action="/admin/edit-Pro?id=<%= currentData._id %>" method="post">
+
+          <div class="form-group">
+            <label for="exampleInputName1">Name Of Product</label>
+            <input type="text" class="form-control" id="name" placeholder="Name" name="proName"
+              value="<%= currentData.productname %>">
+          </div>
+          <input type="hidden" name="product_id" value="<%= currentData._id %>">
+          <div class="form-group">
+            <label for="exampleInputEmail3">Quantity</label>
+            <input type="text" class="form-control" id="exampleInputEmail3" placeholder="Quantity" name="qty"
+              value="<%= currentData.quantity %>">
+          </div>
+          <div class="form-group">
+            <label for="price">Price</label>
+            <div class="input-group" id="price">
+              <div class="input-group-prepend">
+                <span class="input-group-text">₹</span>
               </div>
+              <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" name="price"
+                value="<%= currentData.price %>">
             </div>
-            <div class="form-group">
-              <label for="exampleSelectGender">Category</label>
-              <select class="form-control" id="exampleSelectGender" name="category" required>
-                <% catData.forEach((item) => { %>
-                  <% if (item.blocked == 0) { %>
-                    <option value="<%= item.name %>" <% if (item.name === currentData.category) { %>selected<% } %>>
+          </div>
+          <div class="form-group">
+            <label for="exampleSelectGender">Category</label>
+            <select class="form-control" id="exampleSelectGender" name="category" required>
+              <% catData.forEach((item)=> { %>
+                <% if (item.blocked==0) { %>
+                  <option value="<%= item.name %>" <% if (item.name===currentData.category) { %>selected<% } %>>
                       <%= item.name %>
-                    </option>
+                  </option>
                   <% } %>
-                <% }); %>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="ccbox">Size</label>
-              <div class="form-check" id="ccbox">
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" value="S" id="checkbox1" name="options" <% if (currentData.size.includes('S')) { %>checked<% } %>>
+                    <% }); %>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="ccbox">Size</label>
+            <div class="form-check" id="ccbox">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="S" id="checkbox1" name="options" <% if
+                  (currentData.size.includes('S')) { %>checked<% } %>>
                   <label class="form-check-label" for="checkbox1">
                     S
                   </label>
-                </div>
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" value="M" id="checkbox2" name="options" <% if (currentData.size.includes('M')) { %>checked<% } %>>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="M" id="checkbox2" name="options" <% if
+                  (currentData.size.includes('M')) { %>checked<% } %>>
                   <label class="form-check-label" for="checkbox2">
                     M
                   </label>
-                </div>
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" value="L" id="checkbox3" name="options" <% if (currentData.size.includes('L')) { %>checked<% } %>>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="L" id="checkbox3" name="options" <% if
+                  (currentData.size.includes('L')) { %>checked<% } %>>
                   <label class="form-check-label" for="checkbox3">
                     L
                   </label>
-                </div>
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" value="XL" id="checkbox4" name="options" <% if (currentData.size.includes('XL')) { %>checked<% } %>>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="XL" id="checkbox4" name="options" <% if
+                  (currentData.size.includes('XL')) { %>checked<% } %>>
                   <label class="form-check-label" for="checkbox4">
                     XL
                   </label>
-                </div>
               </div>
             </div>
-            <div class="form-group">
-              <label for="exampleTextarea1">Description</label>
-              <textarea class="form-control" id="exampleTextarea1" rows="4" name="description"><%= currentData.description %></textarea>
+          </div>
+          <div class="form-group">
+            <label for="exampleTextarea1">Description</label>
+            <textarea class="form-control" id="exampleTextarea1" rows="4"
+              name="description"><%= currentData.description %></textarea>
+          </div>
+          <div class="form-group">
+            <label for="exampleTextarea1">Additional Details</label>
+            <textarea class="form-control" id="exampleTextarea1" rows="4"
+              name="additionalInfo"><%= currentData.additionalInfo %></textarea>
+          </div>
+          <div id="existingImagePreview">
+            <p>Existing Images:</p>
+            <div id="existingImages" class="d-flex flex-nowrap overflow-auto">
+              <% for(let i=0; i<image.length; i++){ %>
+                <div class="existing-image-container d-inline-block mr-2">
+                  <img src="/products/<%= image[i] %>" alt="Existing Image" style="max-width: 200px;">
+                  <button type="button" onclick="deleteImage('<%= currentData._id %>', '<%= image[i] %>')"
+                    class="btn btn-sm btn-danger">Delete</button>
+                </div>
+                <% } %>
             </div>
-            <div class="form-group">
-              <label for="exampleTextarea1">Additional Details</label>
-              <textarea class="form-control" id="exampleTextarea1" rows="4" name="additionalInfo"><%= currentData.additionalInfo %></textarea>
-            </div>
-            <!-- <div class="form-group">
-              <label for="images">Upload Images</label>
-              <input type="file" class="form-control-file" id="images" name="image" multiple>
-            </div> -->
-            <div id="errorMessages"></div>
-            <button type="submit"  class="btn btn-primary mr-2">Submit</button>
-            <button class="btn btn-dark">Cancel</button>
-          </form>
-        </div>
-        
+          </div>
+
+          <!-- Upload new images -->
+          <div class="form-group">
+            <label for="images">Upload Images</label>
+            <input type="file" accept="image/*" class="form-control-file" id="images" name="images" multiple
+              onchange="validateAndPreviewImages(this)">
+            <span id="image1Error" style="color: red;"></span>
+          </div>
+          <div id="imagePreviewContainer" class="mt-3"></div>
+
+          <button type="submit" class="btn btn-primary mr-2">Submit</button>
+          <a href="/admin/productmanagement" class="btn btn-dark">Cancel</a>
+        </form>
+
       </div>
+
+    </div>
   </div>
 
 
@@ -107,14 +133,14 @@
         var description = $('#exampleTextarea1').val();
         var additionalInfo = $('textarea[name="additionalInfo"]').val();
         var errorMessages = $('#errorMessages');
-  
+
         // Validate conditions
         var isProNameValid = proName.length > 0 && proName.length <= 20;
         var isQtyValid = !isNaN(qty) && qty >= 0;
         var isPriceValid = !isNaN(price) && price >= 0;
         var isDescriptionValid = description.length >= 10;
         var isAdditionalInfoValid = additionalInfo.length >= 10;
-  
+
         // Show or hide error messages
         errorMessages.empty();
         if (!isProNameValid) {
@@ -132,14 +158,14 @@
         if (!isAdditionalInfoValid) {
           errorMessages.append('<span class="error" id="e5">Additional Details must be at least 10 characters.</span><br>');
         }
-  
+
         // Enable or disable the submit button
         submitButton.prop(
           'disabled',
           !(isProNameValid && isQtyValid && isPriceValid && isDescriptionValid && isAdditionalInfoValid)
         );
       }
-  
+
       // Attach event listeners to form inputs
       $('#name, #exampleInputEmail3, #price input, #exampleTextarea1, textarea[name="additionalInfo"]').on(
         'input',
@@ -147,12 +173,123 @@
           updateSubmitButton();
         }
       );
-  
+
       // Initial validation on page load
       updateSubmitButton();
     });
   </script>
-  
+  <script>
 
-  
-<%- include('../admin/layout/adminFooter.ejs') -%>
+
+    function previewExistingImages(images, productId) {
+      var existingImagesContainer = document.getElementById('existingImages');
+      existingImagesContainer.innerHTML = '';
+
+      images.forEach(function (image) {
+        var imageContainer = document.createElement('div');
+        imageContainer.className = 'existing-image-container d-inline-block mr-2';
+
+        var img = document.createElement('img');
+        img.src = '/products/' + image;
+        img.alt = 'Existing Image';
+        img.style.maxWidth = '200px';
+
+        var deleteButton = document.createElement('button');
+        deleteButton.type = 'button';
+        deleteButton.className = 'btn btn-sm btn-danger';
+        deleteButton.textContent = 'Delete';
+        deleteButton.onclick = function () {
+          deleteImage(productId, image);
+        };
+
+        imageContainer.appendChild(img);
+        imageContainer.appendChild(deleteButton);
+        existingImagesContainer.appendChild(imageContainer);
+      });
+    }
+
+
+    previewExistingImages(<% - JSON.stringify(image) %>, '<%= currentData._id %>');
+
+
+    function previewImages(input) {
+      var previewContainer = document.getElementById('imagePreviewContainer');
+      previewContainer.innerHTML = '';
+      var files = input.files;
+      for (var i = 0; i < files.length; i++) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          var img = document.createElement('img');
+          img.src = e.target.result;
+          img.style.maxWidth = '200px';
+          previewContainer.appendChild(img);
+        };
+        reader.readAsDataURL(files[i]);
+      }
+    }
+
+
+    function validateAndPreviewImages(input) {
+      var previewContainer = document.getElementById('imagePreviewContainer');
+      var errorSpan = document.getElementById('image1Error');
+
+
+      var files = input.files;
+
+
+      var maxImages = 4;
+
+
+      if (files.length > maxImages) {
+
+        input.value = '';
+
+        errorSpan.textContent = 'Please upload a maximum of ' + maxImages + ' images.';
+        errorSpan.style.display = 'block';
+
+
+        previewContainer.innerHTML = '';
+      } else {
+
+        errorSpan.style.display = 'none';
+
+
+        previewExistingImages(<% - JSON.stringify(image) %>, '<%= currentData._id %>');
+        previewImages(input);
+      }
+    }
+
+
+    function deleteImage(productId, image) {
+
+      fetch('/admin/delete-image', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          productId: productId,
+          image: image,
+        }),
+      })
+        .then(response => response.json())
+        .then(data => {
+
+          console.log('Image deleted successfully:', data);
+
+          var existingImagesContainer = document.getElementById('existingImages');
+          var deletedImageElement = Array.from(existingImagesContainer.children).find(element =>
+            element.querySelector('img').src.endsWith(image)
+          );
+          if (deletedImageElement) {
+            existingImagesContainer.removeChild(deletedImageElement);
+          }
+        })
+        .catch(error => {
+          console.error('Error deleting image:', error);
+
+        });
+    }
+  </script>
+
+  <%- include('../admin/layout/adminFooter.ejs') -%>

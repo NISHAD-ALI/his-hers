@@ -13,6 +13,7 @@ adminRoute.use(session({
 adminRoute.use(bodyParser.json())
 adminRoute.use(bodyParser.urlencoded({extended:true}))
 const auth = require('../middleware/adminAuth')
+const multer = require('../middleware/multer')
 adminRoute.set('view engine','ejs')
 adminRoute.set('views','./views/admin')
 adminController = require('../controllers/adminController')
@@ -29,57 +30,58 @@ adminRoute.use((req, res, next) => {
 
 adminRoute.get('/adminLogin',auth.isLogOut,adminController.loadAdminSignin);
 adminRoute.post('/adminLogin', adminController.loginAdmin);
-adminRoute.get('/dashboard', adminController.loadAdminDash);
-adminRoute.get('/userManagement', adminController.loadUserManag);
-adminRoute.get('/block-user', adminController.blockUser);
-adminRoute.get('/categoryManagement', adminController.loadCategoryManag);
+adminRoute.get('/dashboard',auth.isLogin,adminController.loadAdminDash);
+adminRoute.get('/userManagement',auth.isLogin, adminController.loadUserManag);
+adminRoute.get('/block-user',auth.isLogin, adminController.blockUser);
+adminRoute.get('/categoryManagement',auth.isLogin, adminController.loadCategoryManag);
 adminRoute.get('/adminLogout',auth.isLogin,adminController.logoutAdmin)
-adminRoute.get('/addCategory', adminController.addNewCategory)
-adminRoute.post('/addCat', adminController.addCategoryDB)
-adminRoute.get('/block-cat', adminController.blockCat);
-adminRoute.get('/edit-cat', adminController.editcat);
-adminRoute.post('/edit-cat', adminController.editcatPOST);
+adminRoute.get('/addCategory',auth.isLogin, adminController.addNewCategory)
+adminRoute.post('/addCat',auth.isLogin, adminController.addCategoryDB)
+adminRoute.get('/block-cat',auth.isLogin, adminController.blockCat);
+adminRoute.get('/edit-cat',auth.isLogin, adminController.editcat);
+adminRoute.post('/edit-cat',auth.isLogin, adminController.editcatPOST);
 
-adminRoute.get('/chartWeek', adminController.chartFilterWeek);
-adminRoute.get('/chartMonth', adminController.chartFilterMonth);
-adminRoute.get('/chartYear', adminController.chartFilterYear);
+adminRoute.get('/chartWeek',auth.isLogin, adminController.chartFilterWeek);
+adminRoute.get('/chartMonth',auth.isLogin, adminController.chartFilterMonth);
+adminRoute.get('/chartYear',auth.isLogin, adminController.chartFilterYear);
 
 
-adminRoute.get('/productManagement', productController.loadProduct);
-adminRoute.get('/addPro', productController.loadNewProduct)
-adminRoute.post('/addPro', productController.newproduct)
-adminRoute.get('/block-pro', productController.blockPro);
-adminRoute.get('/editPro', productController.loadEditProduct);
-adminRoute.post('/edit-Pro', productController.editProduct);
-adminRoute.get('/deletePro', productController.deleteProduct);
-
-adminRoute.post('/update-order-status', adminController.updateOrderStatus);
-adminRoute.get('/orderManagement', adminController.loadOrder);
+adminRoute.get('/productManagement',auth.isLogin, productController.loadProduct);
+adminRoute.get('/addPro',auth.isLogin, productController.loadNewProduct)
+adminRoute.post('/addPro',auth.isLogin, productController.newproduct)
+adminRoute.get('/block-pro',auth.isLogin, productController.blockPro);
+adminRoute.get('/editPro',auth.isLogin, productController.loadEditProduct);
+adminRoute.post('/edit-Pro',auth.isLogin, productController.editProduct);
+adminRoute.get('/deletePro',auth.isLogin, productController.deleteProduct);
+adminRoute.post('/delete-image',auth.isLogin, productController.deleteImage);
+ 
+adminRoute.post('/update-order-status',auth.isLogin, adminController.updateOrderStatus);
+adminRoute.get('/orderManagement',auth.isLogin, adminController.loadOrder);
 
 // adminRoute.get('*', adminController.loadAdminError);
 
-adminRoute.get('/loadCoupon', couponController.loadCoupon);
-adminRoute.get('/loadAddCoupon', couponController.loadAddCoupon);
-adminRoute.post('/addCouponDB', couponController.addCoupon);
-adminRoute.post('/editCouponDB', couponController.editCoupon);
-adminRoute.get('/loadEditCoupon', couponController.loadEditCoupon);
-adminRoute.get('/blockCoupon', couponController.blockCoupon);
-adminRoute.get('/deleteCoupon', couponController.deletecoupon);
+adminRoute.get('/loadCoupon',auth.isLogin, couponController.loadCoupon);
+adminRoute.get('/loadAddCoupon',auth.isLogin, couponController.loadAddCoupon);
+adminRoute.post('/addCouponDB',auth.isLogin, couponController.addCoupon);
+adminRoute.post('/editCouponDB',auth.isLogin, couponController.editCoupon);
+adminRoute.get('/loadEditCoupon',auth.isLogin, couponController.loadEditCoupon);
+adminRoute.get('/blockCoupon', auth.isLogin,couponController.blockCoupon);
+adminRoute.get('/deleteCoupon',auth.isLogin, couponController.deletecoupon);
 
 
-adminRoute.get('/offers', offerController.loadOffers);
-adminRoute.get('/addOff', offerController.loadAddOffer);
-adminRoute.post('/addOfferDB', offerController.addOffers);
-adminRoute.get('/block-off', offerController.blockOff);
-adminRoute.get('/delete-Off', offerController.deleteOffer);
+adminRoute.get('/offers',auth.isLogin, offerController.loadOffers);
+adminRoute.get('/addOff',auth.isLogin, offerController.loadAddOffer);
+adminRoute.post('/addOfferDB',auth.isLogin, offerController.addOffers);
+adminRoute.get('/block-off',auth.isLogin, offerController.blockOff);
+adminRoute.get('/delete-Off',auth.isLogin, offerController.deleteOffer);
 
-adminRoute.get('/offersCat', offerController.loadCategoryOffers);
-adminRoute.get('/addoffersCat', offerController.loadAddCategoryOffer);
-adminRoute.post('/addOfferCatDB', offerController.addCategoryOffer);
-adminRoute.get('/deletecatOff', offerController.deleteCategoryOffer);
+adminRoute.get('/offersCat',auth.isLogin, offerController.loadCategoryOffers);
+adminRoute.get('/addoffersCat',auth.isLogin, offerController.loadAddCategoryOffer);
+adminRoute.post('/addOfferCatDB',auth.isLogin, offerController.addCategoryOffer);
+adminRoute.get('/deletecatOff',auth.isLogin, offerController.deleteCategoryOffer);
 
-adminRoute.get('/salesSum', adminController.loadSalesSum);
-adminRoute.get('/sales', adminController.filterSaleYear);
+adminRoute.get('/salesSum',auth.isLogin, adminController.loadSalesSum);
+adminRoute.get('/sales',auth.isLogin, adminController.filterSaleYear);
 
 
 module.exports = adminRoute

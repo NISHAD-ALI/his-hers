@@ -87,14 +87,14 @@ const insertNewUser = async (req, res) => {
   
     // Save the default wallet
     const savedWallet = await defaultWallet.save();
-   console.log(savedWallet+"ppppppppppppppppp");
+  
     if (userData) {
       // Send verification email
       sendVerifyMail(req.body.newUsername, req.body.newEmail, userData._id);
       email2 = req.body.newEmail;
       nameResend = req.body.newUsername;
       user_id = userData._id;
-
+      
       res.render('otppage', { message: 'Check your email for the OTP.', newuser });
     } else {
       res.render('login', { message1: 'Failed to register' });
@@ -170,8 +170,8 @@ const verifymail = async (req, res) => {
 
     if (req.body.otp == otpsend) {
       const use = req.body.usermon
-      const updateinfo = await User.updateOne({ _id: use }, { $set: { is_verified: 1 } });
-      console.log(updateinfo);
+      const updateinfo = await User.updateOne({ email: email2 }, { $set: { is_verified: 1 } });
+      console.log(use+"111111111111111");
       // res.redirect('/login');
       res.render('login', { message: 'Your Account has been created.' });
     } else {

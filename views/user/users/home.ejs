@@ -142,12 +142,12 @@
 
                                                    
                                                         <% if (smallestPrice && smallestPrice < product.price) { %>
-                                                            <span class="old-price"> Was<strike>$<%= product.price %></strike></span>
+                                                            <span class="old-price"> Was<strike>₹<%= product.price %></strike></span>
                                                     </div>
                                                     <div class="product-price">
-                                                        <span class="new-price">Now<b>$<%= smallestPrice %></b></span>
+                                                        <span class="new-price">Now<b>₹<%= smallestPrice %></b></span>
                                                             <% } else { %>
-                                                                $<%= product.price %>
+                                                                ₹<%= product.price %>
                                                             <% } %>
                                                     </div>
                                                 </div><!-- End .product-price -->
@@ -178,7 +178,7 @@
                                 </span>
                                 <div class="icon-box-content">
                                     <h3 class="icon-box-title">Payment & Delivery</h3><!-- End .icon-box-title -->
-                                    <p>Free shipping for orders over $50</p>
+                                    <p>Free shipping for all orders </p>
                                 </div><!-- End .icon-box-content -->
                             </div><!-- End .icon-box -->
                         </div><!-- End .col-lg-4 col-sm-6 -->

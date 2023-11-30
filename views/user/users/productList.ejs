@@ -132,18 +132,7 @@
                                     <!-- Showing <span>12 of 56</span> Products -->
                                 </div><!-- End .toolbox-info -->
                             </div><!-- End .toolbox-center -->
-                            <!-- SORTING -->
-                            <div class="toolbox-right">
-                                <div class="toolbox-sort">
-                                    <label for="sortby">Sort by:</label>
-                                    <div class="select-custom">
-                                        <select name="sortby" id="sortby" class="form-control">
-                                            <option value="priceLowToHigh">Price : Low - High</option>
-                                            <option value="priceHighToLow">Price : High - Low</option>
-                                        </select>
-                                    </div>
-                                </div><!-- End .toolbox-sort -->
-                            </div><!-- End .toolbox-right -->
+                           
         
                         </div><!-- End .toolbox -->
                         <!-- PRODUCTS -->
@@ -182,26 +171,16 @@
                                                   
                                                     <div class="product-price">
                                                         <% if (smallestPrice && smallestPrice < product.price) { %>
-                                                            <strike>$<%= product.price %></strike>
+                                                            <strike>₹<%= product.price %></strike>
                                                     </div>
                                                     <div class="product-price">
-                                                            <b>$<%= smallestPrice %></b>
+                                                            <b>₹<%= smallestPrice %></b>
                                                             <% } else { %>
-                                                                $<%= product.price %>
+                                                                ₹<%= product.price %>
                                                             <% } %>
                                                     </div>
                                                     
-                                                    <div class="ratings-container">
-                                                        <div class="ratings">
-                                                            <div class="ratings-val" style="width: <%= (product.ratings * 20) %>%;"></div>
-                                                        </div>
-                                                        <span class="ratings-text">( <%= product.ratings %> Reviews )</span>
-                                                    </div>
-                                                    <div class="product-nav product-nav-dots">
-                                                        <a href="#" style="background: <%= product.color %>;">
-                                                            <span class="sr-only">Color name</span>
-                                                        </a>
-                                                    </div>
+                                                   
                                                 </div>
                                             </div>
                                         </div>

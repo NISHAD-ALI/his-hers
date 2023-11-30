@@ -72,10 +72,7 @@
                                     <a class="nav-link" id="tab-orders-link" data-toggle="tab" href="#tab-orders"
                                         role="tab" aria-controls="tab-orders" aria-selected="false">Orders</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="tab-downloads-link" data-toggle="tab" href="#tab-downloads"
-                                        role="tab" aria-controls="tab-downloads" aria-selected="false">Downloads</a>
-                                </li>
+                               
                                 <li class="nav-item">
                                     <a class="nav-link" id="tab-address-link" data-toggle="tab" href="#tab-address"
                                         role="tab" aria-controls="tab-address" aria-selected="false">Address</a>
@@ -99,11 +96,7 @@
                                             <%= accountDetails.name %>
                                         </span></p>
                                     <br>
-                                    From your account dashboard you can view your <a href="#tab-orders"
-                                        class="tab-trigger-link link-underline">recent orders</a>, manage your <a
-                                        href="#tab-address" class="tab-trigger-link">shipping and billing addresses</a>,
-                                    and <a href="#tab-account" class="tab-trigger-link">edit your password and account
-                                        details</a>.</p>
+                                   
                                 </div><!-- .End .tab-pane -->
 
                                 <div class="tab-pane fade show" id="tab-wallet" role="tabpanel"
@@ -124,12 +117,12 @@
                                                         <p class="card-text">Wallet Id: **** **** **** 1234</p>
                                                         <div class="capsule">
                                                             <h5>Avl Bal</h5>
-                                                            <h6>$<%= walletData.balance %>.00</h6>
+                                                            <h6>₹<%= walletData.balance %>.00</h6>
                                                         </div>
                                                         <br>
-                                                        <a href="#" class="btn btn-outline-primary-2 shop-button"> Add
+                                                        <!-- <a href="#" class="btn btn-outline-primary-2 shop-button"> Add
                                                             Money To Wallet
-                                                            <i class="icon-long-arrow-right"></i></a>
+                                                            <i class="icon-long-arrow-right"></i></a> -->
                                                     </div>
                                                 </div>
                                             </div>
@@ -161,7 +154,7 @@
                                                                         month: 'short' , day: '2-digit' , hour: '2-digit' , minute: '2-digit' ,
                                                                         second: '2-digit' }).replace(/,/, '' ).replace(/\//g, '-' ) %></td>
                                                                     <td> <%= value.type %></td>
-                                                                    <td>$<%= value.amount %>.00</td>
+                                                                    <td>₹<%= value.amount %>.00</td>
                                                                 </tr>
                                                                 
                                                                 <% } %>
@@ -222,11 +215,11 @@
                                                                         </div>
                                                                     </td>
                                                                     <% if(value.discountPricepro){ %>
-                                                                        <td class="price-col">$<%= value.discountPricepro
+                                                                        <td class="price-col">₹<%= value.discountPricepro
                                                                                 %>
                                                                         </td>
                                                                         <% } else { %>
-                                                                            <td class="price-col">$<%= value.price %>
+                                                                            <td class="price-col">₹<%= value.price %>
                                                                             </td>
                                                                             <% } %>
                                                                                 <td class="status-col">
@@ -302,12 +295,7 @@
                                 </div>
 
 
-                                <div class="tab-pane fade" id="tab-downloads" role="tabpanel"
-                                    aria-labelledby="tab-downloads-link">
-                                    <p>No downloads available yet.</p>
-                                    <a href="category.html" class="btn btn-outline-primary-2"><span>GO SHOP</span><i
-                                            class="icon-long-arrow-right"></i></a>
-                                </div><!-- .End .tab-pane -->
+                               
 
                                 <div class="tab-pane fade" id="tab-address" role="tabpanel"
                                     aria-labelledby="tab-address-link">

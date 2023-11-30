@@ -106,11 +106,11 @@
             <td><%= product.productname %></td>
             <td><%= products[i].count %></td>
             <% if(product.discountPricepro){ %>
-            <td>$<%= product.discountPricepro %></td>
+            <td>₹<%= product.discountPricepro %></td>
             <%  } else { %>
-              <td>$<%= product.price %></td>
+              <td>₹<%= product.price %></td>
               <% } %>
-            <td>$<%= order.totalAmount %></td>
+            <td>₹<%= order.totalAmount %></td>
           </tr>
         <% } %>
 
@@ -124,7 +124,7 @@
   
 
   <div class="total">
-    <p><strong>Total:</strong> $<%= order.totalAmount %></p>
+    <p><strong>Total:</strong> ₹<%= order.totalAmount %></p>
   </div>
 </div>
 <div class="company-details details">

@@ -44,8 +44,8 @@
                           <td><%= order.purchaseDate.toLocaleString('en-US') %></td>
                           <td><%= product.productId.productname %></td>
                           <td><%= product.count %></td>
-                          <td>$<%= product.productId.price.toFixed(2) %></td>
-                          <td>$<%= (product.count * product.productId.price).toFixed(2) %></td>
+                          <td>₹<%= product.productId.price.toFixed(2) %></td>
+                          <td>₹<%= (product.count * product.productId.price).toFixed(2) %></td>
                         </tr>
                       <% }); %>
                     <% }); %>

@@ -25,7 +25,7 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <% if (orderDat) { %>
+                        <% if (orderDat.length > 0 ) { %>
                           <% for (let j=0; j < orderDat.length; j++) { %>
                             <% let products=orderDat[j].products; %>
                               <% const username=orderDat[j].userid.name; %>

@@ -48,7 +48,7 @@
                     <div class="row">
                       <div class="col-8 col-sm-12 col-xl-8 my-auto">
                         <div class="d-flex d-sm-block d-md-flex align-items-center">
-                          <h2 class="mb-0">$<%= totalRevenue %></h2>
+                          <h2 class="mb-0">₹<%= totalRevenue %></h2>
                           <!-- <p class="text-success ml-2 mb-0 font-weight-medium">+3.5%</p> -->
                         </div>
                         <h6 class="text-muted font-weight-normal">11.38% Since last month</h6>
@@ -129,18 +129,22 @@
                       <div class="card-body">
                         <h5>Newly Added</h5>
                        <br>
-                          <!-- Image column (100% on smaller screens, 70% on larger screens) -->
+                       <% if(newProduct){ %>
                           <div class="col-12 col-md-8">
                             <img src="/products/images/<%= newProduct[0].image[0] %>" class="img-fluid custom-image" alt="Product Image">
                             <br>
                             <p></p>
                           </div>
-                        
+                       
                         
                         <p><%= newProduct[0].productname %></p>
                         <p>Actual Price : <%= newProduct[0].price %></p>
                         <p>Available Stocks : <%= newProduct[0].quantity %></p>
                         <p>Category : <%= newProduct[0].category %></p>
+
+                      <% } else { %>
+                        <p> No products found</p>
+                        <% } %>
                       </div>
                     </div>
                   </div>
@@ -169,6 +173,8 @@
            Online = '<%= totalOnline %>'
            Wallet = '<%= totalWallet  %>'
     console.log(COD);
+    console.log(Online);
+    console.log(Wallet);
         var data = {
             labels: ['COD', 'Online', 'Wallet'],
             datasets: [{

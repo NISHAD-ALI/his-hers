@@ -10,7 +10,7 @@ let ejs = require('ejs')
 let path = require('path')
 const ExcelJS = require('exceljs');
 const zip = require('express-zip'); 
-// require('dotenv').config();
+
 
 
 // ++++++++++++++++++++++++++++++++++++++CHECKING WITH REGEX++++++++++++++++++++++++++++++++++++++++++++++
@@ -72,28 +72,11 @@ const loginAdmin = async (req, res) => {
 // ++++++++++++++++++++++++++++++++++++++LOGOUT CURRENT ADMIN++++++++++++++++++++++++++++++++++++++++++++++
 
 
-// const logoutAdmin = async (req, res) => {
-//   try {
-
-//     req.session.admin_id = false;
-
-
-//     res.redirect('/admin/adminLogin');
-
-
-//   } catch (error) {
-//     console.log(error.message);
-
-//   }
-// };
 const logoutAdmin = async (req, res) => {
   try {
-    req.session.destroy((err) => {
-      if (err) {
-        console.error(err);
-      }
+    req.session.admin_id = false;
       res.redirect('/admin/adminLogin');
-    });
+  
   } catch (error) {
     console.log(error.message);
   }
@@ -128,31 +111,36 @@ const loadAdminDash = async (req, res) => {
     let totalCod = await Order.aggregate([
       { $match: { status: 'Delivered', paymentMethod: 'cod' } },
 
-      { $group: { _id: null, total: { $sum: 1 } } }
+      { $group: { _id: null, total1: { $sum: 1 } } }
     ])
 
     let totalOnline = await Order.aggregate([
       { $match: { status: 'Delivered', paymentMethod: 'online' } },
 
-      { $group: { _id: null, total: { $sum: 1 } } }
+      { $group: { _id: null, total2: { $sum: 1 } } }
     ])
 
     let totalWallet = await Order.aggregate([
       { $match: { status: 'Delivered', paymentMethod: 'Wallet' } },
 
-      { $group: { _id: null, total: { $sum: 1 } } }
+      { $group: { _id: null, total3: { $sum: 1 } } }
     ])
-    totalCod = totalCod[0].total
-    totalOnline = totalOnline[0].total
-    totalWallet = totalWallet[0].total
+
+    totalCod = totalCod.length > 0 ? totalCod[0].total1 : 0;
+    totalOnline = totalOnline.length > 0 ? totalOnline[0].total2 : 0;
+    totalWallet = totalWallet.length > 0 ? totalWallet[0].total3 : 0;
 
     const formattedTotalRevenue = totalRevenue.length > 0 ? totalRevenue[0].totalRevenue : 0;
-
-    res.render('dashboard', { orderDat, orderCount, totalRevenue: formattedTotalRevenue, userCount, totalCod, totalOnline, totalWallet, newProduct });
+    if (newProduct.length > 0) {
+      res.render('dashboard', { orderDat, orderCount, totalRevenue: formattedTotalRevenue, userCount, totalCod, totalOnline, totalWallet, newProduct });
+    } else {
+      res.render('dashboard', { orderDat, orderCount, totalRevenue: formattedTotalRevenue, userCount, totalCod, totalOnline, totalWallet, newProduct: {} });
+    }
   } catch (error) {
     console.log(error.message);
   }
 };
+
 
 const chartFilterWeek = async (req, res) => {
   try {
@@ -404,8 +392,13 @@ const loadOrder = async (req, res) => {
         select: 'name'
       })
       .populate('products.productId');
-
-    res.render('orderManagement', { orderDat })
+    
+    if(orderDat){
+      res.render('orderManagement', { orderDat })
+    } else{
+      res.render('orderManagement', { orderDat:{} })
+    }
+   
   } catch (error) {
     console.log(error.message)
     res.status(500).json({ error: 'Internal server error' });

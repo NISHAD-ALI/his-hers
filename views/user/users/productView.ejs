@@ -86,12 +86,12 @@
                                     <% let smallestPrice = Math.min(viewProduct.price, viewProduct.discountPricepro || Infinity, viewProduct.discountPricecat || Infinity); %>
                                     <div class="product-price">
                                         <% if (smallestPrice && smallestPrice < viewProduct.price) { %>
-                                            <strike>$<%= viewProduct.price %></strike>
+                                            <strike>₹<%= viewProduct.price %></strike>
                                     </div>
                                     <div class="product-price">
-                                            <b>$<%= smallestPrice %></b>
+                                            <b>₹<%= smallestPrice %></b>
                                             <% } else { %>
-                                                $<%= viewProduct.price %>
+                                                ₹<%= viewProduct.price %>
                                             <% } %>
                                     </div>
 

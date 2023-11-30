@@ -59,7 +59,7 @@
                                             
                                             </div>
                                         </td>
-                                        <td class="price-col">$<%= value.price %></td>
+                                        <td class="price-col">₹<%= value.price %></td>
                                         <td class="quantity-col">
                                             
                                             <div class="cart-product-quantity">
@@ -78,7 +78,7 @@
                                             </div>
                                             
                                         </td>
-                                        <td class="total-col" data-product-id="<%= value._id %>"id="total-<%= value._id %>">$<%= datatotal[i] %></td>
+                                        <td class="total-col" data-product-id="<%= value._id %>"id="total-<%= value._id %>">₹<%= datatotal[i] %></td>
 
 
                                         <td class="remove-col"><a href="/deleteCartProduct?id=<%= value._id %>" ><i class="icon-close"></i></a></td>
@@ -107,7 +107,7 @@
                                         <tbody>
                                             <tr class="summary-subtotal">
                                                 <td>Subtotal:</td>
-                                                <td>$<%= totalamount %></td>
+                                                <td>₹<%= totalamount %></td>
                                             </tr><!-- End .summary-subtotal -->
               <!-- SHIPPING -->
                                             <!-- <tr class="summary-shipping">

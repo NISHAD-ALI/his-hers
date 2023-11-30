@@ -1,112 +1,119 @@
-
 <%- include('../admin/layout/adminHeader.ejs') -%>
 
-<style>
-  .error {
-    color: red;
-  }
-</style>
+  <style>
+    .error {
+      color: red;
+    }
+  </style>
 
 
 
 
 
-<div class="col-12 grid-margin stretch-card">
+  <div class="col-12 grid-margin stretch-card">
     <div class="card">
-        <div class="card-body">
-          <h4 class="card-title">Add New Products</h4>
-         <br>
-         <form class="forms-sample" action="/admin/addPro" method="post" enctype="multipart/form-data">
-            <div class="form-group">
-              <label for="exampleInputName1">Name Of Product</label>
-              <input type="text" class="form-control" id="exampleInputName1" placeholder="Name" name="proName">
-              
-            </div>
-            <div class="form-group">
-              <label for="exampleInputEmail3">Quantity</label>
-              <input type="text" class="form-control" id="exampleInputEmail3" placeholder="Quantity"name="qty">
-            </div>
-            <div class="form-group">
-              <label for="price">Price</label>
-              <div class="input-group" id="price">
-                <div class="input-group-prepend">
-                  <span class="input-group-text">$</span>
-                </div>
-                <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" name="price">
-              </div>
-            </div>
+      <div class="card-body">
+        <h4 class="card-title">Add New Products</h4>
+        <br>
+        <form class="forms-sample" action="/admin/addPro" method="post" enctype="multipart/form-data">
+          <div class="form-group">
+            <label for="exampleInputName1">Name Of Product</label>
+            <input type="text" class="form-control" id="exampleInputName1" placeholder="Name" name="proName">
 
-            <div class="form-group">
-              <label for="exampleSelectGender">Category</label>
-              <select class="form-control" id="exampleSelectGender" name="category" required>
-                <% categories.forEach((item) => { %>
-                  <% if (item.blocked == 0) { %>
-                    <option value="<%= item.name %>">
-                      <%= item.name %>
-                    </option>
-                    
+          </div>
+          <div class="form-group">
+            <label for="exampleInputEmail3">Quantity</label>
+            <input type="text" class="form-control" id="exampleInputEmail3" placeholder="Quantity" name="qty">
+          </div>
+          <div class="form-group">
+            <label for="price">Price</label>
+            <div class="input-group" id="price">
+              <div class="input-group-prepend">
+                <span class="input-group-text">$</span>
+              </div>
+              <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" name="price">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="exampleSelectGender">Category</label>
+            <select class="form-control" id="exampleSelectGender" name="category" required>
+              <% categories.forEach((item)=> { %>
+                <% if (item.blocked==0) { %>
+                  <option value="<%= item.name %>">
+                    <%= item.name %>
+                  </option>
+
                   <% } %>
-                <% }); %>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="ccbox">Size</label>
-              <div class="form-check" id="ccbox">
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" value="S" id="checkbox1" name="options">
-                  <label class="form-check-label" for="checkbox1">
-                    S
-                  </label>
-                </div>
-                
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" value="M" id="checkbox2" name="options">
-                  <label class="form-check-label" for "checkbox2">
-                    M
-                  </label>
-                </div>
-                
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" value="L" id="checkbox3" name="options">
-                  <label class="form-check-label" for="checkbox3">
-                    L
-                  </label>
-                </div>
-                
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" value="XL" id="checkbox4" name="options">
-                  <label class="form-check-label" for="checkbox4">
-                    XL
-                  </label>
-                </div>
+                    <% }); %>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="ccbox">Size</label>
+            <div class="form-check" id="ccbox">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="S" id="checkbox1" name="options">
+                <label class="form-check-label" for="checkbox1">
+                  S
+                </label>
+              </div>
+
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="M" id="checkbox2" name="options">
+                <label class="form-check-label" for "checkbox2">
+                  M
+                </label>
+              </div>
+
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="L" id="checkbox3" name="options">
+                <label class="form-check-label" for="checkbox3">
+                  L
+                </label>
+              </div>
+
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="XL" id="checkbox4" name="options">
+                <label class="form-check-label" for="checkbox4">
+                  XL
+                </label>
               </div>
             </div>
-            
+          </div>
 
-            <div class="form-group">
-              <label for="exampleTextarea1">Description</label>
-              <textarea class="form-control" id="exampleTextarea1" rows="4" name="description"></textarea>
-            </div>
-            <div class="form-group">
-              <label for="exampleTextarea1">Additional Details</label>
-              <textarea class="form-control" id="exampleTextarea1" rows="4" name="additionalInfo"></textarea>
-            </div>
-            <div class="form-group">
-              <label for="images">Upload Images</label>
-              <input type="file" class="form-control-file" id="images" name="images" multiple accept="image/*">
-            </div> 
-            <div id="errorMessages"></div>
-            <button type="submit" class="btn btn-primary mr-2">Submit</button>
-            <button class="btn btn-dark">Cancel</button>
-          </form>
-        </div>
+
+          <div class="form-group">
+            <label for="exampleTextarea1">Description</label>
+            <textarea class="form-control" id="exampleTextarea1" rows="4" name="description"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="exampleTextarea1">Additional Details</label>
+            <textarea class="form-control" id="exampleTextarea1" rows="4" name="additionalInfo"></textarea>
+          </div>
+          <div class="form-group">
+            <span id="image1Error" style="color: red;"></span>
+            <label for="images">Upload Images</label>
+            <input type="file" class="form-control-file" id="images" name="images" multiple accept="image/*"
+              onchange="validateAndPreviewImages(this)">
+          </div>
+          <div id="errorMessages"></div>
+          <div id="imagePreviewContainer"></div>
+          <button type="submit" class="btn btn-primary mr-2">Submit</button>
+          <button class="btn btn-dark">Cancel</button>
+
+
+
+
+
+        </form>
       </div>
+    </div>
   </div>
 
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
   <script>
     $(document).ready(function () {
-     
+
       function updateSubmitButton() {
         var submitButton = $('button[type="submit"]');
         var proName = $('#exampleInputName1').val();
@@ -115,14 +122,14 @@
         var description = $('#exampleTextarea1').val();
         var additionalInfo = $('textarea[name="additionalInfo"]').val();
         var errorMessages = $('#errorMessages');
-  
+
         // Validate conditions
         var isProNameValid = proName.length > 0 && proName.length <= 20;
         var isQtyValid = !isNaN(qty) && qty >= 0;
         var isPriceValid = !isNaN(price) && price >= 0;
         var isDescriptionValid = description.length >= 10;
         var isAdditionalInfoValid = additionalInfo.length >= 10;
-  
+
         // Show or hide error messages
         errorMessages.empty();
         if (!isProNameValid) {
@@ -140,14 +147,14 @@
         if (!isAdditionalInfoValid) {
           errorMessages.append('<span class="error" id="e5">Additional Details must be at least 10 characters.</span><br>');
         }
-  
+
         // Enable or disable the submit button
         submitButton.prop(
           'disabled',
           !(isProNameValid && isQtyValid && isPriceValid && isDescriptionValid && isAdditionalInfoValid)
         );
       }
-  
+
       // Attach event listeners to form inputs
       $('#exampleInputName1, #exampleInputEmail3, #price input, #exampleTextarea1, textarea[name="additionalInfo"]').on(
         'input',
@@ -155,11 +162,56 @@
           updateSubmitButton();
         }
       );
-  
+
       // Initial validation on page load
       updateSubmitButton();
     });
   </script>
- 
+
   
-  <%- include('../admin/layout/adminFooter.ejs') -%>
+ <script>
+  function previewImages(input) {
+  var previewContainer = document.getElementById('imagePreviewContainer');
+  previewContainer.innerHTML = ''; // Clear previous previews
+
+  var files = input.files;
+  for (var i = 0; i < files.length; i++) { var reader=new FileReader(); reader.onload=function (e) { var
+    img=document.createElement('img'); img.src=e.target.result; img.style.maxWidth='300px' ; 
+   previewContainer.appendChild(img); }; reader.readAsDataURL(files[i]); } }
+     </script>
+
+    
+    <script>
+      function validateAndPreviewImages(input) {
+        var previewContainer = document.getElementById('imagePreviewContainer');
+        var errorSpan = document.getElementById('image1Error');
+
+        // Get the selected files
+        var files = input.files;
+
+        // Define the maximum allowed images
+        var maxImages = 4;
+
+        // Check if the number of selected images exceeds the limit
+        if (files.length > maxImages) {
+          // Clear the file input
+          input.value = '';
+
+          // Display an error message
+          errorSpan.textContent = 'Please upload a maximum of ' + maxImages + ' images.';
+          errorSpan.style.display = 'block';
+
+          // Clear the image preview container
+          previewContainer.innerHTML = '';
+        } else {
+          // Hide any previous error messages
+          errorSpan.style.display = 'none';
+
+          // Proceed with previewing the images
+          previewImages(input);
+        }
+      }
+
+      // The rest of your previewImages function goes here
+    </script>
+    <%- include('../admin/layout/adminFooter.ejs') -%>

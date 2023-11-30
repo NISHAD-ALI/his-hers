@@ -5,6 +5,8 @@ const product = require('../models/productModel')
 const multer = require("../middleware/multer");
 const Offers = require('../models/productOfferModel');
 const CategoryOffer = require('../models/categoryOfferModel');
+const sharp = require('sharp');
+let path = require('path')
 const { log } = require('async');
 
 
@@ -65,13 +67,29 @@ const newproduct = async (req, res) => {
           size: req.body.options,
         };
 
-
         productData.image = req.files.map((file) => file.filename);
-
+        console.log( productData.image);
         const item = new product(productData);
-
         await item.save();
-        res.redirect('/admin/productManagement');
+        for (let i = 0; i < req.files.length; i++) {
+          const filePath = path.join(__dirname, '../public/products/images/', req.files[i].filename);
+await sharp(filePath).resize(800, 800).toFile("public/products/images/upload/" + req.files[i].filename);
+
+         
+        };
+        
+       
+
+        if (item) {
+          res.redirect('/admin/productManagement');
+      }
+      else {
+          console.log("Failed upload");
+      }
+
+
+        
+        
       } catch (error) {
         console.log(error.message);
 
@@ -107,7 +125,7 @@ const loadEditProduct = async (req, res) => {
   try {
     const catData = await category.find({ blocked: 0 });
     const editProducts = await product.findOne({ _id: req.query.id });
-    res.render("editProduct", { currentData: editProducts, catData });
+    res.render("editProduct", { currentData: editProducts, catData ,image:editProducts.image});
   } catch (error) {
     console.log(error.message);
     res.status(404).render("404");
@@ -121,6 +139,7 @@ const editProduct = async (req, res) => {
   try {
     const editid = req.query.id;
     console.log(editid);
+
     const newDetails = {
       productname: req.body.proName,
       quantity: req.body.qty,
@@ -129,18 +148,57 @@ const editProduct = async (req, res) => {
       description: req.body.description,
       additionalInfo: req.body.additionalInfo,
       size: req.body.options,
+    };
+
+    newDetails.image = req.files.map((file) => file.filename);
+    console.log(newDetails.image);
+
+    for (let i = 0; i < req.files.length; i++) {
+      const filePath = path.join(__dirname, '../public/products/images/', req.files[i].filename);
+      await sharp(filePath).resize(800, 800).toFile("public/products/images/" + req.files[i].filename);
     }
 
-    const edit = await product.updateOne({ _id: editid }, newDetails)
+    const edit = await product.updateOne({ _id: editid }, newDetails);
 
     res.redirect('/admin/productManagement');
-
   } catch (error) {
     console.log(error.message);
   }
+};
+
+const deleteImage = async ( req , res ) => {
+  try {
+   console.log('334');
+   
+    const { filename } = req.body;
+
+    if (!filename) {
+      return res.status(400).json({ error: 'Image filename is required.' });
+    }
+
+    // Define the path to the images directory
+    const imagesDirectory = path.join(__dirname, 'public', 'images');
+
+    // Construct the full path to the image
+    const imagePath = path.join(imagesDirectory, filename);
+
+    // Check if the file exists
+    const fileExists = await fs.access(imagePath).then(() => true).catch(() => false);
+
+    if (!fileExists) {
+      return res.status(404).json({ error: 'Image not found.' });
+    }
+
+    // Delete the image file
+    await fs.unlink(imagePath);
+
+    // Respond with success
+    res.status(200).json({ message: 'Image deleted successfully.' });
+  } catch (error) {
+    console.error('Error deleting image:', error);
+    res.status(500).json({ error: 'Internal server error.' });
+  }
 }
-
-
 
 
 
@@ -411,4 +469,5 @@ module.exports = {
   menCat,
   womenCat,
   loadfreshArrivals,
+  deleteImage
 }
