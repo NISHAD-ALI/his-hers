@@ -15,9 +15,10 @@ const zip = require('express-zip');
 
 // ++++++++++++++++++++++++++++++++++++++CHECKING WITH REGEX++++++++++++++++++++++++++++++++++++++++++++++
 function validateEmail(email) {
-  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const regex = /^[^\s@]+([\._][^\s@]+)*@[^\s@]+\.[^\s@]+$/;
   return regex.test(email);
 }
+
 // ++++++++++++++++++++++++++++++++++++++RENDER ADMIN LOGIN PAGE++++++++++++++++++++++++++++++++++++++++++++++
 
 const loadAdminSignin = async (req, res) => {

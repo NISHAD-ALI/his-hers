@@ -11,8 +11,7 @@
       <div class="card-body">
         <h4 class="card-title">Edit Product</h4>
         <br>
-        <form action="/admin/edit-Pro?id=<%= currentData._id %>" method="post">
-
+        <form action="/admin/edit-Pro?id=<%= currentData._id %>" method="post" enctype="multipart/form-data">
           <div class="form-group">
             <label for="exampleInputName1">Name Of Product</label>
             <input type="text" class="form-control" id="name" placeholder="Name" name="proName"
@@ -94,7 +93,7 @@
             <div id="existingImages" class="d-flex flex-nowrap overflow-auto">
               <% for(let i=0; i<image.length; i++){ %>
                 <div class="existing-image-container d-inline-block mr-2">
-                  <img src="/products/<%= image[i] %>" alt="Existing Image" style="max-width: 200px;">
+                  <img src="/products/images/upload/<%= image[i] %>" alt="Existing Image" style="max-width: 200px;">
                   <button type="button" onclick="deleteImage('<%= currentData._id %>', '<%= image[i] %>')"
                     class="btn btn-sm btn-danger">Delete</button>
                 </div>
@@ -102,15 +101,8 @@
             </div>
           </div>
 
-          <!-- Upload new images -->
-          <div class="form-group">
-            <label for="images">Upload Images</label>
-            <input type="file" accept="image/*" class="form-control-file" id="images" name="images" multiple
-              onchange="validateAndPreviewImages(this)">
-            <span id="image1Error" style="color: red;"></span>
-          </div>
-          <div id="imagePreviewContainer" class="mt-3"></div>
-
+         
+          <input type="file" class="form-control-file" name="newImage" id="newImage" accept="image/*">
           <button type="submit" class="btn btn-primary mr-2">Submit</button>
           <a href="/admin/productmanagement" class="btn btn-dark">Cancel</a>
         </form>
@@ -122,6 +114,64 @@
 
 
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script>
+ function deleteImage(productId, deletedImage) {
+  // Get the new image input
+  var newImageInput = document.getElementById('newImage');
+  var newImage = newImageInput.files.length > 0 ? newImageInput.files[0] : null;
+
+  fetch('/admin/delete-image', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      productId: productId,
+      deletedImage: deletedImage,
+      newImage: newImage,
+    }),
+  })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Image deleted successfully:', data);
+
+          // Remove the deleted image from the UI
+          var existingImagesContainer = document.getElementById('existingImages');
+          var deletedImageElement = Array.from(existingImagesContainer.children).find(element =>
+            element.querySelector('img').src.endsWith(image)
+          );
+          if (deletedImageElement) {
+            existingImagesContainer.removeChild(deletedImageElement);
+          }
+
+          if (data.newImage) {
+        var existingImagesContainer = document.getElementById('existingImages');
+        var newImageContainer = document.createElement('div');
+        newImageContainer.className = 'existing-image-container d-inline-block mr-2';
+
+        var newImage = document.createElement('img');
+        newImage.src = '/products/images/upload/' + data.newImage;
+        newImage.alt = 'Newly Added Image';
+        newImage.style.maxWidth = '200px';
+
+        var deleteButton = document.createElement('button');
+        deleteButton.type = 'button';
+        deleteButton.className = 'btn btn-sm btn-danger';
+        deleteButton.textContent = 'Delete';
+        deleteButton.onclick = function () {
+          deleteImage(productId, data.newImage);
+        };
+
+        newImageContainer.appendChild(newImage);
+        newImageContainer.appendChild(deleteButton);
+        existingImagesContainer.appendChild(newImageContainer);
+      }
+    })
+    .catch(error => {
+      console.error('Error deleting image:', error);
+    });
+}
+  </script>
   <script>
     $(document).ready(function () {
       // Function to update the submit button based on validations and show error messages
@@ -185,7 +235,7 @@
       var existingImagesContainer = document.getElementById('existingImages');
       existingImagesContainer.innerHTML = '';
 
-      images.forEach(function (image) {
+      images.slice(0, 4).forEach(function (image) {
         var imageContainer = document.createElement('div');
         imageContainer.className = 'existing-image-container d-inline-block mr-2';
 
@@ -211,85 +261,6 @@
 
     previewExistingImages(<% - JSON.stringify(image) %>, '<%= currentData._id %>');
 
-
-    function previewImages(input) {
-      var previewContainer = document.getElementById('imagePreviewContainer');
-      previewContainer.innerHTML = '';
-      var files = input.files;
-      for (var i = 0; i < files.length; i++) {
-        var reader = new FileReader();
-        reader.onload = function (e) {
-          var img = document.createElement('img');
-          img.src = e.target.result;
-          img.style.maxWidth = '200px';
-          previewContainer.appendChild(img);
-        };
-        reader.readAsDataURL(files[i]);
-      }
-    }
-
-
-    function validateAndPreviewImages(input) {
-      var previewContainer = document.getElementById('imagePreviewContainer');
-      var errorSpan = document.getElementById('image1Error');
-
-
-      var files = input.files;
-
-
-      var maxImages = 4;
-
-
-      if (files.length > maxImages) {
-
-        input.value = '';
-
-        errorSpan.textContent = 'Please upload a maximum of ' + maxImages + ' images.';
-        errorSpan.style.display = 'block';
-
-
-        previewContainer.innerHTML = '';
-      } else {
-
-        errorSpan.style.display = 'none';
-
-
-        previewExistingImages(<% - JSON.stringify(image) %>, '<%= currentData._id %>');
-        previewImages(input);
-      }
-    }
-
-
-    function deleteImage(productId, image) {
-
-      fetch('/admin/delete-image', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          productId: productId,
-          image: image,
-        }),
-      })
-        .then(response => response.json())
-        .then(data => {
-
-          console.log('Image deleted successfully:', data);
-
-          var existingImagesContainer = document.getElementById('existingImages');
-          var deletedImageElement = Array.from(existingImagesContainer.children).find(element =>
-            element.querySelector('img').src.endsWith(image)
-          );
-          if (deletedImageElement) {
-            existingImagesContainer.removeChild(deletedImageElement);
-          }
-        })
-        .catch(error => {
-          console.error('Error deleting image:', error);
-
-        });
-    }
   </script>
-
+  
   <%- include('../admin/layout/adminFooter.ejs') -%>

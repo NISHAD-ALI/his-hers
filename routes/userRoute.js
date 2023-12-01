@@ -49,7 +49,7 @@ userRoute.get('/loadpassReset',userController.loadpassReset)
 userRoute.post('/resetpassPost',userController.resetPasswordPost)
 
 userRoute.get('/cart',userAuth.isLogin,cartController.loadCart)
-userRoute.post('/addToCart',userAuth.isLogin,cartController.addToCart)
+userRoute.post('/addToCart',cartController.addToCart)
 userRoute.post('/updateCartQuantity',userAuth.isLogin,cartController.updateCartQuantity)
 userRoute.get('/deleteCartProduct',userAuth.isLogin,cartController.deleteCartProduct)
 
@@ -69,6 +69,7 @@ userRoute.post('/applyCoupon',userAuth.isLogin,couponController.applyCoupon)
 userRoute.get('/wishlist',userAuth.isLogin,userController.loadWishlist)
 userRoute.post('/addToWishlist',userAuth.isLogin, userController.addtoWishlist);
 userRoute.get('/deleteWishproduct',userAuth.isLogin,userController.deleteWishproduct)
+userRoute.get('/aboutUs',userController.loadAboutUs)
 
 
 module.exports = userRoute

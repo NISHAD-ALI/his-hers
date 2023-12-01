@@ -77,10 +77,7 @@
                                     <a class="nav-link" id="tab-address-link" data-toggle="tab" href="#tab-address"
                                         role="tab" aria-controls="tab-address" aria-selected="false">Address</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="tab-account-link" data-toggle="tab" href="#tab-account"
-                                        role="tab" aria-controls="tab-account" aria-selected="false">Account Details</a>
-                                </li>
+                                
                                 <li class="nav-item">
                                     <a class="nav-link" href="/logout">Sign Out</a>
                                 </li>
@@ -90,15 +87,49 @@
                         <div class="col-md-8 col-lg-9">
 
                             <div class="tab-content">
+                               
                                 <div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel"
-                                    aria-labelledby="tab-dashboard-link">
-                                    <p>Hello <span class="font-weight-normal text-dark" style="font-size: 24px;">
-                                            <%= accountDetails.name %>
-                                        </span></p>
-                                    <br>
-                                   
-                                </div><!-- .End .tab-pane -->
+                                aria-labelledby="tab-dashboard-link">
+                                <% if (accountDetails) { %>
+                                    <div class="row">
 
+
+
+                                        <div class="col-lg-6">
+                                            <a href="#" id="edit-profile-button"><i
+                                                    class="bi bi-pen float-right"></i></a>
+
+                                            <form id="edit-profile-form" action="/updateUserDetails" method="post">
+                                                <div class="mb-3" id="name-field">
+                                                    <label for="exampleInputName" class="form-label">Name</label>
+                                                    <input type="text" class="form-control" id="edit-name-input"
+                                                        value="<%= accountDetails.name %>" name="name" readonly>
+                                                </div>
+                                                <div class="mb-3" id="password-field" style="display: none;">
+                                                    <label for="edit-password-input"
+                                                        class="form-label">Password</label>
+                                                    <input type="password" class="form-control"
+                                                        id="edit-password-input" name="password">
+                                                </div>
+                                                <div class="mb-3" id="email-field">
+                                                    <label for="exampleInputEmail1" class="form-label">Email
+                                                        address</label>
+                                                    <input type="email" class="form-control" id="edit-email-input"
+                                                        value="<%= accountDetails.email %>" name="email" readonly>
+                                                </div>
+                                                <div class="mb-3" id="mobile-field">
+                                                    <label for="edit-mobile-input" class="form-label">Mobile</label>
+                                                    <input type="text" class="form-control" id="edit-mobile-input"
+                                                        value="<%= accountDetails.Mobile %>" name="Mobile" readonly>
+                                                </div>
+
+                                                <button type="submit" class="btn btn-primary"
+                                                    id="edit-profile-submit-button"
+                                                    style="display: none;">Submit</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                            </div>
                                 <div class="tab-pane fade show" id="tab-wallet" role="tabpanel"
                                     aria-labelledby="tab-wallet-link">
                                     <div class="container">
@@ -370,66 +401,7 @@
 
                                     </div><!-- .End .tab-pane -->
                                 </div>
-                                <div class="tab-pane fade" id="tab-account" role="tabpanel"
-                                    aria-labelledby="tab-account-link">
-          <% if (accountDetails) { %>
-                                    <div class="row">
-
-                                        <!-- IMAGE UPLOAD AND UPDATE -->
-                                        <!-- <div class="col-lg-6">
-                                <% if (accountDetails.image) { %>
-                                    <img src="<%= accountDetails.image  %>" alt="User Profile Picture" class="img-fluid rounded-circle" style="height: 200px; width: 200px;">
-                                <% } else { %>
-                                    <img src="/profile/_bb5f8b05-d952-4d79-a5a4-d53490b5f23d.jpeg" alt="User Profile Picture" class="img-fluid rounded-circle profile-picture" style="height: 200px; width: 200px;">
-                                <% } %>
-                                <label class="col-form-label" for="profile-picture" style="margin-top: 20px;">Change Profile</label>
-                                <form action="/editImage" method="post" enctype="multipart/form-data">
-                                  <input type="file" accept="image/*" name="image" class="form-control file-upload-info" placeholder="Upload Image" id="preview-input" />
-                                 
-                                  <button type="submit" class="btn btn-outline-primary-2">
-                                      <span>Update profile</span>
-                                      <i class="icon-long-arrow-right"></i><br>
-                                </form>
-                            </div> -->
-
-                                        <div class="col-lg-6">
-                                            <a href="#" id="edit-profile-button"><i
-                                                    class="bi bi-pen float-right"></i></a>
-                                            <!-- <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">Name: <b><%= accountDetails.name %></b></li>
-                                    <li class="list-group-item">Email: <b><%= accountDetails.email %></b></li>
-                                    <li class="list-group-item">Mobile: <b><%= accountDetails.Mobile %></b></li>
-                                </ul> -->
-                                            <form id="edit-profile-form" action="/updateUserDetails" method="post">
-                                                <div class="mb-3" id="name-field">
-                                                    <label for="exampleInputName" class="form-label">Name</label>
-                                                    <input type="text" class="form-control" id="edit-name-input"
-                                                        value="<%= accountDetails.name %>" name="name" readonly>
-                                                </div>
-                                                <div class="mb-3" id="password-field" style="display: none;">
-                                                    <label for="edit-password-input" class="form-label">Password</label>
-                                                    <input type="password" class="form-control" id="edit-password-input"
-                                                        name="password">
-                                                </div>
-                                                <div class="mb-3" id="email-field">
-                                                    <label for="exampleInputEmail1" class="form-label">Email
-                                                        address</label>
-                                                    <input type="email" class="form-control" id="edit-email-input"
-                                                        value="<%= accountDetails.email %>" name="email" readonly>
-                                                </div>
-                                                <div class="mb-3" id="mobile-field">
-                                                    <label for="edit-mobile-input" class="form-label">Mobile</label>
-                                                    <input type="text" class="form-control" id="edit-mobile-input"
-                                                        value="<%= accountDetails.Mobile %>" name="Mobile" readonly>
-                                                </div>
-
-                                                <button type="submit" class="btn btn-primary"
-                                                    id="edit-profile-submit-button"
-                                                    style="display: none;">Submit</button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
+                              
                                 <div class="row mt-3">
                                     <div class="col-lg-6">
                                         <% if (accountDetails.image) { %>

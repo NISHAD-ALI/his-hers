@@ -193,24 +193,40 @@ const addCategoryOffer = async (req, res) => {
 
 const deleteCategoryOffer = async (req, res) => {
     try {
+        console.log('123');
         
         const currentData = await CategoryOffer.findOne({ _id: req.query.id });
+  
+        const productDB = await Product.find({ category: currentData.categoryname });
+        
+        console.log(productDB);
 
-        const productDB = await Product.findOne({ _id: currentData.product });
-
-        if (productDB) {
+        if (productDB.length > 0) {
             console.log('Offer is not expired');
-           
-            productDB.discountPricecat = null;
-            await productDB.save();
+            
+            // Iterate through each product and update the discountPricecat field
+            for (const product of productDB) {
+                if (product.discountPricecat) {
+                    // Delete the field
+                   product.discountPricecat = null
+                    
+                    // Save the updated document
+                    await product.save();
+                    console.log(product);
+                }
+            }
         }
+        
+       
         await CategoryOffer.deleteOne({ _id: req.query.id });
+        
         res.redirect('/admin/offersCat');
     } catch (error) {
         console.log(error.message);
         res.status(500).send('An error occurred');
     }
 };
+
 
 module.exports = {
     loadOffers,

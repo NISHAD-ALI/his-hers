@@ -191,8 +191,8 @@ const deleteImage = async ( req , res ) => {
 
     // Delete the image file
     await fs.unlink(imagePath);
+console.log('qq');
 
-    // Respond with success
     res.status(200).json({ message: 'Image deleted successfully.' });
   } catch (error) {
     console.error('Error deleting image:', error);

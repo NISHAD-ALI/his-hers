@@ -172,7 +172,7 @@
 					}
 
 					// Validate email
-					const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+					const emailRegex =  /^[^\s@]+([@_.][^\s@]+)*@(gmail|yahoo|hotmail|outlook)\.[^\s@]+$/;
 					if (!emailRegex.test(email)) {
 						$('#email-error').text('Please enter a valid email address.');
 						isValid = false;

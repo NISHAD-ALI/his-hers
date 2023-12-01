@@ -93,73 +93,61 @@
                 </div><!-- End .heading -->
 
                 <div class="tab-content">
-                    <div class="tab-pane p-0 fade show active" id="recent-all-tab" role="tabpanel"
-                        aria-labelledby="recent-all-link">
+                    <div class="tab-pane p-0 fade show active" id="recent-all-tab" role="tabpanel" aria-labelledby="recent-all-link">
                         <div class="products">
                             <div class="row justify-content-center">
-
+                
                                 <% products.forEach((product, i)=> { %>
-                                    <div class="col-6 col-md-4 col-lg-3">
-                                        <div class="product product-2 text-center">
-                                            <figure class="product-media">
-                                                <% const productDiscount=discPrice.find(x=> x.product.toString() ===
-                                                    product._id.toString() && x.is_block === 0); %>
-                                                    <% let smallestPrice = Math.min(product.price, product.discountPricepro || Infinity, product.discountPricecat || Infinity); %>
-                                                    <% if (productDiscount) { %>
-                                                        <span class="product-label label-new">
-                                                            <%= productDiscount.percentage %>% off
-                                                        </span>
-                                                        <% } %>
-                                                            <a href="/productView?id=<%= product._id %>">
-
-                                                                <img src="/products/images/<%= product.image[0] %>"
-                                                                    alt="Product image" class="product-image">
-                                                                <img src="/products/images/<%= product.image[1] %>"
-                                                                    alt="Product image" class="product-image-hover">
-                                                            </a>
-
-                                                            <div class="product-action-vertical">
-                                                                <a href="#" class="btn-product-icon btn-wishlist btn-expandable"
-                                                                    onclick="addToWishlist('<%= product._id %>')"><span>add to wishlist</span></a>
-                                                            </div><!-- End .details-action-wrapper -->
-
-                                                            <div class="product-action">
-                                                                <a href="#" class="btn-product btn-cart"
-                                                                    onclick="addToCart('<%= product._id %>')"><span>add
-                                                                        to cart</span></a>
-                                                            </div><!-- End .product-action -->
-
-                                            </figure><!-- End .product-media -->
-
-                                            <div class="product-body">
-                                                <div class="product-cat">
-                                                    <%= product.category %>
-                                                </div><!-- End .product-cat -->
-                                                <h3 class="product-title"><%= product.productname %></h3>
-                                                <!-- End .product-title -->
+                                <div class="col-6 col-md-4 col-lg-3">
+                                    <div class="product product-2 text-center">
+                                        <figure class="product-media">
+                                            <% const productDiscount=discPrice.find(x=> x.product.toString() === product._id.toString() && x.is_block === 0); %>
+                                            <% let smallestPrice = Math.min(product.price, product.discountPricepro || Infinity, product.discountPricecat || Infinity); %>
+                                            <% if (productDiscount) { %>
+                                            <span class="product-label label-new">
+                                                <%= productDiscount.percentage %>% off
+                                            </span>
+                                            <% } %>
+                                            <a href="/productView?id=<%= product._id %>">
+                                                <img src="/products/images/<%= product.image[0] %>" alt="Product image" class="product-image">
+                                                <img src="/products/images/<%= product.image[1] %>" alt="Product image" class="product-image-hover">
+                                            </a>
+                                            <div class="product-action-vertical">
+                                                <a href="#" class="btn-product-icon btn-wishlist btn-expandable" onclick="addToWishlist('<%= product._id %>')">
+                                                    <span>add to wishlist</span>
+                                                </a>
+                                            </div><!-- End .product-action-vertical -->
+                                            <div class="product-action">
+                                                <a href="#" class="btn-product btn-cart" onclick="addToCart('<%= product._id %>')">
+                                                    <span>add to cart</span>
+                                                </a>
+                                            </div><!-- End .product-action -->
+                                        </figure><!-- End .product-media -->
+                                        <div class="product-body">
+                                            <div class="product-cat">
+                                                <%= product.category %>
+                                            </div><!-- End .product-cat -->
+                                            <h3 class="product-title"><%= product.productname %></h3><!-- End .product-title -->
+                                            <div class="product-price">
+                                                <% if (smallestPrice && smallestPrice < product.price) { %>
+                                                <span class="old-price"> Was<strike>₹<%= product.price %></strike></span>
+                                                </div>
                                                 <div class="product-price">
-                                                   
-
-                                                   
-                                                        <% if (smallestPrice && smallestPrice < product.price) { %>
-                                                            <span class="old-price"> Was<strike>₹<%= product.price %></strike></span>
-                                                    </div>
-                                                    <div class="product-price">
-                                                        <span class="new-price">Now<b>₹<%= smallestPrice %></b></span>
-                                                            <% } else { %>
-                                                                ₹<%= product.price %>
-                                                            <% } %>
-                                                    </div>
-                                                </div><!-- End .product-price -->
-                                            </div><!-- End .product-body -->
-                                        </div><!-- End .product -->
-                                    </div><!-- End .col-sm-6 col-md-4 col-lg-3 -->
-                                    <% }); %>
-
+                                                    <span class="new-price">Now<b>₹<%= smallestPrice %></b></span>
+                                                <% } else { %>
+                                                    ₹<%= product.price %>
+                                                <% } %>
+                                            </div><!-- End .product-price -->
+                                        </div><!-- End .product-body -->
+                                    </div><!-- End .product -->
+                                </div><!-- End .col-6 col-md-4 col-lg-3 -->
+                                <% }); %>
+                
                             </div><!-- End .row -->
                         </div><!-- End .products -->
                     </div><!-- .End .tab-pane -->
-
+                </div>
+                
                     <!-- LIST NEW PRODUCTS -->
                     <div class="more-container text-center mt-3 mb-3">
                         <a href="/viewMore" class="btn btn-outline-dark-3 btn-more"><span>View More</span><i

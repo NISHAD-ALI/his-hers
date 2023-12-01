@@ -20,10 +20,10 @@ let user_id;
 // ++++++++++++++++++++++++++++++++++++++REGEX FOR VALIDATION EMAIL++++++++++++++++++++++++++++++++++++++++++++++
 
 function validateEmail(email) {
-  // const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const regex = /^[^\s@]+@(gmail\.com|icloud\.com|yahoo\.com)$/;
+  const regex = /^[^\s@]+([\._][^\s@]+)*@[^\s@]+\.[^\s@]+$/;
   return regex.test(email);
 }
+
 
 // ++++++++++++++++++++++++++++++++++++++HASHING PASSWORD++++++++++++++++++++++++++++++++++++++++++++++
 const hashPassword = async (password) => {
@@ -339,7 +339,7 @@ const loadAcc = async (req, res) => {
       const walletData = await Wallet.findOne({ userid: req.session.user_id })
    
    
-       
+       console.log(orderData);
          
 
       if (user) {
@@ -794,7 +794,21 @@ const deleteWishproduct = async (req, res) => {
   }
 }
 
+
+const loadAboutUs = async (req, res) => {
+  try {
+   
+  
+    res.render('aboutus')
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+
+
 module.exports = {
+
   loadSignup,
   insertNewUser,
   loginUser,
@@ -818,5 +832,7 @@ module.exports = {
   loadWishlist,
   addtoWishlist,
   deleteWishproduct,
+  loadAboutUs,
+  
 };
 
