@@ -27,7 +27,7 @@ const loadAdminSignin = async (req, res) => {
 
   } catch (error) {
     console.log(error.message);
-
+    res.render('500')
   }
 }
 // ++++++++++++++++++++++++++++++++++++++VALIDATION OF EMAIL++++++++++++++++++++++++++++++++++++++++++++++
@@ -80,6 +80,7 @@ const logoutAdmin = async (req, res) => {
   
   } catch (error) {
     console.log(error.message);
+    res.render('500')
   }
 };
 
@@ -139,6 +140,7 @@ const loadAdminDash = async (req, res) => {
     }
   } catch (error) {
     console.log(error.message);
+    res.render('500')
   }
 };
 
@@ -169,7 +171,7 @@ const chartFilterWeek = async (req, res) => {
     res.json([totalCodWeek, totalOnlineWeek, totalWalletWeek]);
   } catch (error) {
     console.log(error.message);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.render('500')
   }
 }
 
@@ -195,7 +197,7 @@ const chartFilterMonth = async (req, res) => {
     res.json([totalCodMonth, totalOnlineMonth, totalWalletMonth]);
   } catch (error) {
     console.log(error.message);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.render('500')
   }
 }
 const chartFilterYear = async (req, res) => {
@@ -221,7 +223,7 @@ const chartFilterYear = async (req, res) => {
     res.json([totalCodYear, totalOnlineYear, totalWalletYear]);
   } catch (error) {
     console.log(error.message);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.render('500')
   }
 }
 // ++++++++++++++++++++++++++++++++++++++LOAD USER MANAGEMENT++++++++++++++++++++++++++++++++++++++++++++++
@@ -233,7 +235,7 @@ const loadUserManag = async (req, res) => {
     res.render("userManagement", { user: usersData });
   } catch (error) {
     console.log(error.message);
-
+    res.render('500')
   }
 };
 
@@ -253,7 +255,7 @@ const blockUser = async (req, res) => {
     }
   } catch (error) {
     console.log(error.message);
-
+    res.render('500')
   }
 };
 
@@ -266,7 +268,7 @@ const addNewCategory = async (req, res) => {
   }
   catch (error) {
     console.log(error.message);
-
+    res.render('500')
   }
 }
 
@@ -291,7 +293,7 @@ const addCategoryDB = async (req, res) => {
     }
   } catch (error) {
     console.log(error.message);
-
+    res.render('500')
   }
 };
 // ++++++++++++++++++++++++++++++++++++++LOAD CATEGORY MANAGE++++++++++++++++++++++++++++++++++++++++++++++
@@ -302,7 +304,7 @@ const loadCategoryManag = async (req, res) => {
     res.render("categoryManagement", { cats: categories });
   } catch (error) {
     console.log(error.message);
-
+    res.render('500')
   }
 };
 
@@ -322,7 +324,7 @@ const blockCat = async (req, res) => {
     res.redirect('/admin/categoryManagement');
   } catch (error) {
     console.error(error.message);
-    res.status(500).send('Error blocking/unblocking category');
+    res.render('500')
   }
 };
 
@@ -334,7 +336,7 @@ const editcat = async (req, res) => {
     res.render("editCategory", { cats: cate });
   } catch (error) {
     console.log(error.message);
-
+    res.render('500')
   }
 };
 // ++++++++++++++++++++++++++++++++++++++EDIT CATEGORY POST ++++++++++++++++++++++++++++++++++++++++++++++
@@ -355,7 +357,7 @@ const editcatPOST = async (req, res) => {
     res.redirect('/admin/categoryManagement');
   } catch (error) {
     console.log(error.message);
-
+    res.render('500')
 
   }
 };
@@ -367,6 +369,7 @@ const loadAdminError = async (req, res) => {
     res.render("404");
   } catch (error) {
     console.log(error.message);
+    res.render('500')
   }
 };
 
@@ -381,12 +384,14 @@ const updateOrderStatus = async (req, res) => {
     res.json({ success: true });
   } catch (error) {
     console.error(error.message);
-    res.status(500).json({ error: 'Internal server error' });
+    res.render('500')
   }
 };
 
 const loadOrder = async (req, res) => {
   try {
+
+
     const orderDat = await Order.find({})
       .populate({
         path: 'userid',
@@ -402,7 +407,7 @@ const loadOrder = async (req, res) => {
    
   } catch (error) {
     console.log(error.message)
-    res.status(500).json({ error: 'Internal server error' });
+    res.render('500')
   }
 }
 
@@ -418,6 +423,7 @@ const loadSalesSum = async (req, res) => {
     res.render('salesSummary', { orderDat, newProduct })
   } catch (error) {
     console.log(error.message)
+    res.render('500')
   }
 }
 
@@ -484,7 +490,7 @@ const filterSaleYear = async (req, res) => {
       async (err, data) => {
         if (err) {
           console.log(err);
-          res.status(500).send('Internal Server Error');
+          res.render('500')
         }
 
         // Generate PDF
@@ -556,13 +562,13 @@ const filterSaleYear = async (req, res) => {
           ]);
         } catch (error) {
           console.log(error);
-          res.status(500).send('Error sending files');
+          res.render('500')
         }
       }
     );
   } catch (error) {
     console.log(error.message);
-    res.status(500).send('Internal Server Error');
+    res.render('500')
   }
 };
 
