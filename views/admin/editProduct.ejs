@@ -91,7 +91,7 @@
           <div id="existingImagePreview">
             <p>Existing Images:</p>
             <div id="existingImages" class="d-flex flex-nowrap overflow-auto">
-              <% for(let i=0; i<image.length; i++){ %>
+              <% for(let i=0; i < image.length ; i++){ %>
                 <div class="existing-image-container d-inline-block mr-2">
                   <img src="/products/images/upload/<%= image[i] %>" alt="Existing Image" style="max-width: 200px;">
                   <button type="button" onclick="deleteImage('<%= currentData._id %>', '<%= image[i] %>')"
@@ -101,10 +101,18 @@
             </div>
           </div>
 
+          <div class="form-group">
+            <label for="images">Upload Images</label>
+            <input type="file" accept="image/*" class="form-control-file" id="images" name="image" multiple onchange="validateAndPreviewImages(this)">
+            <span id="image1Error" style="color: red;"></span>
+        </div>
+        <div id="imagePreviewContainer"></div>
+        <button type="submit" class="btn btn-primary mr-2">Submit</button>
+        <button class="btn btn-dark"><a href="/admin/productManagement">Cancel</a></button>
+
          
-          <input type="file" class="form-control-file" name="newImage" id="newImage" accept="image/*">
-          <button type="submit" class="btn btn-primary mr-2">Submit</button>
-          <a href="/admin/productmanagement" class="btn btn-dark">Cancel</a>
+          
+        
         </form>
 
       </div>
@@ -115,63 +123,33 @@
 
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
   <script>
- function deleteImage(productId, deletedImage) {
-  // Get the new image input
-  var newImageInput = document.getElementById('newImage');
-  var newImage = newImageInput.files.length > 0 ? newImageInput.files[0] : null;
-
-  fetch('/admin/delete-image', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      productId: productId,
-      deletedImage: deletedImage,
-      newImage: newImage,
-    }),
-  })
-    .then(response => response.json())
-    .then(data => {
-      console.log('Image deleted successfully:', data);
-
-          // Remove the deleted image from the UI
-          var existingImagesContainer = document.getElementById('existingImages');
-          var deletedImageElement = Array.from(existingImagesContainer.children).find(element =>
-            element.querySelector('img').src.endsWith(image)
-          );
-          if (deletedImageElement) {
-            existingImagesContainer.removeChild(deletedImageElement);
-          }
-
-          if (data.newImage) {
-        var existingImagesContainer = document.getElementById('existingImages');
-        var newImageContainer = document.createElement('div');
-        newImageContainer.className = 'existing-image-container d-inline-block mr-2';
-
-        var newImage = document.createElement('img');
-        newImage.src = '/products/images/upload/' + data.newImage;
-        newImage.alt = 'Newly Added Image';
-        newImage.style.maxWidth = '200px';
-
-        var deleteButton = document.createElement('button');
-        deleteButton.type = 'button';
-        deleteButton.className = 'btn btn-sm btn-danger';
-        deleteButton.textContent = 'Delete';
-        deleteButton.onclick = function () {
-          deleteImage(productId, data.newImage);
-        };
-
-        newImageContainer.appendChild(newImage);
-        newImageContainer.appendChild(deleteButton);
-        existingImagesContainer.appendChild(newImageContainer);
-      }
-    })
-    .catch(error => {
-      console.error('Error deleting image:', error);
-    });
-}
+    function deleteImage(productid,imageid){
+        console.log(productid,"pppp",imageid);
+        $.ajax({
+            method:'delete',
+        url:'/admin/delete-image',
+        data:JSON.stringify({productid:productid,imageid:imageid}),
+        contentType:'application/json',
+        success:function(response){
+            if(response.result==true){
+              
+                window.location.reload()
+  
+               
+            }else{
+                console.log('Error');
+            }
+        }
+        })
+  
+    }
+    
+    function updateImage(productid,imageid){
+        console.log(productid,imageid);
+  
+    }
   </script>
+
   <script>
     $(document).ready(function () {
       // Function to update the submit button based on validations and show error messages
@@ -228,39 +206,60 @@
       updateSubmitButton();
     });
   </script>
-  <script>
+<script>
+  // Function to handle new image uploads
+  function previewImages(input) {
+      var previewContainer = document.getElementById('imagePreviewContainer');
+      previewContainer.innerHTML = ''; // Clear previous previews
 
+      var files = input.files;
+      for (var i = 0; i < files.length; i++) {
+          var reader = new FileReader();
 
-    function previewExistingImages(images, productId) {
-      var existingImagesContainer = document.getElementById('existingImages');
-      existingImagesContainer.innerHTML = '';
+          reader.onload = function (e) {
+              var img = document.createElement('img');
+              img.src = e.target.result;
+              img.style.maxWidth = '300px'; // Set a maximum width for the preview image
 
-      images.slice(0, 4).forEach(function (image) {
-        var imageContainer = document.createElement('div');
-        imageContainer.className = 'existing-image-container d-inline-block mr-2';
+              previewContainer.appendChild(img);
+          };
 
-        var img = document.createElement('img');
-        img.src = '/products/' + image;
-        img.alt = 'Existing Image';
-        img.style.maxWidth = '200px';
+          reader.readAsDataURL(files[i]);
+      }
+  }
+</script>
 
-        var deleteButton = document.createElement('button');
-        deleteButton.type = 'button';
-        deleteButton.className = 'btn btn-sm btn-danger';
-        deleteButton.textContent = 'Delete';
-        deleteButton.onclick = function () {
-          deleteImage(productId, image);
-        };
-
-        imageContainer.appendChild(img);
-        imageContainer.appendChild(deleteButton);
-        existingImagesContainer.appendChild(imageContainer);
-      });
-    }
-
-
-    previewExistingImages(<% - JSON.stringify(image) %>, '<%= currentData._id %>');
-
-  </script>
+<script>
+  function validateAndPreviewImages(input) {
+      var previewContainer = document.getElementById('imagePreviewContainer');
+      var errorSpan = document.getElementById('image1Error');
+      
+      // Get the selected files
+      var files = input.files;
   
+      // Define the maximum allowed images
+      var maxImages = 4;
+  
+      // Check if the number of selected images exceeds the limit
+      if (files.length > maxImages) {
+          // Clear the file input
+          input.value = '';
+  
+          // Display an error message
+          errorSpan.textContent = 'Please upload a maximum of ' + maxImages + ' images.';
+          errorSpan.style.display = 'block';
+  
+          // Clear the image preview container
+          previewContainer.innerHTML = '';
+      } else {
+          // Hide any previous error messages
+          errorSpan.style.display = 'none';
+  
+          // Proceed with previewing the images
+          previewImages(input);
+      }
+  }
+  
+  // The rest of your previewImages function goes here
+  </script>
   <%- include('../admin/layout/adminFooter.ejs') -%>

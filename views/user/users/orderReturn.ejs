@@ -3,31 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Return Success</title>
+    <title>Order Success</title>
   
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles-confetti@2.12.0/tsparticles.confetti.bundle.min.js"></script>
    
-</head>
-<body>
-    <div class="container h-100">
-        <div class="row h-100 justify-content-center align-items-center">
-            <div class="card text-center bg-light">
-                <div class="card-body">
-                    <img src="/user/success.gif" alt="Success GIF" class="img-fluid"style="max-width: 550px;">
-                    <h4 class="card-title">Order Return Requested!</h4>
-                    <p class="card-text">Your order return Has been Requested Successfully.</p>
-                    <div class="mt-4">
-                        <a href="/viewMore" class="btn btn-primary mx-2">Continue Shopping</a>
-                        <a href="/" class="btn btn-danger mx-2">Home</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <style>
+      body {
+        font-family: 'Arial', sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        background-color: #f4f4f4;
+      }
+  
+      .container {
+        text-align: center;
+      }
+  
+      .success-message {
+        display: none;
+        color: #28a745;
+        font-size: 24px;
+        font-weight: bold;
+        animation: fadeIn 1s ease-in-out;
+      }
+  
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+  
+      .success-icon {
+        color: #28a745;
+        font-size: 64px;
+        margin-bottom: 20px;
+        animation: bounceIn 1s ease-in-out;
+      }
+  
+      @keyframes bounceIn {
+        0%, 20%, 50%, 80%, 100% {
+          transform: translateY(0);
+        }
+        40% {
+          transform: translateY(-20px);
+        }
+        60% {
+          transform: translateY(-10px);
+        }
+      }
+  
+      .back-to-home {
+        color: #007bff;
+        text-decoration: none;
+        font-size: 18px;
+        margin-top: 20px;
+        display: inline-block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="success-icon" id="successIcon">&#10003;</div>
+      <div class="success-message" id="successMessage">Order Return Requested!</div>
+      <a href="/" class="back-to-home">Back to Home</a>
     </div>
-
+  
     <!-- Add Bootstrap JS and jQuery scripts here (if needed) -->
+    
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles-confetti@2.12.0/tsparticles.confetti.bundle.min.js"></script>
+    <script>
+      // Display the success message and icon after a delay
+      setTimeout(function() {
+        document.getElementById('successIcon').style.display = 'block';
+        document.getElementById('successMessage').style.display = 'block';
+      }, 500);
+    </script>
+    <script>const end = Date.now() + 3 * 1000;
+
+        // go Buckeyes!
+        const colors = ["#bb0000", "#ffffff"];
+        
+        (function frame() {
+          confetti({
+            particleCount: 2,
+            angle: 60,
+            spread: 55,
+            origin: { x: 0 },
+            colors: colors,
+          });
+        
+          confetti({
+            particleCount: 2,
+            angle: 120,
+            spread: 55,
+            origin: { x: 1 },
+            colors: colors,
+          });
+        
+          if (Date.now() < end) {
+            requestAnimationFrame(frame);
+          }
+        })();</script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
+
+

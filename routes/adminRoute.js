@@ -48,12 +48,12 @@ adminRoute.get('/chartYear',auth.isLogin, adminController.chartFilterYear);
 
 adminRoute.get('/productManagement',auth.isLogin, productController.loadProduct);
 adminRoute.get('/addPro',auth.isLogin, productController.loadNewProduct)
-adminRoute.post('/addPro',auth.isLogin, productController.newproduct)
+adminRoute.post('/addPro',auth.isLogin,multer.upload.array('image', 4), productController.newproduct)
 adminRoute.get('/block-pro',auth.isLogin, productController.blockPro);
 adminRoute.get('/editPro',auth.isLogin, productController.loadEditProduct);
-adminRoute.post('/edit-Pro',auth.isLogin, productController.editProduct);
+adminRoute.post('/edit-Pro',auth.isLogin,multer.upload.array('image', 4) ,productController.editProduct);
 adminRoute.get('/deletePro',auth.isLogin, productController.deleteProduct);
-adminRoute.post('/delete-image',auth.isLogin, productController.deleteImage);
+adminRoute.delete('/delete-image',auth.isLogin, productController.deleteImage);
  
 adminRoute.post('/update-order-status',auth.isLogin, adminController.updateOrderStatus);
 adminRoute.get('/orderManagement',auth.isLogin, adminController.loadOrder);

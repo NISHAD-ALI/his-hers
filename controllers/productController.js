@@ -140,25 +140,25 @@ const editProduct = async (req, res) => {
     const editid = req.query.id;
     console.log(editid);
 
-    const newDetails = {
-      productname: req.body.proName,
-      quantity: req.body.qty,
-      price: req.body.price,
-      category: req.body.category,
-      description: req.body.description,
-      additionalInfo: req.body.additionalInfo,
-      size: req.body.options,
-    };
-
-    newDetails.image = req.files.map((file) => file.filename);
-    console.log(newDetails.image);
-
-    for (let i = 0; i < req.files.length; i++) {
-      const filePath = path.join(__dirname, '../public/products/images/', req.files[i].filename);
-      await sharp(filePath).resize(800, 800).toFile("public/products/images/" + req.files[i].filename);
-    }
-
-    const edit = await product.updateOne({ _id: editid }, newDetails);
+    await product.updateOne(
+      { _id: editid },
+      {
+        $set: {
+          productname: req.body.proName,
+          quantity: req.body.qty,
+          price: req.body.price,
+          category: req.body.category,
+          description: req.body.description,
+          additionalInfo: req.body.additionalInfo,
+          size: req.body.options,
+        },
+        $push: {
+          image: { $each: req.files.map((file) => file.filename) }
+        },
+      }
+    );
+    
+    
 
     res.redirect('/admin/productManagement');
   } catch (error) {
@@ -170,30 +170,15 @@ const deleteImage = async ( req , res ) => {
   try {
    console.log('334');
    
-    const { filename } = req.body;
-
-    if (!filename) {
-      return res.status(400).json({ error: 'Image filename is required.' });
-    }
-
-    // Define the path to the images directory
-    const imagesDirectory = path.join(__dirname, 'public', 'images');
-
-    // Construct the full path to the image
-    const imagePath = path.join(imagesDirectory, filename);
-
-    // Check if the file exists
-    const fileExists = await fs.access(imagePath).then(() => true).catch(() => false);
-
-    if (!fileExists) {
-      return res.status(404).json({ error: 'Image not found.' });
-    }
-
-    // Delete the image file
-    await fs.unlink(imagePath);
-console.log('qq');
-
-    res.status(200).json({ message: 'Image deleted successfully.' });
+   const productid = req.body.productid
+   const imageid= req.body.imageid
+   const productimage = await product.updateOne({_id:productid},{$pull:{image:imageid}}) 
+   if(productimage ){
+   res.json({result:true})}
+   else{
+       res.json({result:false}) 
+   }
+   console.log(productimage);       
   } catch (error) {
     console.error('Error deleting image:', error);
     res.status(500).json({ error: 'Internal server error.' });
@@ -206,7 +191,8 @@ console.log('qq');
 // ++++++++++++++++++++++++++++++++++++++ DELETE PRODUCTS ++++++++++++++++++++++++++++++++++++++++++++++
 const deleteProduct = async (req, res) => {
   try {
-
+     
+     
     const currentData = await product.findOne({ _id: req.query.id });
 
     if (!currentData) {

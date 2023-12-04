@@ -83,7 +83,7 @@ const blockCoupon = async (req, res) => {
     try {
         const blockedCoupon = await Coupon.findOne({ _id: req.query.id });
         if (!blockedCoupon) {
-            return res.status(404).send('Category not found');
+            return res.send('Category not found');
         }
 
         // Toggle the is_block status
@@ -112,195 +112,47 @@ const calculateDiscountedTotal = (total, discountAmount) => {
 };
 
 
-// const applyCoupon = async (req, res) => {
-//     try {
-//         const { couponCode } = req.body;
-//         const coupon = await Coupon.findOne({ couponcode: couponCode });
-
-//         if (coupon) {
-//             const cart = await Cart.findOne({ userid: req.session.user_id });
-
-//             if (cart) {
-//                 const discountedTotal = calculateDiscountedTotal(cart.total, coupon.discountamount);
-
-//                 // Update the cart with the discounted total
-//                 await Cart.updateOne({ userid: req.session.user_id }, { $set: { total: discountedTotal } });
-
-//                 // Send the updated total back to the client
-//                 return res.status(200).json({ success: true, message: 'Coupon applied successfully!', discountedTotal });
-//             } else {
-//                 // Cart not found
-//                 return res.status(404).json({ success: false, message: 'User cart not found' });
-//             }
-//         } else {
-//             // Coupon not found
-//             return res.status(404).json({ success: false, message: 'Invalid coupon code' });
-//         }
-//     } catch (error) {
-//         console.error(error.message);
-//         return res.status(500).json({ success: false, message: 'Internal server error' });
-//     }
-// };
-
-// const applyCoupon = async (req, res) => {
-//     try {
-//         const { couponCode } = req.body;
-//         const userId = req.session.user_id;
-//        console.log('11');
-
-//         const coupon = await Coupon.findOne({ couponcode: couponCode });
-//         const user = await User.findById(userId);
-
-//         if (!coupon) {
-//             console.log('12');
-//             return res.status(404).json({ success: false, message: 'Invalid coupon code' });
-
-//         }
-
-//         if (!user) {
-//             console.log('13');
-//             return res.status(404).json({ success: false, message: 'User not found' });
-//         }
-
-//         // Check if the user has already claimed this coupon
-//         if (coupon.claimedusers.includes(userId)) {
-//             console.log('14');
-//             return res.json({ success: false, message: 'Coupon already claimed', alreadyClaimed: true });
-//         }
-
-//         // Alternatively, check if the user has used any coupon
-//         const hasUsedCoupon = await Coupon.exists({ claimedusers: userId });
-//         if (hasUsedCoupon) {
-//             console.log('hey bro');
-
-//             return res.json({ success: false, message: 'You have already used a coupon.' });
-//         }
-
-//         const cart = await Cart.findOne({ userid: userId });
-//         console.log('15');
-//         if (!cart) {
-//             console.log('16');
-//             return res.json({ success: false, message: 'User cart not found' });
-//         }
-
-//         const discountedTotal = calculateDiscountedTotal(cart.total, coupon.discountamount);
-
-//         // Update the cart with the discounted total
-//         await Cart.updateOne({ userid: userId }, { $set: { total: discountedTotal } });
-
-//         // Update the user's applied coupons
-
-//         console.log('17');
-//         // Update the coupon's claimed users
-
-//         await coupon.save();
-//         console.log('18');
-//         // Send the updated total back to the client
-//         return res.status(200).json({ success: true, message: 'Coupon applied successfully!', discountedTotal });
-
-//     } catch (error) {
-//         console.error(error.message);
-//         return res.json({ success: false, message: 'Internal server error' });
-//     }
-// };
-// const applyCoupon = async (req, res) => {
-//     try {
-//         const { couponCode } = req.body;
-//         const userId = req.session.user_id;
-
-//         const currentDate = new Date();
-
-//         const coupon = await Coupon.findOne({ couponcode: couponCode });
-
-//         if (!coupon) {
-//             return res.status(404).json({ success: false, message: 'Invalid coupon code' });
-//         }
-
-//         if (!userId) {
-//             return res.status(404).json({ success: false, message: 'User not found' });
-//         }
-
-//         // Check if the user has already claimed this coupon
-//         if (coupon.claimedusers.includes(userId)) {
-//             return res.json({ success: false, message: 'Coupon already claimed', alreadyClaimed: true });
-//         }
-
-//         // Check activation date
-//         if (currentDate < coupon.activationdate) {
-//             return res.status(400).json({ success: false, message: 'Coupon is not yet active' });
-//         }
-
-//         // Check expiry date
-//         if (currentDate > coupon.expirydate) {
-//             return res.status(400).json({ success: false, message: 'Coupon has expired' });
-//         }
-
-//         // Check if order total meets criteria amount
-//         const cart = await Cart.findOne({ userid: userId });
-//         if (!cart) {
-//             return res.status(404).json({ success: false, message: 'User cart not found' });
-//         }
-
-//         if (cart.total < coupon.criteriaamount) {
-//             return res.status(400).json({ success: false, message: 'Order total does not meet coupon criteria' });
-//         }
-
-//         // Update the cart with the discounted total
-//         const discountedTotal = calculateDiscountedTotal(cart.total, coupon.discountamount);
-//         await Cart.updateOne({ userid: userId }, { $set: { total: discountedTotal } });
-
-//         // Update the coupon's claimed users
-//         coupon.claimedusers.push(userId);
-//         await coupon.save();
-
-//         // Send the updated total back to the client
-//         return res.status(200).json({ success: true, message: 'Coupon applied successfully!', discountedTotal });
-//     } catch (error) {
-//         console.error(error.message);
-//         return res.status(500).json({ success: false, message: 'Internal server error' });
-//     }
-// };
 const applyCoupon = async (req, res) => {
     try {
         const { couponCode } = req.body;
         const userId = req.session.user_id;
-
+      
         const currentDate = new Date();
 
         const coupon = await Coupon.findOne({ couponcode: couponCode });
-
+        console.log(coupon);
         if (!coupon) {
-            return res.status(404).json({ success: false, message: 'Invalid coupon code' });
+            return res.json({ success: false, message: 'Invalid coupon code' });
         }
-
+        console.log("1");
         if (!userId) {
-            return res.status(404).json({ success: false, message: 'User not found' });
+            return res.json({ success: false, message: 'User not found' });
         }
-
+        console.log("2");
         // Check activation date
         if (currentDate < coupon.activationdate) {
-            return res.status(400).json({ success: false, message: 'Coupon is not yet active' });
+            return res.json({ success: false, message: 'Coupon is not yet active' });
         }
-
+        console.log("3");
         // Check expiry date
         if (currentDate > coupon.expirydate) {
-            return res.status(400).json({ success: false, message: 'Coupon has expired' });
+            return res.json({ success: false, message: 'Coupon has expired' });
         }
-
+        console.log("4");
         // criteria of amount
         const cart = await Cart.findOne({ userid: userId });
         if (!cart) {
-            return res.status(404).json({ success: false, message: 'User cart not found' });
+            return res.json({ success: false, message: 'User cart not found' });
         }
-
+        console.log("15");
         if (cart.total < coupon.criteriaamount) {
             return res.json({ success: false, message: 'Order total does not meet coupon criteria' });
         }
-
+        console.log("6");
         // Update the cart with the discounted total
         const discountedTotal = calculateDiscountedTotal(cart.total, coupon.discountamount);
         await Cart.updateOne({ userid: userId }, { $set: { total: discountedTotal } });
-
+console.log(discountedTotal);
         // Send the updated total back to the client
         return res.status(200).json({ success: true, message: 'Coupon applied successfully!',  discountedTotal,
         couponDiscountAmount: coupon.discountamount, });

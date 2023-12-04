@@ -1,617 +1,83 @@
-<script>
-  const multer = require('multer')
-const path = require('path')
-
-// const p=require('../public/productimages')
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, "../public/productimages"));
-  },
-  filename: function (req, file, cb) {
-    // cb(null, Date.now() + '-' + file.originalname);
-    cb(null,file.fieldname + "-" + Date.now() + path.extname(file.originalname))
-  },
-});
-
-const upload = multer({ storage: storage });
-
-
-const banner = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, "../public/bannerimages"));
-  },
-  filename: function (req, file, cb) {
-    cb(null, "-" + Date.now() + path.extname(file.originalname));
-  },
-});
-
-const uploadbanner = multer({ storage: banner });
-
-
-module.exports = { upload,uploadbanner }
-</script>
-
-
-<script>
-  //=================================== PRODUCT MANAGEMENT =====================================//
-const productmanagement = async (req, res) => {
-    try {
-        const id =req.query.id
-      
-        const productcount = await product.find().count();
-        var productpagecount =Math.floor(productcount/8)
-        if(productcount %8!==0){
-            productpagecount +=1;
-        }
-        if(id){
-            const val =id-1
-            const data = await product.find().limit(8).skip(8*val);
-            res.render('productmanagement', { data,id,productpagecount })
-
-        }else{
-            const data = await product.find().limit(8);
-        res.render('productmanagement', { data,id:1,productpagecount })
-        }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Success</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #f4f4f4;
     }
-    catch (error) {
-        console.log(error.message);
-        res.render('500');
+
+    .container {
+      text-align: center;
     }
-}
-//=================================== DELETING PRODUCT =====================================//
 
-const deleteproduct = async (req, res) => {
-    try {
-
-        const deleteid = req.query.id
-
-        await product.deleteOne({ _id: deleteid });
-        res.redirect('/admin/productmanagement');
-
+    .success-message {
+      display: none;
+      color: #28a745;
+      font-size: 24px;
+      font-weight: bold;
+      animation: fadeIn 1s ease-in-out;
     }
-    catch (error) {
-        console.log(error.message);
-        res.render('500');
-    }
-}
-//=================================== EDITING PRODUCT =====================================//
 
-const editproduct = async (req, res) => {
-    try {
-        const editid = req.query.id
-        const item = await product.findOne({ _id: editid })
-        // console.log(items);
-        const categorydata = await category.find()
-        const image= item.image
-        console.log(image);
-
-        res.render('editproduct', { item, categorydata,image });
-
-    }
-    catch (error) {
-        console.log(error.message);
-        res.render('500');
-
-    }
-}
-
-const editingproduct = async (req, res) => {
-    try {
-        const editid = req.query.id;
-        // const images = req.files.map((file) => file.filename);
-        // console.log(images);
-        for (let i = 0; i < req.files.length; i++) {
-            await sharp("public/productimages/" + req.files[i].filename).resize(800, 800).toFile("public/sharpedimages/" + req.files[i].filename);
-        };
-        console.log(editid);
-        await product.updateOne(
-            { _id: editid },
-            {
-              $set: {
-                productname: req.body.product,
-                quantity: req.body.quantity,
-                price: req.body.price,
-                category: req.body.category,
-                description: req.body.description,
-              },
-              $push: {
-                image: { $each: req.files.map((file) => file.filename) }
-              },
-            }
-          );
-          
-        
-        res.redirect('/admin/productmanagement');
-
-    } catch (error) {
-        console.log(error.message);
-        res.render('500');
-    }
-}
-
-const deleteproductimage = async(req,res)=>{
-    try {
-        const productid = req.body.productid
-        const imageid= req.body.imageid
-        const productimage = await product.updateOne({_id:productid},{$pull:{image:imageid}}) 
-        if(productimage ){
-        res.json({result:true})}
-        else{
-            res.json({result:false}) 
-        }
-        console.log(productimage);       
-    } catch (error) {
-        console.log(error.message);
-        res.render('500');
-    }
-}
-
-
-router.post('/productadd',auth.checkadminisLogin,multer.upload.array('image', 4),adminController.newproduct);
-router.post('/editingproduct',auth.checkadminisLogin,multer.upload.array('image', 4),adminController.editingproduct);
-</script>
-
-
-
-
-ADD PRODUCT
-
-<%- include ('../admin/layouts/header.ejs')-%>
-  
-<style>
-  .imageContainer {
-    display: inline-block;
-    position: relative;
-    margin-right: 10px;
-  }
-
-  .overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.5);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-  }
-
-  .overlay button {
-    background: transparent;
-    border: none;
-    cursor: pointer;
-  }
-</style>
-        <!-- partial -->
-        <div class="col-12 mt-5 grid-margin stretch-card">
-            <div class="card">
-              <div class="card-body">
-                <h4 class="card-title">Add Product</h4>
-                <!-- <p class="card-description"> Basic form elements </p> -->
-                <form class="forms-sample" action="/admin/productadd?id=_id" method="post" enctype="multipart/form-data" id="productForm"  >
-                  <div class="form-group">
-                    <label for="exampleInputName1">Product Name</label>
-                    <input type="text" class="form-control" id="exampleInputName1" placeholder="Product Name " name="product" required>
-                    <span id="productnameError" style="color: red;"></span>
-
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleInputEmail3">Quantity</label>
-                    <input type="text" class="form-control" id="exampleInputQuantity" placeholder="Quantity" name="quantity" required>
-                    <span id="quantityError" style="color: red;"></span>
-
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleInputPrice">Price</label>
-                    <input type="number" class="form-control" id="exampleInputPrice" placeholder="Price" name="price" required>
-                    <span id="priceError" style="color: red;"></span>
-
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleSelectGender">Category</label>
-                    <select class="form-control" id="categorySelect" name="category" required>
-                      <% data.forEach((item) => { %>
-                        <% if (item.status == 0) { %>
-                          <option value="<%= item.productcategory %>">
-                            <%= item.productcategory %>
-                          </option>
-                          <span id="categoryError" style="color: red;"></span>
-
-                        <% } %>
-                      <% }); %>
-                    </select>
-                    
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleTextarea1">Description</label>
-                    <textarea class="form-control" id="exampleTextarea1" rows="4" name="description" required></textarea>
-                    <span id="descriptionError" style="color: red;"></span>
-
-                  </div>
-                  <!-- <div class="form-group">
-                    <label>File upload</label>
-                    <input type="file" name="imgage" class="file-upload-default">
-                    <div class="input-group col-xs-12">
-                      <input type="text" class="form-control file-upload-info" disabled placeholder="Upload Image">
-                      <span class="input-group-append">
-                        <button class="file-upload-browse btn btn-primary" type="button">Upload</button>
-                      </span>
-                    </div>
-                  </div> -->
-                  <div class="form-group">
-                    <label for="images">Upload Images</label>
-                    <input type="file" accept="image/*" class="form-control-file" id="images" name="image" multiple onchange="validateAndPreviewImages(this)" required>
-                    <span id="image1Error" style="color: red;"></span>
-                </div>
-                <div id="imagePreviewContainer"></div>
-                  
-                  <button type="submit" class="btn btn-primary mr-2" value="Upload Images">Submit</button>
-                  <button class="btn btn-dark"  ><a href="/admin/productmanagement">Cancel</a></button>
-                </form>
-              </div>
-            </div>
-          </div>
-      
-          <script>
-            function validateAndPreviewImages(input) {
-                var previewContainer = document.getElementById('imagePreviewContainer');
-                var errorSpan = document.getElementById('image1Error');
-            
-                // Get the selected files
-                var files = input.files;
-            
-                // Define the maximum allowed images
-                var maxImages = 4;
-            
-                // Check if the number of selected images exceeds the limit
-                if (files.length > maxImages) {
-                    // Clear the file input
-                    input.value = '';
-            
-                    // Display an error message
-                    errorSpan.textContent = 'Please upload a maximum of ' + maxImages + ' images.';
-                    errorSpan.style.display = 'block';
-            
-                    // Clear the image preview container
-                    previewContainer.innerHTML = '';
-                } else {
-                    // Hide any previous error messages
-                    errorSpan.style.display = 'none';
-            
-                    // Check if there are already 4 images
-                    if (previewContainer.childElementCount === maxImages) {
-                        // Display a message to delete existing images
-                        errorSpan.textContent = 'Delete existing images before uploading new ones.';
-                        errorSpan.style.display = 'block';
-            
-                        // Clear the file input
-                        input.value = '';
-            
-                        // Clear the image preview container
-                        previewContainer.innerHTML = '';
-                    } else {
-                        // Proceed with previewing the images
-                        previewImages(input);
-                    }
-                }
-            }
-            
-            // The rest of your previewImages function goes here
-            </script>
-
-<script>
-
-// function addproduct(){
-//   const category
-// }
-
-
-  function previewImages(input) {
-    var previewContainer = document.getElementById('imagePreviewContainer');
-    previewContainer.innerHTML = ''; // Clear previous previews
-
-    var files = input.files;
-    for (var i = 0; i < files.length; i++) {
-      var reader = new FileReader();
-
-      reader.onload = function (e) {
-        var imgContainer = document.createElement('div');
-        imgContainer.classList.add('imageContainer');
-
-        var img = document.createElement('img');
-        img.src = e.target.result;
-        img.style.maxWidth = '300px'; // Set a maximum width for the preview image
-
-        var overlay = document.createElement('div');
-        overlay.classList.add('overlay');
-        overlay.addEventListener('mouseover', function () {
-          overlay.style.opacity = 1; // Show overlay on mouseover
-        });
-        overlay.addEventListener('mouseout', function () {
-          overlay.style.opacity = 0; // Hide overlay on mouseout
-        });
-
-        var removeButton = document.createElement('button');
-        removeButton.innerHTML = 'Remove';
-        removeButton.addEventListener('click', function () {
-          imgContainer.parentNode.removeChild(imgContainer); // Remove the preview when the remove button is clicked
-        });
-
-        overlay.appendChild(removeButton);
-        imgContainer.appendChild(img);
-        imgContainer.appendChild(overlay);
-
-        previewContainer.appendChild(imgContainer);
-      };
-
-      reader.readAsDataURL(files[i]);
-    }
-  }
-</script>
-<script>
-  //////////
-  const productname = document.getElementById("exampleInputName1");
-		productname.addEventListener('input', validproductname);
-
-  function validproductname() {
-			const name = document.getElementById("exampleInputName1").value;
-
-			if (name.trim() === "") {
-				document.getElementById('countryError').innerHTML = "Enter Product name";
-				productname.setCustomValidity("Enter product name");
-			} else {
-				const productnamepattern = /^(.*[a-zA-Z]){5,}/;
-				if (!name.match(productnamepattern )) {
-					document.getElementById('productnameError').innerHTML = "Product name should contain minimum 5 letters ";
-					productname.setCustomValidity("Product name should contain minimum 5 letters");
-				} else {
-					document.getElementById('productnameError').innerHTML = "";
-					productname.setCustomValidity("");
-				}
-			}
-		}
-
-    const quantity = document.getElementById("exampleInputQuantity");
-		quantity.addEventListener('input', validproductquantity);
-
-    function validproductquantity() {
-			const productquantity = document.getElementById("exampleInputQuantity").value;
-
-			if (productquantity.trim() === "") {
-				document.getElementById('quantityError').innerHTML = "Enter Product quantity";
-				quantity.setCustomValidity("Enter product quantity");
-			} else {
-				const productquantitypattern = /^[+]?\d*\.?\d+$/;
-				if (!productquantity.match(productquantitypattern)) {
-					document.getElementById('quantityError').innerHTML = "Quantity should contain only  postive values  ";
-					quantity.setCustomValidity("Quantity should contain only  postive values");
-				} else {
-					document.getElementById('quantityError').innerHTML = "";
-					quantity.setCustomValidity("");
-				}
-			}
-		}
-
-    const price = document.getElementById("exampleInputPrice");
-		price.addEventListener('input', validproductprice);
-
-    function validproductprice() {
-			const productprice = document.getElementById("exampleInputPrice").value;
-
-			if (productprice.trim() === "") {
-				document.getElementById('priceError').innerHTML = "Enter Product price";
-				price.setCustomValidity("Enter product price");
-			} else {
-				const productpricepattern = /^[+]?\d*\.?\d+$/;
-				if (!productprice.match(productpricepattern)) {
-					document.getElementById('priceError').innerHTML = "Price should contain only  postive values  ";
-					price.setCustomValidity("Price should contain only  postive values");
-				} else {
-					document.getElementById('priceError').innerHTML = "";
-					price.setCustomValidity("");
-				}
-			}
-		}
-
-    const description = document.getElementById("exampleTextarea1");
-		description.addEventListener('input', validdescription);
-
-  function validdescription() {
-			const descriptionvalue = document.getElementById("exampleTextarea1").value;
-
-			if (descriptionvalue.trim() === "") {
-				document.getElementById('descriptionError').innerHTML = "Enter Product description";
-				description.setCustomValidity("Enter Product description");
-			} else {
-				const descriptionpattern = /^(.*[a-zA-Z]){10,}/;
-				if (!descriptionvalue.match(descriptionpattern )) {
-					document.getElementById('descriptionError').innerHTML = "Description should contain minimum 10 letters ";
-					description.setCustomValidity("Description should contain minimum 10 letters");
-				} else {
-					document.getElementById('descriptionError').innerHTML = "";
-					description.setCustomValidity("");
-				}
-			}
-		}
-
-
-
-</script>
-
-         <%- include ('../admin/layouts/footer.ejs')-%>
-
-
-
-
-
-
-
-
-         EDIT PRODUCT
-
-
-
-
-         <%- include ('../admin/layouts/header.ejs')-%>
-  
-<div class="col-12 mt-5 grid-margin stretch-card">
-    <div class="card">
-        <div class="card-body">
-
-            <% if(item) { %>
-            <!-- Your form for each item goes here -->
-            <form class="forms-sample" action="/admin/editingproduct?id=<%= item._id %>" method="post" enctype="multipart/form-data">
-                <!-- Form fields for this product -->
-                <div class="form-group">
-                    <label for="exampleInputName1">Product Name</label>
-                    <input type="text" class="form-control" value="<%= item.productname %>" id="exampleInputName1"
-                        placeholder="Product Name" name="product" required>
-                </div>
-                <div class="form-group">
-                    <label for="exampleInputEmail3">Quantity</label>
-                    <input type="text" class="form-control" value="<%= item.quantity %>" id="exampleInputEmail3"
-                        placeholder="Quantity" name="quantity" required>
-                </div>
-                <div class="form-group">
-                    <label for="exampleInputPassword4">Price</label>
-                    <input type="number" class="form-control" value="<%= item.price %>" id="exampleInputPassword4"
-                        placeholder="Price" name="price" required>
-                </div>
-                <div class="form-group">
-                    <label for="exampleSelectGender">Category</label>
-                    <select class="form-control" id="exampleSelectGender" name="category" required>
-                        <% for(let i=0; i<categorydata.length; i++){ %>
-                        <option value="<%= categorydata[i].productcategory %>"><%= categorydata[i].productcategory %>
-                        </option>
-                        <% } %>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="exampleTextarea1">Description</label>
-                    <textarea class="form-control" id="exampleTextarea1" rows="4" name="description"
-                        required><%= item.description %></textarea>
-                </div>
-
-                <!-- Display existing images -->
-                <div id="existingImagePreview">
-                    <p>Existing Images:</p>
-                    <div id="existingImages" class="d-flex flex-nowrap overflow-auto">
-                        <% for(let i=0; i<image.length; i++){ %>
-                        <div class="existing-image-container d-inline-block mr-2">
-                            <img src="/productimages/<%=image[i] %>" alt="Existing Image" style="max-width: 200px;">
-                            <!-- <button type="button" onclick="updateImage('<%= item._id %>', '<%= image[i] %>')" class="btn btn-sm btn-secondary">Update</button> -->
-                            <button type="button" onclick="deleteImage('<%= item._id %>', '<%= image[i] %>')" class="btn btn-sm btn-danger">Delete</button>
-                        </div>
-                        <% } %>
-                    </div>
-                </div>
-                
-                
-                <!-- Upload new images -->
-                <div class="form-group">
-                    <label for="images">Upload Images</label>
-                    <input type="file" accept="image/*" class="form-control-file" id="images" name="image" multiple onchange="validateAndPreviewImages(this)">
-                    <span id="image1Error" style="color: red;"></span>
-                </div>
-                <div id="imagePreviewContainer"></div>
-                <button type="submit" class="btn btn-primary mr-2">Submit</button>
-                <button class="btn btn-dark"><a href="/admin/productmanagement">Cancel</a></button>
-            </form>
-            <% } %>
-
-        </div>
-    </div>
-</div>
-
-      
-<script>
-    // Function to handle new image uploads
-    function previewImages(input) {
-        var previewContainer = document.getElementById('imagePreviewContainer');
-        previewContainer.innerHTML = ''; // Clear previous previews
-
-        var files = input.files;
-        for (var i = 0; i < files.length; i++) {
-            var reader = new FileReader();
-
-            reader.onload = function (e) {
-                var img = document.createElement('img');
-                img.src = e.target.result;
-                img.style.maxWidth = '300px'; // Set a maximum width for the preview image
-
-                previewContainer.appendChild(img);
-            };
-
-            reader.readAsDataURL(files[i]);
-        }
-    }
-</script>
-
-<script>
-    function deleteImage(productid,imageid){
-        console.log(productid,"pppp",imageid);
-        $.ajax({
-            method:'delete',
-        url:'/admin/deleteproductimage',
-        data:JSON.stringify({productid:productid,imageid:imageid}),
-        contentType:'application/json',
-        success:function(response){
-            if(response.result==true){
-                // $('#existingImagePreview').load('/admin/edit/product #existingImagePreview');
-                window.location.reload()
-
-               
-            }else{
-                console.log('Error');
-            }
-        }
-        })
-
-    }
-    
-    function updateImage(productid,imageid){
-        console.log(productid,imageid);
-
-    }
-</script>
-
-<script>
-  function validateAndPreviewImages(input) {
-      var previewContainer = document.getElementById('imagePreviewContainer');
-      var errorSpan = document.getElementById('image1Error');
-      
-      // Get the selected files
-      var files = input.files;
-  
-      // Define the maximum allowed images
-      var maxImages = 4;
-  
-      // Check if the number of selected images exceeds the limit
-      if (files.length > maxImages) {
-          // Clear the file input
-          input.value = '';
-  
-          // Display an error message
-          errorSpan.textContent = 'Please upload a maximum of ' + maxImages + ' images.';
-          errorSpan.style.display = 'block';
-  
-          // Clear the image preview container
-          previewContainer.innerHTML = '';
-      } else {
-          // Hide any previous error messages
-          errorSpan.style.display = 'none';
-  
-          // Proceed with previewing the images
-          previewImages(input);
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
       }
-  }
-  
-  // The rest of your previewImages function goes here
+      to {
+        opacity: 1;
+      }
+    }
+
+    .success-icon {
+      color: #28a745;
+      font-size: 64px;
+      margin-bottom: 20px;
+      animation: bounceIn 1s ease-in-out;
+    }
+
+    @keyframes bounceIn {
+      0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+      }
+      40% {
+        transform: translateY(-20px);
+      }
+      60% {
+        transform: translateY(-10px);
+      }
+    }
+
+    .back-to-home {
+      color: #007bff;
+      text-decoration: none;
+      font-size: 18px;
+      margin-top: 20px;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="success-icon" id="successIcon">&#10003;</div>
+    <div class="success-message" id="successMessage">Order Successful!</div>
+    <a href="/" class="back-to-home">Back to Home</a>
+  </div>
+
+  <script>
+    // Display the success message and icon after a delay
+    setTimeout(function() {
+      document.getElementById('successIcon').style.display = 'block';
+      document.getElementById('successMessage').style.display = 'block';
+    }, 500);
   </script>
-
-
-       
-         <%- include ('../admin/layouts/footer.ejs')-%>
+</body>
+</html>

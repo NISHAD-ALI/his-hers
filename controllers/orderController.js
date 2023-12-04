@@ -76,94 +76,7 @@ const loadCheckout = async (req, res) => {
 
 
 // ++++++++++++++++PLACE ORDER++++++++++++++++++
-// const placeOrder = async (req, res) => {
-//   try {
-//     const userId = req.session.user_id;
-//     const addressId = req.body.selectedAddress;
-//     const paymentMethod = req.body['payment-method'];
-//     const status = paymentMethod === "cod" ? "placed" : "pending";
-//     const statusLevel = status === "placed" ? 1 : 0;
 
-
-//     const user = await User.findOne({ _id: userId });
-//     const address = await Address.findOne({ _id: addressId });
-
-//     if (!user || !address) {
-
-//       console.log('User or address not found');
-//       return res.status(400).json({ error: 'User or address not found' });
-//     }
-
-
-//     const cartData = await Cart.findOne({ userid: userId })
-//     console.log('cartDta>');
-//     console.log(cartData);
-//     const orderProducts = [];
-
-//     // Loop through the products in the cart and add them to the orderProducts array
-//     for (const cartProduct of cartData.products) {
-//       orderProducts.push({
-//         productId: cartProduct.productId,
-
-//         quantity: cartProduct.count,
-
-//       });
-//     }
-//     // Calculate the total amount from the cart
-//     let totalAmount = 0;
-//     cartData.products.forEach((product) => {
-//       totalAmount += product.totalPrice * product.count;
-//     });
-
-//     // Create a new order document
-//     const newOrder = new Order({
-//       userid: userId,
-//       deliveryDetails: {
-//         address: address,
-//       },
-//       products: orderProducts,
-//       purchaseDate: new Date(),
-//       totalAmount: totalAmount,
-//       status: status,
-//       paymentMethod: paymentMethod,
-//       paymentStatus: 'paid',
-
-//       shippingFee: '0',
-//     });
-//     console.log(newOrder);
-//     // Save the order to the database
-//     const savedOrder = await newOrder.save();
-
-//     // decresing quantity
-
-//     for (const orderProduct of orderProducts) {
-//       const productnew = await product.findOne({ _id: orderProduct.productId });
-//       console.log(productnew.quantity);
-//       if (productnew) {
-//         // Decrement the product quantity
-//         const newQuantity = productnew.quantity - orderProduct.quantity;
-//         const productne = await product.updateOne({ _id: orderProduct.productId }, { $set: { quantity: newQuantity } });
-//         console.log(productne);
-//       }
-//     }
-
-
-
-
-//     // Clear the user's cart
-//     await Cart.updateOne({ userid: userId }, { $set: { products: [] } });
-
-
-//     const successPageURL = '/order-success';
-
-//     res.json({ successPage: successPageURL });
-//     console.log('2');
-//   } catch (error) {
-//     console.log(error.message);
-//     res.status(500).json({ error: 'Internal server error' });
-//   }
-
-// };
 const placeOrder = async (req, res) => {
   try {
     const userId = req.session.user_id;
@@ -322,10 +235,7 @@ const verifypayment = async(req,res)=>{
         await Cart.deleteOne({userid:user_id})
         console.log('XP 9');
         res.json({placed:true})
-      }
-  
-    
-      
+      }   
   } catch (error) {
       console.log(error.message);
   }
