@@ -69,8 +69,8 @@
                         </p>
                         <p class="card-text">Minimum Purchase: <%= coupon[i].criteriaamount %>
                         </p>
-                        <button class="btn btn-primary" onclick="copyToClipboard('<%= 'coupon' + (i + 1) %>')">Copy to
-                          Clipboard</button>
+                      
+
                       </div>
                     </div>
                     <% } %>
@@ -217,6 +217,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
   <script>
 
 
@@ -336,29 +337,7 @@
 
 
 
-    async function copyToClipboard(couponId) {
-      try {
-        var textToCopy = document.getElementById(couponId).textContent;
-
-        await navigator.clipboard.writeText(textToCopy);
-
-        // Use SweetAlert for a stylish alert
-        Swal.fire({
-          icon: 'success',
-          title: 'Coupon Copied!',
-          text: 'The coupon has been copied to the clipboard.',
-        });
-      } catch (error) {
-        console.error('Unable to copy coupon to clipboard:', error);
-        // Use SweetAlert for error handling
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Something went wrong while copying the coupon!',
-        });
-      }
-    }
-
+  
     // In your client-side script
     $(document).ready(function () {
       $('#applyCouponForm').submit(function (event) {
