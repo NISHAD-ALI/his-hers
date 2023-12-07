@@ -620,7 +620,7 @@ const resetPasswordPost = async (req, res) => {
   try {
     const { token, newPassword } = req.body;
     console.log(token);
-    // Verify the token and check if it has expired
+
     const user = await User.findOne({
       resetPasswordToken: token,
       resetPasswordExpires: { $gt: Date.now() },

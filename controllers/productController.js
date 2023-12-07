@@ -68,28 +68,28 @@ const newproduct = async (req, res) => {
         };
 
         productData.image = req.files.map((file) => file.filename);
-        console.log( productData.image);
+        console.log(productData.image);
         const item = new product(productData);
         await item.save();
         for (let i = 0; i < req.files.length; i++) {
           const filePath = path.join(__dirname, '../public/products/images/', req.files[i].filename);
-await sharp(filePath).resize(800, 800).toFile("public/products/images/upload/" + req.files[i].filename);
+          await sharp(filePath).resize(800, 800).toFile("public/products/images/upload/" + req.files[i].filename);
 
-         
+
         };
-        
-       
+
+
 
         if (item) {
           res.redirect('/admin/productManagement');
-      }
-      else {
+        }
+        else {
           console.log("Failed upload");
-      }
+        }
 
 
-        
-        
+
+
       } catch (error) {
         console.log(error.message);
 
@@ -125,7 +125,7 @@ const loadEditProduct = async (req, res) => {
   try {
     const catData = await category.find({ blocked: 0 });
     const editProducts = await product.findOne({ _id: req.query.id });
-    res.render("editProduct", { currentData: editProducts, catData ,image:editProducts.image});
+    res.render("editProduct", { currentData: editProducts, catData, image: editProducts.image });
   } catch (error) {
     console.log(error.message);
     res.status(404).render("404");
@@ -157,8 +157,8 @@ const editProduct = async (req, res) => {
         },
       }
     );
-    
-    
+
+
 
     res.redirect('/admin/productManagement');
   } catch (error) {
@@ -166,19 +166,20 @@ const editProduct = async (req, res) => {
   }
 };
 
-const deleteImage = async ( req , res ) => {
+const deleteImage = async (req, res) => {
   try {
-   console.log('334');
-   
-   const productid = req.body.productid
-   const imageid= req.body.imageid
-   const productimage = await product.updateOne({_id:productid},{$pull:{image:imageid}}) 
-   if(productimage ){
-   res.json({result:true})}
-   else{
-       res.json({result:false}) 
-   }
-   console.log(productimage);       
+    console.log('334');
+
+    const productid = req.body.productid
+    const imageid = req.body.imageid
+    const productimage = await product.updateOne({ _id: productid }, { $pull: { image: imageid } })
+    if (productimage) {
+      res.json({ result: true })
+    }
+    else {
+      res.json({ result: false })
+    }
+    console.log(productimage);
   } catch (error) {
     console.error('Error deleting image:', error);
     res.status(500).json({ error: 'Internal server error.' });
@@ -191,8 +192,8 @@ const deleteImage = async ( req , res ) => {
 // ++++++++++++++++++++++++++++++++++++++ DELETE PRODUCTS ++++++++++++++++++++++++++++++++++++++++++++++
 const deleteProduct = async (req, res) => {
   try {
-     
-     
+
+
     const currentData = await product.findOne({ _id: req.query.id });
 
     if (!currentData) {
@@ -220,7 +221,7 @@ const loadProductList = async (req, res) => {
     const discount = await Offers.find({ is_block: 0 })
     const discountcategory = await CategoryOffer.find({ is_block: 0 });
     const productData = await product.find({ blocked: 0 });
-    const renderData = { products: productData, discPrice: discount ,discCat : discountcategory};
+    const renderData = { products: productData, discPrice: discount, discCat: discountcategory };
 
     if (userName) {
       renderData.userName = userName;
@@ -236,7 +237,7 @@ const loadProductList = async (req, res) => {
 
 
 const loadUserProduct = async (req, res) => {
-  let userName = ''; 
+  let userName = '';
 
   if (req.session.user_id) {
     const user = await User.findOne({ _id: req.session.user_id });
@@ -251,12 +252,12 @@ const loadUserProduct = async (req, res) => {
 
     const discount = await Offers.find({ is_block: 0 })
     const discountcategory = await CategoryOffer.find({ is_block: 0 });
-    
-    
+
+
 
     if (viewProduct) {
       const products = await product.find({ blocked: 0 });
-      const renderData = { viewProduct, productId: req.query.id,discPrice: discount ,discCat : discountcategory };
+      const renderData = { viewProduct, productId: req.query.id, discPrice: discount, discCat: discountcategory };
 
       if (userName) {
         renderData.userName = userName;
@@ -273,75 +274,80 @@ const loadUserProduct = async (req, res) => {
 
 const searchProducts = async (req, res) => {
   try {
-      const data = req.query.searchdata;
-      console.log(data);
-      const discount = await Offers.find({ is_block: 0 });
-      const productData = await product.find({
-          productname: { $regex: new RegExp(data, "i") },
-      });
-      console.log(productData);
-      const renderData = { products: productData, discPrice: discount };
-      res.render('productList', renderData); 
+    const data = req.query.searchdata;
+    console.log(data);
+    const discount = await Offers.find({ is_block: 0 });
+    const productData = await product.find({
+      productname: { $regex: new RegExp(data, "i") },
+    });
+    console.log(productData);
+    const renderData = { products: productData, discPrice: discount };
+    res.render('productList', renderData);
   } catch (error) {
-      console.log(error.message);
-      res.status(500).json({ error: 'Internal Server Error' });
+    console.log(error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
 
 
 
-  const sortProducts = async (req, res) => {
-    try {
-        let sortOption = req.query.sortby;
-        console.log('Sort Option:', sortOption);
+const sortProducts = async (req, res) => {
+  try {
+    let sortOption = req.query.sortby;
+    console.log('Sort Option:', sortOption);
 
-        let sortCriteria = {};
+    let sortCriteria = {};
 
-        switch (sortOption) {
-            case 'priceLowToHigh':
-                sortCriteria = { price: 1 };
-                break;
-            case 'priceHighToLow':
-                sortCriteria = { price: -1 };
-                break;
-            default:
-              sortCriteria = { price: 1 };
-                break;
-        }
-
-        console.log('Sort Criteria:', sortCriteria);
-
-        const discountProducts = await Offers.find({ is_block: 0 });
-        const discountcategory = await CategoryOffer.find({ is_block: 0 });
-        const sortedProducts = await product.find().sort(sortCriteria);
-
-        const renderData = { products: sortedProducts, discPrice: discount };
-     console.log(sortedProducts)
-        res.render('productList', renderData);
-        
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Internal Server Error');
+    switch (sortOption) {
+      case 'priceLowToHigh':
+        sortCriteria = { price: 1 };
+        break;
+      case 'priceHighToLow':
+        sortCriteria = { price: -1 };
+        break;
+      default:
+        sortCriteria = { price: 1 };
+        break;
     }
-  };
+
+    console.log('Sort Criteria:', sortCriteria);
+
+    const discountProducts = await Offers.find({ is_block: 0 });
+    const discountcategory = await CategoryOffer.find({ is_block: 0 });
+    const sortedProducts = await product.find().sort(sortCriteria);
+
+    const renderData = { products: sortedProducts, discPrice: discount };
+    console.log(sortedProducts)
+    res.render('productList', renderData);
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+};
 
 
 const filteredProducts = async (req, res) => {
   try {
 
-    console.log(req.body);
-    
-      const selectedCategories = req.body.categories;
-      const filteredProducts = await product.find({ category:selectedCategories  });
-      const discount = await Offers.find({ is_block: 0 });
-      const renderData = { products: filteredProducts, discPrice: discount };
-     console.log(selectedCategories);
-     
-      res.render('productList', renderData);
+ 
+    const priceRange = req.body.priceRange;
+    const selectedCategories = req.body.categories;
+    const [minPrice, maxPrice] = priceRange.split('-').map(Number);
+
+    const filteredProducts = await product.find({
+      category: selectedCategories,
+      price: { $gte: minPrice, $lte: maxPrice }
+    });
+    const discount = await Offers.find({ is_block: 0 });
+    const renderData = { products: filteredProducts, discPrice: discount };
+   
+
+    res.render('productList', renderData);
   } catch (error) {
-      console.log(error.message);
-      res.status(500).json({ error: 'Internal Server Error' });
+    console.log(error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
@@ -359,11 +365,11 @@ const menCat = async (req, res) => {
     }
 
     const discount = await Offers.find({ is_block: 0 });
-    
-  
+
+
     const productData = await product.find({
       blocked: 0,
-      category: { $regex: /^men/, $options: 'i' } 
+      category: { $regex: /^men/, $options: 'i' }
     });
 
     const renderData = { products: productData, discPrice: discount };
@@ -394,7 +400,7 @@ const womenCat = async (req, res) => {
 
     const productData = await product.find({
       blocked: 0,
-      category: { $regex: 'women', $options: 'i' } 
+      category: { $regex: 'women', $options: 'i' }
     });
 
     const renderData = { products: productData, discPrice: discount };
@@ -410,7 +416,7 @@ const womenCat = async (req, res) => {
 };
 
 
-const loadfreshArrivals = async(req,res) => {
+const loadfreshArrivals = async (req, res) => {
   try {
     let userName = '';
 
@@ -423,8 +429,8 @@ const loadfreshArrivals = async(req,res) => {
     }
 
     const discount = await Offers.find({ is_block: 0 });
-    
- 
+
+
     const productData = await product.find({ blocked: 0 }).sort({ _id: -1 }).limit(8)
     const renderData = { products: productData, discPrice: discount };
 

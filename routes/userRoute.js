@@ -67,7 +67,7 @@ userRoute.get('/invoice/:id',orderController.orderInvoice)
 userRoute.post('/applyCoupon',userAuth.isLogin,couponController.applyCoupon)
 
 userRoute.get('/wishlist',userAuth.isLogin,userController.loadWishlist)
-userRoute.post('/addToWishlist',userAuth.isLogin, userController.addtoWishlist);
+userRoute.post('/addToWishlist', userController.addtoWishlist);
 userRoute.get('/deleteWishproduct',userAuth.isLogin,userController.deleteWishproduct)
 userRoute.get('/aboutUs',userController.loadAboutUs)
 

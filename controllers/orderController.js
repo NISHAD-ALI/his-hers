@@ -32,7 +32,7 @@ const loadCheckout = async (req, res) => {
       const user = await User.findOne({ _id: req.session.user_id });
       const addresses = await Address.find({ User: req.session.user_id });
  
-      console.log(addresses);
+      
 
       if (user) {
         userName = user.name;
@@ -44,6 +44,8 @@ const loadCheckout = async (req, res) => {
 
     const userId = req.session.user_id;
     const cartData = await Cart.findOne({ userid: userId }).populate("products.productId");
+
+    
     console.log(cartData);
     const coupon = await Coupon.find({ status:0 })
     const discAmount = coupon.discountamount
