@@ -48,7 +48,7 @@ adminRoute.get('/chartYear',auth.isLogin, adminController.chartFilterYear);
 
 adminRoute.get('/productManagement',auth.isLogin, productController.loadProduct);
 adminRoute.get('/addPro',auth.isLogin, productController.loadNewProduct)
-adminRoute.post('/addPro',auth.isLogin,multer.upload.array('image', 4), productController.newproduct)
+adminRoute.post('/addPro',auth.isLogin, productController.newproduct)
 adminRoute.get('/block-pro',auth.isLogin, productController.blockPro);
 adminRoute.get('/editPro',auth.isLogin, productController.loadEditProduct);
 adminRoute.post('/edit-Pro',auth.isLogin,multer.upload.array('image', 4) ,productController.editProduct);

@@ -372,45 +372,7 @@ const orderReturnPOST = async (req, res) => {
 }
 
 // ++++++++++++++++ORDER INVOICE++++++++++++++++++
-// const orderInvoice = async (req, res) => {
-//   try {
-//     const id = req.params.id;
-//     const user = req.session.user_id;
-//     const userData = await User.findOne({ _id: user });
-//     const orderData = await Order.findOne({ _id: id }).populate(
-//       "products.productId"
-//     );
-//     const date = new Date()
-    
-//     data = {
-//       order: orderData,
-//       user: userData,
-//       date
-//     };
 
-//     const filepathName = path.resolve(__dirname, "../views/user/users/invoice.ejs");
-
-//     const html = fs.readFileSync(filepathName).toString();
-//     const ejsData = ejs.render(html, data);
-
-//     const browser = await puppeteer.launch({ headless: "new"});
-//     const page = await browser.newPage();
-//     await page.setContent(ejsData, { waitUntil: "networkidle0"});
-//     const pdfBytes = await page.pdf({ format: "letter" });
-//     await browser.close();
-
-//     res.setHeader("Content-Type", "application/pdf");
-//     res.setHeader(
-//       "Content-Disposition",
-//       "attachment; filename= order invoice.pdf"
-//     );
-//     res.send(pdfBytes);
-
-//   } catch (error) {
-//     console.log(error.message);
-//     res.status(500).json({ error: 'Internal server error' });
-//   }
-// };
 const orderInvoice = async (req, res) => {
   try {
       const proid = req.params.id;

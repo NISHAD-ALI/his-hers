@@ -18,7 +18,7 @@
 
     <div class="page-content">
         <div class="container">
-         <% if(wishlist){ %>
+         <% if(wishlist.length == 0){ %>
             <table class="table table-wishlist table-mobile">
                 <thead>
                    
@@ -81,7 +81,7 @@
                 <% } %>
             </table><!-- End .table table-wishlist -->
             <% }else{ %>
-                <h2> I AM EMPTY MAHN ! PLEASE ADD SOME PRODUCTS !</h2>
+                <h4 style="color: rgb(252, 0, 0);"> I AM EMPTY  ! PLEASE ADD SOME PRODUCTS !</h4>
             <% } %>
             <div class="wishlist-share">
                 <div class="social-icons social-icons-sm mb-2">

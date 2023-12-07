@@ -110,7 +110,11 @@
             <%  } else { %>
               <td>₹<%= product.price %></td>
               <% } %>
-            <td>₹<%= order.totalAmount %></td>
+              <% if(product.discountPricepro){ %>
+                <td>₹<%= product.discountPricepro %>*</td>
+                <%  } else { %>
+                  <td>₹<%= product.price %>*</td>
+                  <% } %>
           </tr>
         <% } %>
 
@@ -124,8 +128,11 @@
   
 
   <div class="total">
-    <p><strong>Total:</strong> ₹<%= order.totalAmount %></p>
+    <p><strong>Total:</strong> ₹<%= order.totalAmount %>**</p>
   </div>
+  <p style="font-size: 12px;">* After including discounts</p>
+  <p style="font-size: 12px;">** After including Coupon discounts</p>
+  
 </div>
 <div class="company-details details">
   <p><strong>HIS&HERS Ltd.</strong> </p>

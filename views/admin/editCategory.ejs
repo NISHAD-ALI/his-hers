@@ -1,33 +1,58 @@
-
 <%- include('../admin/layout/adminHeader.ejs') -%>
 
-
 <div class="col-12 grid-margin stretch-card">
-    <div class="card">
-      <div class="card-body">
-        <h4 class="card-title">Edit Category</h4>
-        <% if(typeof message !== 'undefined'){ %>
-          <span
-            id="er2"
-            style="color: rgb(241, 7, 7); text-align: center"
-            ><%= message %></span
-          >
-          <% } %>
-        <form class="forms-sample" action="/admin/edit-cat" method="post">
-          <div class="form-group">
-            <input type="hidden" name="categoryId" value="<%= cats._id %>">
-            <label for="exampleInputName1">Name of Category</label>
-            <input type="text" class="form-control" id="exampleInputName1" placeholder="Category Name" name="catName">
-          </div>
+  <div class="card">
+    <div class="card-body">
+      <h4 class="card-title">Edit Category</h4>
+      <% if (typeof message !== 'undefined') { %>
+        <span id="er2" style="color: rgb(241, 7, 7); text-align: center"><%= message %></span>
+      <% } %>
+      <form class="forms-sample" action="/admin/edit-cat" method="post" onsubmit="return validateForm()">
+        <div class="form-group">
+          <input type="hidden" name="categoryId" value="<%= cats._id %>">
+          <label for="exampleInputName1">Name of Category</label>
+          <input type="text" class="form-control" id="exampleInputName1" placeholder="Category Name" name="catName"value="<%= cats.name %>">
+          <span id="nameError" style="color: red;"></span>
+        </div>
 
-
-
-          <button type="submit" class="btn btn-primary mr-2">Submit</button>
-          <button class="btn btn-dark">Cancel</button>
-        </form>
-      </div>
+        <button type="submit" class="btn btn-primary mr-2">Submit</button>
+        <button class="btn btn-dark">Cancel</button>
+      </form>
     </div>
   </div>
+</div>
 
+<script>
+  function validateForm() {
+    var nameInput = document.getElementById('exampleInputName1');
+    var nameError = document.getElementById('nameError');
+    var nameValue = nameInput.value.trim();
 
-  <%- include('../admin/layout/adminFooter.ejs') -%>
+    // Check if the name is empty
+    if (nameValue === '') {
+      nameError.textContent = 'Name cannot be empty';
+      return false;
+    }
+
+    // Check if the name starts or ends with spaces
+    if (nameValue.startsWith(' ') || nameValue.endsWith(' ')) {
+      nameError.textContent = 'Name cannot start or end with spaces';
+      return false;
+    }
+
+    // Check if the name contains special characters
+    var specialCharacters = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/;
+    if (specialCharacters.test(nameValue)) {
+      nameError.textContent = 'Name cannot contain special characters';
+      return false;
+    }
+
+    // Clear any previous error messages
+    nameError.textContent = '';
+
+    // If all checks pass, the form is valid
+    return true;
+  }
+</script>
+
+<%- include('../admin/layout/adminFooter.ejs') -%>

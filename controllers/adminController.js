@@ -10,6 +10,7 @@ let ejs = require('ejs')
 let path = require('path')
 const ExcelJS = require('exceljs');
 const zip = require('express-zip'); 
+const { query } = require('express');
 
 
 
@@ -342,6 +343,7 @@ const editcat = async (req, res) => {
 // ++++++++++++++++++++++++++++++++++++++EDIT CATEGORY POST ++++++++++++++++++++++++++++++++++++++++++++++
 const editcatPOST = async (req, res) => {
   try {
+   
     const categoryId = req.body.categoryId;
     const newCatname = req.body.catName;
     const categ = await category.findOne({ _id: categoryId });
@@ -349,12 +351,23 @@ const editcatPOST = async (req, res) => {
     if (!categ) {
       return res.status(404).send('Category not found');
     }
-
-
-    categ.name = newCatname;
+    const exists = await category.findOne({
+      name: { $regex: `^${newCatname}$`, $options: 'i' },
+    });
+   
+    console.log(exists);
+    
+    if (exists) {
+      res.render("editCategory", {
+        message: "Entered category already exists.",cats:categ
+      });
+    } else {
+      categ.name = newCatname;
     await categ.save();
 
     res.redirect('/admin/categoryManagement');
+    }
+
   } catch (error) {
     console.log(error.message);
     res.render('500')
@@ -397,7 +410,7 @@ const loadOrder = async (req, res) => {
         path: 'userid',
         select: 'name'
       })
-      .populate('products.productId');
+      .populate('products.productId').sort({ purchaseDate: -1 });
     
     if(orderDat){
       res.render('orderManagement', { orderDat })

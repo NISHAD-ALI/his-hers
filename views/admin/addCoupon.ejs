@@ -143,7 +143,7 @@
           var expirydate = new Date($("#expirydate").val());
 
           var currentDate = new Date();
-          if (activationdate <= currentDate) {
+          if (activationdate < currentDate) {
             showError("activationdate", "Activation Date must be greater than the present date.");
             isValid = false;
           } else {

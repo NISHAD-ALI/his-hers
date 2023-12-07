@@ -36,6 +36,28 @@
             flex: 1;
             padding: 5px;
         }
+    #productname,
+    #uniqueOrder,
+    #orderdate,
+    #quantityOrder,
+    #paymentmethod,
+    #statusOrder,
+    #baseprice,
+    #finalPrice1,
+    #fullname,
+    #mobile,
+    #email,
+    #houseNo,
+    #city,
+    #state,
+    #zip,
+    #addetails {
+        color: #ffffff; /* Set the desired text color */
+    }
+    .modal-title{
+        color: #c7a2a2;
+    }
+
     </style>
     <main class="main">
         <div class="page-header text-center" style="background-image: url('user/images/page-header-bg.jpg')">
@@ -87,49 +109,40 @@
                         <div class="col-md-8 col-lg-9">
 
                             <div class="tab-content">
-                               
-                                <div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel"
-                                aria-labelledby="tab-dashboard-link">
-                                <% if (accountDetails) { %>
-                                    <div class="row">
-
-
-
+                                <div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel" aria-labelledby="tab-dashboard-link">
+                                    <% if (accountDetails) { %>
+                                      <div class="row">
                                         <div class="col-lg-6">
-                                            <a href="#" id="edit-profile-button"><i
-                                                    class="bi bi-pen float-right"></i></a>
-
-                                            <form id="edit-profile-form" action="/updateUserDetails" method="post">
-                                                <div class="mb-3" id="name-field">
-                                                    <label for="exampleInputName" class="form-label">Name</label>
-                                                    <input type="text" class="form-control" id="edit-name-input"
-                                                        value="<%= accountDetails.name %>" name="name" readonly>
-                                                </div>
-                                                <div class="mb-3" id="password-field" style="display: none;">
-                                                    <label for="edit-password-input"
-                                                        class="form-label">Password</label>
-                                                    <input type="password" class="form-control"
-                                                        id="edit-password-input" name="password">
-                                                </div>
-                                                <div class="mb-3" id="email-field">
-                                                    <label for="exampleInputEmail1" class="form-label">Email
-                                                        address</label>
-                                                    <input type="email" class="form-control" id="edit-email-input"
-                                                        value="<%= accountDetails.email %>" name="email" readonly>
-                                                </div>
-                                                <div class="mb-3" id="mobile-field">
-                                                    <label for="edit-mobile-input" class="form-label">Mobile</label>
-                                                    <input type="text" class="form-control" id="edit-mobile-input"
-                                                        value="<%= accountDetails.Mobile %>" name="Mobile" readonly>
-                                                </div>
-
-                                                <button type="submit" class="btn btn-primary"
-                                                    id="edit-profile-submit-button"
-                                                    style="display: none;">Submit</button>
-                                            </form>
+                                          <a href="#" id="edit-profile-button"><i class="bi bi-pen float-right"></i></a>
+                                          <form id="edit-profile-form" action="/updateUserDetails" method="post">
+                                            <div class="mb-3" id="name-field">
+                                              <label for="exampleInputName" class="form-label">Name</label>
+                                              <input type="text" class="form-control" id="edit-name-input" value="<%= accountDetails.name %>" name="name" readonly>
+                                              <span id="name-error" style="color: red;"></span>
+                                            </div>
+                                            <div class="mb-3" id="password-field" style="display: none;">
+                                              <label for="new-password-input" class="form-label">New Password</label>
+                                              <input type="password" class="form-control" id="new-password-input" name="newPassword">
+                                            </div>
+                                            <div class="mb-3" id="confirm-password-field" style="display: none;">
+                                              <label for="confirm-password-input" class="form-label">Confirm Password</label>
+                                              <input type="password" class="form-control" id="confirm-password-input" name="confirmPassword">
+                                              <span id="password-match-error" style="color: red;"></span>
+                                            </div>
+                                            <div class="mb-3" id="email-field">
+                                              <label for="exampleInputEmail1" class="form-label">Email address</label>
+                                              <input type="email" class="form-control" id="edit-email-input" value="<%= accountDetails.email %>" name="email" readonly>
+                                            </div>
+                                            <div class="mb-3" id="mobile-field">
+                                              <label for="edit-mobile-input" class="form-label">Mobile</label>
+                                              <input type="text" class="form-control" id="edit-mobile-input" value="<%= accountDetails.Mobile %>" name="Mobile" readonly>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary" id="edit-profile-submit-button" style="display: none;">Submit</button>
+                                          </form>
                                         </div>
+                                      </div>
                                     </div>
-                            </div>
+                                  
                                 <div class="tab-pane fade show" id="tab-wallet" role="tabpanel"
                                     aria-labelledby="tab-wallet-link">
                                     <div class="container">
@@ -230,6 +243,9 @@
                                                             <% const value=product[i].productId; %>
 
                                                                 <tr>
+
+     
+
                                                                     <td class="product-col">
                                                                         <div class="product">
                                                                             <figure class="product-media">
@@ -240,7 +256,7 @@
                                                                             </figure>
                                                                             <h3 class="product-title">
                                                                                 <a href="#">
-                                                                                    <%= value.productname %>
+                                                                                    <%= value.productname  %>
                                                                                 </a>
                                                                             </h3>
                                                                         </div>
@@ -255,7 +271,36 @@
                                                                             <% } %>
                                                                                 <td class="status-col">
                                                                                     <%= orderData[j].status %>
+                                                                                    <td class="status-col">
+                                                                                        <%= orderData[j].status %>
+                                                                                      
+                                                                                        <i data-toggle="modal" data-target="#transparentModal" class="bi bi-caret-up-square"
+                                                                                           data-order-id="<%= orderData[j]._id %>"
+                                                                                           data-product-name="<%= value.productname %>"
+                                                                                           data-quantity="<%= product[i].count %>"
+                                                                                           data-mrp="<%= value.price %>"
+                                                                                           data-final-price="<%= product[i].total %>"
+                                                                                           
+                                                                                           data-delivery-fullname="<%= orderData[j].deliveryDetails.address.address[0].fullname %>"
+                                                                                           data-delivery-mobile= "<%= orderData[j].deliveryDetails.address.address[0].mobile %>"
+                                                                                           data-delivery-email="<%= orderData[j].deliveryDetails.address.address[0].email %>"
+                                                                                           data-delivery-houseNo="<%= orderData[j].deliveryDetails.address.address[0].houseNo %>"
+                                                                                           data-delivery-city="<%= orderData[j].deliveryDetails.address.address[0].city %>"
+                                                                                           data-delivery-state="<%= orderData[j].deliveryDetails.address.address[0].state %>"
+                                                                                           data-delivery-zip="<%= orderData[j].deliveryDetails.address.address[0].zipcode %>"
+                                                                                           data-delivery-addetails="<%= orderData[j].deliveryDetails.address.address[0].additionalDetails %>"
+                                                                                          
+                                                                                           data-order-status="<%= orderData[j].status %>"
+                                                                                           data-date-of-order="<%= orderData[j].purchaseDate %>"
+                                                                                           data-payment-method="<%= orderData[j].paymentMethod %>"
+                                                                                           data-product-image="/products/images/<%= value.image[0] %>">
+
+                                                                                           </i>
+                                                                                    </td>
+                                                                                 
                                                                                 </td>
+
+
                                                                                 <td class="remove-col">
                                                                                     <% if
                                                                                         (orderData[j].status==='Delivered'
@@ -290,7 +335,9 @@
                                                                                                         class="btn btn-outline-primary-2 cancel-button">CANCEL<i
                                                                                                             class="icon-long-arrow-right"></i></a>
                                                                                                     <% } %>
+                                                                                                   
                                                                                 </td>
+                                          
                                                                                 <td>
                                                                                     <% if(orderData[j].status=="Delivered"
                                                                                         ){ %>
@@ -410,15 +457,7 @@
                                                     class="btn btn-danger profile-button">Remove profile</a>
                                             </div>
                                             <% } %>
-                                                <!-- <div class="col-lg-12">
-                                    <a href="/">
-                                        <button class="btn btn-outline-primary-2">
-                                            <span>CHANGE PASSWORD</span>
-                                            <i class="icon-long-arrow-right"></i>
-                                        </button>
-                                    </a>
-                                  
-                                </div> -->
+                                    
                                 <% } else { %>
                                     <p>No user  found.</p>
                                     <% } %>
@@ -435,7 +474,233 @@
         </div><!-- End .page-content -->
     </main><!-- End .main -->
 
+
+
+           
+<!-- MODAL -->
+<div class="modal fade" id="transparentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content bg-transparent border-0">
+            <div class="modal-body text-white">
+                
+                <img src="" alt="Product Image" class="img-fluid mb-3" id="productImage" width="100px" height="100px">
+
+               
+                <p><strong>Product Name:</strong> <span id="productname"></span></p>
+
+                <p><strong>Order Id: </strong> <span id="uniqueOrder"></span></p>
+                <p><strong>Date Of Order: </strong> <span id="orderdate"></span></p>
+                <p><strong>Quantity: </strong> <span id="quantityOrder"></span></p>
+                <p><strong>Payment Method: </strong> <span id="paymentmethod"></span></p>
+                <p><strong>Status: </strong><span id="statusOrder"></span></p>
+          
+                <p><strong>Max.Retail Price:</strong> ₹<span id="baseprice"></span></p>
+                <p><strong>Price After Deductions:</strong> ₹<span id="finalPrice1"></span></p>
+                <br>
+                <h5 class="modal-title mb-3">Delivery Address:</h5>
+              
+                <p><strong></strong> <span id="fullname"></span></p>
+                <p><strong></strong> <span id="mobile"></span></p>
+                <p><strong></strong> <span id="email"></span></p>
+                <p><strong></strong> <span id="houseNo"></span></p>
+                <p><strong></strong> <span id="city"></span></p>
+                <p><strong></strong> <span id="state"></span></p>
+                <p><strong></strong> <span id="zip"></span></p>
+                <p><strong></strong> <span id="addetails"></span></p>
+            </div>
+            
+        </div>
+    </div>
+</div>                                                       
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var productName = document.getElementById('productname');
+            var dateOfOrder = document.getElementById('orderdate');
+            var qty = document.getElementById('quantityOrder');
+            var payment = document.getElementById('paymentmethod');
+            var statusoforder = document.getElementById('statusOrder');
+            var orderidun = document.getElementById('uniqueOrder');
+            var baseMrp = document.getElementById('baseprice');
+            var finalprice = document.getElementById('finalPrice1');
+            var productImage = document.getElementById('productImage'); 
+
+            var fullname1 = document.getElementById('fullname');
+            var mobile1 = document.getElementById('mobile');
+            var email1 = document.getElementById('email');
+            var houseNo1 = document.getElementById('houseNo');
+            var city1 = document.getElementById('city');
+            var state1 = document.getElementById('state');
+            var zip1 = document.getElementById('zip');
+            var addetails1 = document.getElementById('addetails');
+            
+
+            
+            var caretIcons = document.querySelectorAll('.bi-caret-up-square');
+    
+            caretIcons.forEach(function (icon) {
+                icon.addEventListener('click', function () {
+                    // Retrieve order details from data attributes
+                    
+                    var productName1 = icon.getAttribute('data-product-name');
+                    var dateOfOrder1 = icon.getAttribute('data-date-of-order');
+                    var quantityOrder = icon.getAttribute('data-quantity');
+                    var paymentMethod = icon.getAttribute('data-payment-method');
+                    var orderstatus = icon.getAttribute('data-order-status');
+                    var orderId = icon.getAttribute('data-order-id');
+                    var mrp = icon.getAttribute('data-mrp');
+                    var fprice = icon.getAttribute('data-final-price');
+                    
+                    var fullname = icon.getAttribute('data-delivery-fullname');
+                    var mobile = icon.getAttribute('data-delivery-mobile');
+                    var email = icon.getAttribute('data-delivery-email');
+                    var houseNo = icon.getAttribute('data-delivery-houseNo');
+                    var city = icon.getAttribute('data-delivery-city');
+                    var state = icon.getAttribute('data-delivery-state');
+                    var zip = icon.getAttribute('data-delivery-zip');
+                    var addetails = icon.getAttribute('data-delivery-addetails');
+                    var productImageSrc = icon.getAttribute('data-product-image');
+
+                    
+
+
+
+                    productName.textContent = productName1;
+                    dateOfOrder.textContent = dateOfOrder1;
+                    qty.textContent = quantityOrder;
+                    payment.textContent = paymentMethod;
+                    statusoforder.textContent = orderstatus
+                    orderidun.textContent = orderId
+                    baseMrp.textContent = mrp
+                    finalprice.textContent = fprice
+
+                    fullname1.textContent = fullname
+                    mobile1.textContent = mobile
+                    email1.textContent = email
+                    houseNo1.textContent = houseNo
+                    city1.textContent = city
+                    state1.textContent = state
+                    zip1.textContent = zip
+                    addetails1.textContent = addetails
+                    productImage.src = productImageSrc;
+
+
+                    var modalInstance = new bootstrap.Modal(document.getElementById('transparentModal'));
+                    modalInstance.show();
+                });
+            });
+        });
+    </script>
+    
+
+
+    <script>
+        // Add an event listener to the name input for real-time validation
+        document.getElementById('edit-name-input').addEventListener('input', function () {
+          validateName();
+        });
+      
+        function validateName() {
+          var nameInput = document.getElementById('edit-name-input');
+          var nameError = document.getElementById('name-error');
+          var submitButton = document.getElementById('edit-profile-submit-button');
+      
+          // Check if the name is empty
+          if (nameInput.value.trim() === '') {
+            nameError.textContent = 'Name cannot be empty';
+            submitButton.disabled = true;
+            return;
+          }
+      
+          // Check if the name starts or ends with spaces
+          if (/^\s|\s$/.test(nameInput.value)) {
+            nameError.textContent = 'Name cannot start or end with spaces';
+            submitButton.disabled = true;
+            return;
+          }
+      
+          // Clear name errors
+          nameError.textContent = '';
+      
+          // Enable the submit button if all checks pass
+          submitButton.disabled = false;
+        }
+      </script>
+      
+    <script>
+        document.getElementById('edit-profile-button').addEventListener('click', function () {
+          // Toggle the visibility of the form fields
+          toggleVisibility('password-field');
+          toggleVisibility('confirm-password-field');
+          toggleVisibility('edit-profile-submit-button');
+          toggleReadOnly('name-field');
+          toggleReadOnly('email-field');
+          toggleReadOnly('mobile-field');
+        });
+    
+        function toggleVisibility(elementId) {
+          const element = document.getElementById(elementId);
+          element.style.display = element.style.display === 'none' ? 'block' : 'none';
+        }
+    
+        function toggleReadOnly(elementId) {
+          const inputElement = document.getElementById(elementId).querySelector('input');
+          inputElement.readOnly = !inputElement.readOnly;
+        }
+      </script>
+<script>
+    // Add an event listener to the new password input for real-time validation
+    document.getElementById('new-password-input').addEventListener('input', function () {
+      validatePassword();
+    });
+  
+    // Add an event listener to the confirm password input for real-time validation
+    document.getElementById('confirm-password-input').addEventListener('input', function () {
+      validatePassword();
+    });
+  
+    function validatePassword() {
+      var newPasswordInput = document.getElementById('new-password-input');
+      var confirmPasswordInput = document.getElementById('confirm-password-input');
+      var passwordMatchError = document.getElementById('password-match-error');
+      var submitButton = document.getElementById('edit-profile-submit-button');
+  
+      // Check if passwords match
+      if (newPasswordInput.value !== confirmPasswordInput.value) {
+        passwordMatchError.textContent = 'Passwords do not match';
+        submitButton.disabled = true;
+        return;
+      }
+  
+      // Clear password match error
+      passwordMatchError.textContent = '';
+  
+      // Validate password format
+      var passwordFormatRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+])[0-9a-zA-Z!@#$%^&*()_+]{8,}$/;
+      if (!passwordFormatRegex.test(newPasswordInput.value)) {
+        passwordMatchError.textContent = 'Password must be 8 characters long and include at least one uppercase letter, one lowercase letter, one special character, and one number.';
+        submitButton.disabled = true;
+        return;
+      }
+  
+      // Clear password format error
+      passwordMatchError.textContent = '';
+  
+      // Enable the submit button if all checks pass
+      submitButton.disabled = false;
+    }
+  </script>
+  
+
     <script>
         $(document).ready(function () {
             // Handle the cancel button click event
@@ -558,4 +823,6 @@
 
 
     </script>
+
+
     <%- include('../layout/footer.ejs') -%>

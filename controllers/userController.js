@@ -292,37 +292,7 @@ const loadUserError = async (req, res) => {
 };
 // ++++++++++++++++++++++++++++++++++++++ACCOUNT DASH LOAD++++++++++++++++++++++++++++++++++++++++++++++
 
-// const loadAcc = async (req, res) => {
-//   try {
-//     let accountDetails;
-//     let userName;
-//     let UserAddress;
-//     let addressId = req.query.id
-//     if (req.session.user_id) {
 
-//       const user = await User.findOne({ _id: req.session.user_id });
-//       const addresses = await Address.find({ User: req.session.user_id });
-//       const orderData = await Order.find({ userid: req.session.user_id }).populate("products.productId");
-
-//       console.log("kk"+addresses);
-
-//       if (user ) {
-//         userName = user.name;
-//         accountDetails = user;
-//          UserAddress = addresses;
-//          return res.render('account', { accountDetails, orderData, UserAddress ,userName});
-
-//       }
-//     }
-
-
-//     // If user or address is not found
-//     res.render('account', { userName: 'Please Login!',UserAddress:[] });
-//   } catch (error) {
-//     console.error(error.message);
-//     res.render('account', { userName: 'An error occurred',UserAddress:[] });
-//   }
-// }
 const loadAcc = async (req, res) => {
   try {
           
@@ -338,9 +308,10 @@ const loadAcc = async (req, res) => {
         .sort({ purchaseDate: -1 });
       const walletData = await Wallet.findOne({ userid: req.session.user_id })
    
-   
-       console.log(orderData);
-         
+      if (walletData && walletData.items && walletData.items.length > 0) {
+        const sortedItems = walletData.items.sort((a, b) => b._id.getTimestamp() - a._id.getTimestamp());
+        walletData.items = sortedItems;
+    }
 
       if (user) {
         userName = user.name;
@@ -362,26 +333,7 @@ const loadAcc = async (req, res) => {
 
 // ++++++++++++++++++++++++++++++++++++++ LOAD EDIT ADDRESS +++++++++++++++++++++++++++++++++++++++++++++++++++
 
-// const loadEditAddress = async(req,res) => {
-//   try {
-//     let userName
-//     let userAdd
-//     if (req.session.user_id) {
-//       const user = await User.findOne({ _id: req.session.user_id });
-//       const UserAddress = await Address.findOne({ User: user._id });
-//       if (user) {
-//          userName = user.name;
-//          userAdd = UserAddress.address
-//         return res.render('editAddress', { userName , userAdd  });
-//       }
-//     }
-//     else{
-//     res.render('editAddress', { userName });
-//     }
-//   } catch (error) {
-//     console.log(error.message);
-//   }
-// };
+
 const loadEditAddress = async (req, res) => {
   try {
     let userName;
@@ -392,7 +344,7 @@ const loadEditAddress = async (req, res) => {
     if (req.session.user_id) {
       const user = await User.findOne({ _id: req.session.user_id });
       const UserAddress = await Address.findOne({ _id: addressid });
-      console.log(UserAddress);
+     
 
       if (user) {
         userName = user.name;
@@ -695,7 +647,7 @@ const resetPasswordPost = async (req, res) => {
 
 const updateUserDetails = async (req, res) => {
   try {
-    const hashedPassword = await hashPassword(req.body.password);
+    const hashedPassword = await hashPassword(req.body.confirmPassword);
     const newDetails = {
       name: req.body.name,
       email: req.body.email,
