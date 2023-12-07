@@ -3,25 +3,27 @@ const Cart = require('../models/cartModel')
 const User = require('../models/userModel')
 const { log } = require('npmlog')
 
-
+// +++++++++++++++++++++++++++++ RENDER COUPON MANAGEMENT +++++++++++++++++++++++++++++++++
 const loadCoupon = async (req, res) => {
     try {
         const coupon = await Coupon.find({})
         res.render('couponManagement', { coupon })
     } catch (error) {
         console.log(error.message)
+        res.render('500')
     }
 }
-
+// +++++++++++++++++++++++++++++ RENDER ADD COUPON +++++++++++++++++++++++++++++++++
 const loadAddCoupon = async (req, res) => {
     try {
         res.render('addCoupon')
     }
     catch (error) {
         console.log(error.message)
+        res.render('500')
     }
 }
-
+// +++++++++++++++++++++++++++++  ADD COUPON TO DB +++++++++++++++++++++++++++++++++
 const addCoupon = async (req, res) => {
     try {
 
@@ -42,9 +44,10 @@ const addCoupon = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
+        res.render('500')
     }
 }
-
+// +++++++++++++++++++++++++++++ RENDER EDIT COUPON +++++++++++++++++++++++++++++++++
 const loadEditCoupon = async (req, res) => {
     try {
         const coupon = await Coupon.findOne({ _id: req.query.id })
@@ -53,9 +56,10 @@ const loadEditCoupon = async (req, res) => {
     }
     catch (error) {
         console.log(error.message)
+        res.render('500')
     }
 }
-
+// +++++++++++++++++++++++++++++ EDIT COUPON TO DB +++++++++++++++++++++++++++++++++
 const editCoupon = async (req, res) => {
     try {
         const id = req.query.id
@@ -76,26 +80,11 @@ const editCoupon = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
+        res.render('500')
     }
 }
 
-const blockCoupon = async (req, res) => {
-    try {
-        const blockedCoupon = await Coupon.findOne({ _id: req.query.id });
-        if (!blockedCoupon) {
-            return res.send('Category not found');
-        }
-
-        // Toggle the is_block status
-        blockedCoupon.status = blockedCoupon.status === 0 ? 1 : 0;
-        await blockedCoupon.save();
-
-        res.redirect('/admin/loadCoupon');
-    } catch (error) {
-        console.error(error.message);
-        res.status(500).send('Error blocking/unblocking Coupon');
-    }
-};
+// +++++++++++++++++++++++++++++ DELETE COUPON FROM DB +++++++++++++++++++++++++++++++++
 const deletecoupon = async (req, res) => {
     try {
 
@@ -104,19 +93,22 @@ const deletecoupon = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
+        res.render('500')
     }
 }
+
+// +++++++++++++++++++++++++++++ CALCULATE DISCOUNT ON COUPON +++++++++++++++++++++++++++++++++
 const calculateDiscountedTotal = (total, discountAmount) => {
     // Your discount calculation logic here
     return total - discountAmount;
 };
 
-
+// +++++++++++++++++++++++++++++ APPLY COUPON +++++++++++++++++++++++++++++++++
 const applyCoupon = async (req, res) => {
     try {
         const { couponCode } = req.body;
         const userId = req.session.user_id;
-      
+
         const currentDate = new Date();
 
         const coupon = await Coupon.findOne({ couponcode: couponCode });
@@ -152,13 +144,15 @@ const applyCoupon = async (req, res) => {
         // Update the cart with the discounted total
         const discountedTotal = calculateDiscountedTotal(cart.total, coupon.discountamount);
         await Cart.updateOne({ userid: userId }, { $set: { total: discountedTotal } });
-console.log(discountedTotal);
+
         // Send the updated total back to the client
-        return res.status(200).json({ success: true, message: 'Coupon applied successfully!',  discountedTotal,
-        couponDiscountAmount: coupon.discountamount, });
+        return res.status(200).json({
+            success: true, message: 'Coupon applied successfully!', discountedTotal,
+            couponDiscountAmount: coupon.discountamount,
+        });
     } catch (error) {
         console.error(error.message);
-        return res.status(500).json({ success: false, message: 'Internal server error' });
+        res.render('500')
     }
 };
 
@@ -168,7 +162,6 @@ module.exports = {
     addCoupon,
     editCoupon,
     loadEditCoupon,
-    blockCoupon,
     deletecoupon,
     applyCoupon
 }

@@ -7,29 +7,33 @@ const Offers = require('../models/productOfferModel');
 const product = require('../models/productModel');
 const CategoryOffer = require('../models/categoryOfferModel');
 
-
+// +++++++++++++++++++++++++++++ RENDER PRODUCT OFFER MANAGEMENT +++++++++++++++++++++++++++++++++
 const loadOffers = async (req, res) => {
     try {
         const offerDB = await Offers.find({}).lean();
+        if (offerDB) {
+            res.render('offerManagement', { offerDB });
+        }
+        res.render('offerManagement', { offerDB: [] });
 
-        res.render('offerManagement', { offerDB });
     } catch (error) {
         console.log(error.message);
-        res.render('offerManagement', { offerDB: [] });
+        res.render('500')
     }
 };
 
-
+// +++++++++++++++++++++++++++++ RENDER ADD OFFER PAGE ON PRODUCTS +++++++++++++++++++++++++++++++++
 const loadAddOffer = async (req, res) => {
     try {
         const product = await Product.find({ blocked: 0 });
         res.render('addOffer', { product });
     } catch (error) {
         console.log(error.message);
+        res.render('500')
     }
 }
 
-
+// +++++++++++++++++++++++++++++ ADD OFFERS ON PRODUCTS +++++++++++++++++++++++++++++++++
 const addOffers = async (req, res) => {
     try {
         const productData = await Product.findOne({ productname: req.body.product });
@@ -65,6 +69,7 @@ const addOffers = async (req, res) => {
         res.redirect('/admin/offers');
     }
 };
+// +++++++++++++++++++++++++++++ BLOCK OFFER ON PRODUCT +++++++++++++++++++++++++++++++++
 const blockOff = async (req, res) => {
     try {
         const blockOffer = await Offers.findOne({ _id: req.query.id });
@@ -79,10 +84,11 @@ const blockOff = async (req, res) => {
         res.redirect('/admin/offers');
     } catch (error) {
         console.error(error.message);
-        res.status(500).send('Error blocking/unblocking offer');
+        res.render('500')
     }
 };
 
+// +++++++++++++++++++++++++++++ DELETE OFFER ON PRODUCT +++++++++++++++++++++++++++++++++
 const deleteOffer = async (req, res) => {
     try {
         const currentData = await Offers.findOne({ _id: req.query.id });
@@ -112,11 +118,11 @@ const deleteOffer = async (req, res) => {
         res.redirect('/admin/offers');
     } catch (error) {
         console.log(error.message);
-        res.status(500).send('An error occurred');
+        res.render('500')
     }
 };
 
-
+// +++++++++++++++++++++++++++++ RENDER CATEGORY MANAGEMENT OFFERS +++++++++++++++++++++++++++++++++
 const loadCategoryOffers = async (req, res) => {
     try {
         const categoryOffers = await CategoryOffer.find({}).lean();
@@ -127,15 +133,17 @@ const loadCategoryOffers = async (req, res) => {
     }
 };
 
+// +++++++++++++++++++++++++++++ RENDER ADD CATEGORY OFFERS PAGE +++++++++++++++++++++++++++++++++
 const loadAddCategoryOffer = async (req, res) => {
     try {
         const categories = await Category.find();
         res.render('addCategoryOffer', { categories });
     } catch (error) {
-        console.log(error.message);
+        res.render('500')
     }
 };
 
+// +++++++++++++++++++++++++++++ ADD OFFER ON CATEGORY +++++++++++++++++++++++++++++++++
 const addCategoryOffer = async (req, res) => {
     try {
 
@@ -161,69 +169,51 @@ const addCategoryOffer = async (req, res) => {
 
         console.log(cattDB);
         const offerPrice = Math.floor((cattDB.price * percent) / 100);
-        const updateProductPrice = await Product.updateOne({ category: req.body.categories }, { $set: { discountPricecat:cattDB.price - offerPrice } })
+        const updateProductPrice = await Product.updateOne({ category: req.body.categories }, { $set: { discountPricecat: cattDB.price - offerPrice } })
         console.log(updateProductPrice);
         console.log('Category Offer added successfully');
 
         res.redirect('/admin/offersCat');
     } catch (error) {
         console.log(error.message);
-        
+        res.render('500')
     }
 };
 
-// const blockCategoryOffer = async (req, res) => {
-//     try {
-//         const blockCategoryOffer = await CategoryOffer.findOne({ _id: req.query.id });
-
-//         if (!blockCategoryOffer) {
-//             return res.status(404).send('Category offer not found');
-//         }
-
-//         blockCategoryOffer.is_block = blockCategoryOffer.is_block === 0 ? 1 : 0;
-//         await blockCategoryOffer.save();
-
-//         res.redirect('/admin/categoryOffers');
-//     } catch (error) {
-//         console.error(error.message);
-//         res.status(500).send('Error blocking/unblocking category offer');
-//     }
-// };
-
-
+// +++++++++++++++++++++++++++++ DELETE OFFER ON CATEGORY +++++++++++++++++++++++++++++++++
 const deleteCategoryOffer = async (req, res) => {
     try {
         console.log('123');
-        
+
         const currentData = await CategoryOffer.findOne({ _id: req.query.id });
-  
+
         const productDB = await Product.find({ category: currentData.categoryname });
-        
+
         console.log(productDB);
 
         if (productDB.length > 0) {
             console.log('Offer is not expired');
-            
+
             // Iterate through each product and update the discountPricecat field
             for (const product of productDB) {
                 if (product.discountPricecat) {
                     // Delete the field
-                   product.discountPricecat = null
-                    
+                    product.discountPricecat = null
+
                     // Save the updated document
                     await product.save();
                     console.log(product);
                 }
             }
         }
-        
-       
+
+
         await CategoryOffer.deleteOne({ _id: req.query.id });
-        
+
         res.redirect('/admin/offersCat');
     } catch (error) {
         console.log(error.message);
-        res.status(500).send('An error occurred');
+        res.render('500')
     }
 };
 

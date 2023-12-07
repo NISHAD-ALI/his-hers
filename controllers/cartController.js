@@ -45,6 +45,7 @@ const loadCart = async (req, res) => {
     res.render('cart', { user: req.session.name, cartData: cartData, userId, datatotal, totalamount, userName });
   } catch (error) {
     console.log(error.message);
+    res.render('500')
   }
 };
 // +++++++++++++++++++++++++++++ADD TO CART+++++++++++++++++++++++++++++++++
@@ -71,15 +72,15 @@ const addToCart = async (req, res) => {
 
           const discountPrices = [productData.discountPricepro, productData.price, productData.discountPricecat];
           const validDiscounts = discountPrices.filter(discount => discount !== null && discount !== undefined);
-        
+
           let smallestDiscount = validDiscounts ? Math.min(...validDiscounts) : undefined;
-          console.log(smallestDiscount+"00000000");
+          console.log(smallestDiscount + "00000000");
           const cartItem = {
             productId: productId,
             count: 1,
-            totalPrice: smallestDiscount  ? smallestDiscount : productData.price,
+            totalPrice: smallestDiscount ? smallestDiscount : productData.price,
           };
-          
+
 
           const newCart = await Cart.findOneAndUpdate(
             { userid: userId },
@@ -99,6 +100,7 @@ const addToCart = async (req, res) => {
     }
   } catch (error) {
     console.log(error.message);
+    res.render('500')
   }
 };
 
@@ -149,7 +151,7 @@ const updateCartQuantity = async (req, res) => {
     }
   } catch (error) {
     console.error(error.message);
-    res.status(500).json({ error: 'Internal server error' });
+    res.render('500');
   }
 };
 
@@ -178,7 +180,7 @@ const deleteCartProduct = async (req, res) => {
   } catch (error) {
     console.log(error.message);
 
-    res.status(500).json({ error: 'Internal server error' });
+    res.render('500');
   }
 };
 

@@ -9,7 +9,7 @@ let pdf = require('html-pdf')
 let ejs = require('ejs')
 let path = require('path')
 const ExcelJS = require('exceljs');
-const zip = require('express-zip'); 
+const zip = require('express-zip');
 const { query } = require('express');
 
 
@@ -77,8 +77,8 @@ const loginAdmin = async (req, res) => {
 const logoutAdmin = async (req, res) => {
   try {
     req.session.admin_id = false;
-      res.redirect('/admin/adminLogin');
-  
+    res.redirect('/admin/adminLogin');
+
   } catch (error) {
     console.log(error.message);
     res.render('500')
@@ -144,7 +144,7 @@ const loadAdminDash = async (req, res) => {
     res.render('500')
   }
 };
-
+// ++++++++++++++++++++++++++++++++++++++DASHBOARD CHART WEEK FILTER++++++++++++++++++++++++++++++++++++++++++++++
 
 const chartFilterWeek = async (req, res) => {
   try {
@@ -175,7 +175,7 @@ const chartFilterWeek = async (req, res) => {
     res.render('500')
   }
 }
-
+// ++++++++++++++++++++++++++++++++++++++DASHBOARD CHART MONTH FILTER++++++++++++++++++++++++++++++++++++++++++++++
 const chartFilterMonth = async (req, res) => {
   try {
     const totalCodMonth = await Order.countDocuments({
@@ -201,6 +201,7 @@ const chartFilterMonth = async (req, res) => {
     res.render('500')
   }
 }
+// ++++++++++++++++++++++++++++++++++++++DASHBOARD CHART YEAR FILTER++++++++++++++++++++++++++++++++++++++++++++++
 const chartFilterYear = async (req, res) => {
   try {
     const totalCodYear = await Order.countDocuments({
@@ -343,7 +344,7 @@ const editcat = async (req, res) => {
 // ++++++++++++++++++++++++++++++++++++++EDIT CATEGORY POST ++++++++++++++++++++++++++++++++++++++++++++++
 const editcatPOST = async (req, res) => {
   try {
-   
+
     const categoryId = req.body.categoryId;
     const newCatname = req.body.catName;
     const categ = await category.findOne({ _id: categoryId });
@@ -354,18 +355,18 @@ const editcatPOST = async (req, res) => {
     const exists = await category.findOne({
       name: { $regex: `^${newCatname}$`, $options: 'i' },
     });
-   
+
     console.log(exists);
-    
+
     if (exists) {
       res.render("editCategory", {
-        message: "Entered category already exists.",cats:categ
+        message: "Entered category already exists.", cats: categ
       });
     } else {
       categ.name = newCatname;
-    await categ.save();
+      await categ.save();
 
-    res.redirect('/admin/categoryManagement');
+      res.redirect('/admin/categoryManagement');
     }
 
   } catch (error) {
@@ -385,7 +386,7 @@ const loadAdminError = async (req, res) => {
     res.render('500')
   }
 };
-
+// ++++++++++++++++++++++++++++++++++++++UPDATING ORDER STATUS++++++++++++++++++++++++++++++++++++++++++++++
 const updateOrderStatus = async (req, res) => {
   try {
     const { orderId, newStatus } = req.body;
@@ -400,7 +401,7 @@ const updateOrderStatus = async (req, res) => {
     res.render('500')
   }
 };
-
+// ++++++++++++++++++++++++++++++++++++++RENDER ORDER PAGE++++++++++++++++++++++++++++++++++++++++++++++
 const loadOrder = async (req, res) => {
   try {
 
@@ -411,19 +412,19 @@ const loadOrder = async (req, res) => {
         select: 'name'
       })
       .populate('products.productId').sort({ purchaseDate: -1 });
-    
-    if(orderDat){
+
+    if (orderDat) {
       res.render('orderManagement', { orderDat })
-    } else{
-      res.render('orderManagement', { orderDat:{} })
+    } else {
+      res.render('orderManagement', { orderDat: {} })
     }
-   
+
   } catch (error) {
     console.log(error.message)
     res.render('500')
   }
 }
-
+// ++++++++++++++++++++++++++++++++++++++RENDER SALES SUMMARY PAGE++++++++++++++++++++++++++++++++++++++++++++++
 const loadSalesSum = async (req, res) => {
   try {
     const orderDat = await Order.find({})
@@ -440,7 +441,7 @@ const loadSalesSum = async (req, res) => {
   }
 }
 
-
+// ++++++++++++++++++++++++++++++++++++++FILTER SALE AND DOWNLOAD REPORT++++++++++++++++++++++++++++++++++++++++++++++
 const filterSaleYear = async (req, res) => {
   try {
     let filter = {};

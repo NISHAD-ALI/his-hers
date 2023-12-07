@@ -33,7 +33,7 @@ const loadProduct = async (req, res) => {
     }
   } catch (error) {
     console.log(error.message);
-    res.status(404).render("404");
+    res.render('500')
   }
 };
 // ++++++++++++++++++++++++++++++++++++++ADD NEW PRODUCT LOAD ++++++++++++++++++++++++++++++++++++++++++++++
@@ -44,6 +44,7 @@ const loadNewProduct = async (req, res) => {
     res.render("addProduct", { categories });
   } catch (error) {
     console.log(error.message);
+    res.render('500')
   }
 };
 // ++++++++++++++++++++++++++++++++++++++ ADD FULL DETAILS OF PRODUCTS AND SAVE TO DB ++++++++++++++++++++++++++++++++++++++++++++++
@@ -97,7 +98,7 @@ const newproduct = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).send('An error occurred');
+    res.render('500')
   }
 };
 
@@ -117,7 +118,7 @@ const blockPro = async (req, res) => {
     res.redirect('/admin/productManagement');
   } catch (error) {
     console.error(error.message);
-    res.status(500).send('Error blocking/unblocking product');
+    res.render('500')
   }
 };
 // ++++++++++++++++++++++++++++++++++++++LOAD EDIT PRODUCTS ++++++++++++++++++++++++++++++++++++++++++++++
@@ -128,7 +129,7 @@ const loadEditProduct = async (req, res) => {
     res.render("editProduct", { currentData: editProducts, catData, image: editProducts.image });
   } catch (error) {
     console.log(error.message);
-    res.status(404).render("404");
+    res.render('500')
   }
 };
 
@@ -163,9 +164,10 @@ const editProduct = async (req, res) => {
     res.redirect('/admin/productManagement');
   } catch (error) {
     console.log(error.message);
+    res.render('500')
   }
 };
-
+// ++++++++++++++++++++++++++++++++++++++ DELETE IMAGE OF PRODUCTS ++++++++++++++++++++++++++++++++++++++++++++++
 const deleteImage = async (req, res) => {
   try {
     console.log('334');
@@ -182,7 +184,7 @@ const deleteImage = async (req, res) => {
     console.log(productimage);
   } catch (error) {
     console.error('Error deleting image:', error);
-    res.status(500).json({ error: 'Internal server error.' });
+    res.render('500')
   }
 }
 
@@ -203,7 +205,7 @@ const deleteProduct = async (req, res) => {
     res.redirect('/admin/productManagement');
   } catch (error) {
     console.log(error.message);
-    res.status(500).send('An error occurred');
+    res.render('500')
   }
 };
 // ++++++++++++++++++++++++++++++++++++++ LOAD LIST OF PRODUCTS++++++++++++++++++++++++++++++++++++++++++++++
@@ -230,6 +232,7 @@ const loadProductList = async (req, res) => {
     res.render('productList', renderData);
   } catch (error) {
     console.log(error.message);
+    res.render('500')
   }
 }
 
@@ -269,9 +272,11 @@ const loadUserProduct = async (req, res) => {
     }
   } catch (error) {
     console.log(error.message);
+    res.render('500')
   }
 };
 
+// ++++++++++++++++++++++++++++++++++++++ SEARCH PRODUCTS++++++++++++++++++++++++++++++++++++++++++++++
 const searchProducts = async (req, res) => {
   try {
     const data = req.query.searchdata;
@@ -285,12 +290,12 @@ const searchProducts = async (req, res) => {
     res.render('productList', renderData);
   } catch (error) {
     console.log(error.message);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.render('500')
   }
 };
 
 
-
+// ++++++++++++++++++++++++++++++++++++++ LOAD SORTED PRODUCTS++++++++++++++++++++++++++++++++++++++++++++++
 
 const sortProducts = async (req, res) => {
   try {
@@ -323,15 +328,15 @@ const sortProducts = async (req, res) => {
 
   } catch (error) {
     console.error(error);
-    res.status(500).send('Internal Server Error');
+    res.render('500')
   }
 };
 
-
+// ++++++++++++++++++++++++++++++++++++++ LOAD FILTER PRODUCTS++++++++++++++++++++++++++++++++++++++++++++++
 const filteredProducts = async (req, res) => {
   try {
 
- 
+
     const priceRange = req.body.priceRange;
     const selectedCategories = req.body.categories;
     const [minPrice, maxPrice] = priceRange.split('-').map(Number);
@@ -342,16 +347,16 @@ const filteredProducts = async (req, res) => {
     });
     const discount = await Offers.find({ is_block: 0 });
     const renderData = { products: filteredProducts, discPrice: discount };
-   
+
 
     res.render('productList', renderData);
   } catch (error) {
     console.log(error.message);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.render('500')
   }
 };
 
-
+// ++++++++++++++++++++++++++++++++++++++ LOAD MEN CATEGORY PRODUCTS++++++++++++++++++++++++++++++++++++++++++++++
 const menCat = async (req, res) => {
   try {
     let userName = '';
@@ -381,9 +386,11 @@ const menCat = async (req, res) => {
     res.render('menCategory', renderData);
   } catch (error) {
     console.log(error.message);
+    res.render('500')
   }
 };
 
+// ++++++++++++++++++++++++++++++++++++++ LOAD WOMEN CATEGORY PRODUCTS++++++++++++++++++++++++++++++++++++++++++++++
 const womenCat = async (req, res) => {
   try {
     let userName = '';
@@ -412,10 +419,11 @@ const womenCat = async (req, res) => {
     res.render('womenCategory', renderData);
   } catch (error) {
     console.log(error.message);
+    res.render('500')
   }
 };
 
-
+// ++++++++++++++++++++++++++++++++++++++ LOAD FRESH ARRIVAL PRODUCTS++++++++++++++++++++++++++++++++++++++++++++++
 const loadfreshArrivals = async (req, res) => {
   try {
     let userName = '';
@@ -441,6 +449,7 @@ const loadfreshArrivals = async (req, res) => {
     res.render('freshArrivals', renderData);
   } catch (error) {
     console.log(error.message)
+    res.render('500')
 
   }
 }

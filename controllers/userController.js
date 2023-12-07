@@ -32,6 +32,7 @@ const hashPassword = async (password) => {
     return passHash
   } catch (error) {
     console.log(error.message)
+    res.render('500')
   }
 }
 // ++++++++++++++++++++++++++++++++++++++LOGIN SIGNUP(BOTH IN SAMEPAGE)++++++++++++++++++++++++++++++++++++++++++++++
@@ -40,6 +41,7 @@ const loadSignup = async (req, res) => {
     res.render('login')
   } catch (error) {
     console.log(error.message);
+    res.render('500')
   }
 }
 
@@ -82,25 +84,26 @@ const insertNewUser = async (req, res) => {
     const defaultWallet = new Wallet({
       userid: newuser._id,
       balance: 0,
-      items: [], 
+      items: [],
     });
-  
+
     // Save the default wallet
     const savedWallet = await defaultWallet.save();
-  
+
     if (userData) {
       // Send verification email
       sendVerifyMail(req.body.newUsername, req.body.newEmail, userData._id);
       email2 = req.body.newEmail;
       nameResend = req.body.newUsername;
       user_id = userData._id;
-      
+
       res.render('otppage', { message: 'Check your email for the OTP.', newuser });
     } else {
       res.render('login', { message1: 'Failed to register' });
     }
   } catch (error) {
     console.log(error.message);
+    res.render('500')
   }
 };
 
@@ -141,6 +144,7 @@ const sendVerifyMail = async (name, email) => {
     console.log('Email has been sent:', info.response);
   } catch (error) {
     console.error('Error sending email:', error.message);
+    res.render('500')
   }
 };
 // // ++++++++++++++++++++++++++++++++++++++RESEND OTP +++++++++++++++++++++++++++++++++++++++++++++
@@ -157,6 +161,7 @@ const resendOTP = async (req, res) => {
 
   catch (error) {
     console.log(error);
+    res.render('500')
   }
 }
 
@@ -171,7 +176,7 @@ const verifymail = async (req, res) => {
     if (req.body.otp == otpsend) {
       const use = req.body.usermon
       const updateinfo = await User.updateOne({ email: email2 }, { $set: { is_verified: 1 } });
-      console.log(use+"111111111111111");
+      console.log(use + "111111111111111");
       // res.redirect('/login');
       res.render('login', { message: 'Your Account has been created.' });
     } else {
@@ -179,6 +184,7 @@ const verifymail = async (req, res) => {
     }
   } catch (error) {
     console.error('Error during OTP verification:', error.message);
+    res.render('500')
   }
 };
 
@@ -248,15 +254,15 @@ const loadHome = async (req, res) => {
         }
       ]
     });
-    
-   
-  
+
+
+
     if (req.session.user_id) {
       const user = await User.findOne({ _id: req.session.user_id });
 
       if (user) {
         userName = user.name;
-        return res.render('home', { userName, products: productData, discPrice: discount ,discCat :discountcategory });
+        return res.render('home', { userName, products: productData, discPrice: discount, discCat: discountcategory });
       }
     }
     else {
@@ -264,6 +270,7 @@ const loadHome = async (req, res) => {
     }
   } catch (error) {
     console.log(error.message)
+    res.render('500')
   }
 }
 
@@ -278,6 +285,7 @@ const logoutUser = (req, res) => {
     res.redirect('/login');
   } catch (error) {
     console.log(error.message);
+    res.render('500')
   }
 }
 
@@ -288,6 +296,7 @@ const loadUserError = async (req, res) => {
     res.status(404).render("404");
   } catch (error) {
     console.log(error.message);
+    res.render('500')
   }
 };
 // ++++++++++++++++++++++++++++++++++++++ACCOUNT DASH LOAD++++++++++++++++++++++++++++++++++++++++++++++
@@ -295,7 +304,7 @@ const loadUserError = async (req, res) => {
 
 const loadAcc = async (req, res) => {
   try {
-          
+
     let accountDetails;
     let userName;
     let UserAddress;
@@ -307,27 +316,27 @@ const loadAcc = async (req, res) => {
         .populate("products.productId")
         .sort({ purchaseDate: -1 });
       const walletData = await Wallet.findOne({ userid: req.session.user_id })
-   
+
       if (walletData && walletData.items && walletData.items.length > 0) {
         const sortedItems = walletData.items.sort((a, b) => b._id.getTimestamp() - a._id.getTimestamp());
         walletData.items = sortedItems;
-    }
+      }
 
       if (user) {
         userName = user.name;
         accountDetails = user;
         UserAddress = addresses;
 
-        return res.render('account', { accountDetails, orderData, UserAddress, userName ,walletData});
+        return res.render('account', { accountDetails, orderData, UserAddress, userName, walletData });
       }
     }
 
     // If user or address is not found
-    res.render('account', { userName, UserAddress: [] ,accountDetails: [],orderData: [],walletData: []});
+    res.render('account', { userName, UserAddress: [], accountDetails: [], orderData: [], walletData: [] });
   } catch (error) {
     console.error(error.message);
-    
-    res.render('account', { userName, UserAddress: [] ,accountDetails: [],orderData: [],walletData: []});
+
+    res.render('account', { userName, UserAddress: [], accountDetails: [], orderData: [], walletData: [] });
   }
 };
 
@@ -344,7 +353,7 @@ const loadEditAddress = async (req, res) => {
     if (req.session.user_id) {
       const user = await User.findOne({ _id: req.session.user_id });
       const UserAddress = await Address.findOne({ _id: addressid });
-     
+
 
       if (user) {
         userName = user.name;
@@ -357,6 +366,7 @@ const loadEditAddress = async (req, res) => {
     res.render('editAddress', { userName, userAdd });
   } catch (error) {
     console.log(error.message);
+    res.render('500')
   }
 };
 
@@ -378,6 +388,7 @@ const loadAddAddress = async (req, res) => {
     }
   } catch (error) {
     console.log(error.message);
+    res.render('500')
   }
 };
 
@@ -409,6 +420,7 @@ const addAddress = async (req, res) => {
     }
   } catch (error) {
     console.log(error.message);
+    res.render('500')
   }
 }
 
@@ -460,7 +472,7 @@ const deleteAddress = async (req, res) => {
     res.redirect('/myAccount');
   } catch (error) {
     console.log(error.message);
-    res.status(500).send('An error occurred');
+    res.render('500')
   }
 };
 // ++++++++++++++++++++++++++++++++++++++ SEND RESET PASSWORD EMAIL +++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -593,7 +605,7 @@ const resetPasswordEmailLink = async (req, res) => {
     });
   } catch (error) {
     console.log(error.message);
-    return res.status(500).json({ error: 'Internal server error' });
+    res.render('500')
   }
 };
 
@@ -613,6 +625,7 @@ const loadpassReset = async (req, res) => {
     res.render('resetPassword', { token })
   } catch (error) {
     console.log(error.message);
+    res.render('500')
   }
 }
 // ++++++++++++++++++++++++++++++++++++++  RESET PASSWORD POST +++++++++++++++++++++++++++++++++++++++++++++++++++   
@@ -639,7 +652,7 @@ const resetPasswordPost = async (req, res) => {
     res.redirect('/login');
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.render('500')
   }
 }
 
@@ -667,7 +680,7 @@ const updateUserDetails = async (req, res) => {
   }
 };
 
-
+// ++++++++++++++++++++++++++++++++++++++ RENDER WISHLIST +++++++++++++++++++++++++++++++++++++++++++++++++++  
 const loadWishlist = async (req, res) => {
   try {
     const user = req.session.user_id;
@@ -693,11 +706,11 @@ const loadWishlist = async (req, res) => {
   } catch (error) {
     console.error(error.message);
 
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.render('500')
   }
 };
 
-
+// ++++++++++++++++++++++++++++++++++++++ ADD PRODUCT TO WISHLIST +++++++++++++++++++++++++++++++++++++++++++++++++++  
 const addtoWishlist = async (req, res) => {
   try {
     const user = req.session.user_id;
@@ -727,11 +740,11 @@ const addtoWishlist = async (req, res) => {
     }
   } catch (error) {
     console.log(error.message);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.render('500')
   }
 };
 
-
+// ++++++++++++++++++++++++++++++++++++++ DELETE PRODUCT FROM WISHLIST +++++++++++++++++++++++++++++++++++++++++++++++++++  
 const deleteWishproduct = async (req, res) => {
   try {
     const user = req.session.user_id;
@@ -743,17 +756,19 @@ const deleteWishproduct = async (req, res) => {
 
   } catch (error) {
     console.log(error.message)
+    res.render('500')
   }
 }
 
-
+// ++++++++++++++++++++++++++++++++++++++ RENDER ABOUT US +++++++++++++++++++++++++++++++++++++++++++++++++++  
 const loadAboutUs = async (req, res) => {
   try {
-   
-  
+
+
     res.render('aboutus')
   } catch (error) {
     console.log(error.message);
+    res.render('500')
   }
 }
 
@@ -785,6 +800,6 @@ module.exports = {
   addtoWishlist,
   deleteWishproduct,
   loadAboutUs,
-  
+
 };
 

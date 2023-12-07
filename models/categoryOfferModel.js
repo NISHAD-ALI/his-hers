@@ -8,7 +8,7 @@ const categoryOfferSchema = new mongoose.Schema({
     },
     categoryname: {
         type: String,
-        required:true
+        required: true
     },
     percentage: {
         type: Number,
