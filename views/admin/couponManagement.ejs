@@ -17,7 +17,7 @@
               </a>
             </div>
             <br>
-            <!-- style="overflow: scroll; max-height: 300px;" -->
+            
             <div class="table-responsive">
               <table class="table " >
                 <thead>
@@ -29,9 +29,8 @@
                     <th>Active Date</th>
                     <th>Expiry Date</th>
                     <th>Min Sale</th>
-                    <th>Users Limit</th>
                     <th>Status</th>
-                    <th>Actions</th>
+                 
                   </tr>
                 </thead>
                 <tbody>
@@ -53,17 +52,11 @@
                     <td><%= formatDate(coupon[i].activationdate) %></td>
                     <td><%= formatDate(coupon[i].expirydate) %></td>
                     <td><%= coupon[i].criteriaamount %></td>
-                    <td><%= coupon[i].description %></td>
+                    
                     <td class="<%= coupon[i].status === 1 ? 'text-danger' : 'text-success' %>">
                         <%= coupon[i].status === 1 ? 'Blocked' : 'Active' %>
                       </td>
-                      <td>
-                        <a href="/admin/blockCoupon?id=<%= coupon[i]._id %>" class="badge <%= coupon[i].status === 1 ? 'badge-success' : 'badge-danger' %>"
-                          onclick="return confirm('Are you sure? <%= coupon[i].status === 1 ? 'Do you want to Unblock?': 'Do you want to Block?' %>')">
-                          <%= coupon[i].status === 1 ? 'LIST' : 'UNLIST' %>
-                        </a>
-                      </td>
-                      
+                    
                     <td>
                       <a href="/admin/loadEditCoupon?id=<%= coupon[i]._id %>"><i class="bi bi-pencil-square"></i></a>
                     </td>

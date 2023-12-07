@@ -26,10 +26,6 @@ const coupondata = new mongoose.Schema({
         type: Number,
         required: true
     },
-    userslimit: {
-        type: Number,
-        required: true
-    },
     description: {
         type: String,
         required: true

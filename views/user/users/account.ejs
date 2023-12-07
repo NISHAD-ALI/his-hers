@@ -36,28 +36,30 @@
             flex: 1;
             padding: 5px;
         }
-    #productname,
-    #uniqueOrder,
-    #orderdate,
-    #quantityOrder,
-    #paymentmethod,
-    #statusOrder,
-    #baseprice,
-    #finalPrice1,
-    #fullname,
-    #mobile,
-    #email,
-    #houseNo,
-    #city,
-    #state,
-    #zip,
-    #addetails {
-        color: #ffffff; /* Set the desired text color */
-    }
-    .modal-title{
-        color: #c7a2a2;
-    }
 
+        #productname,
+        #uniqueOrder,
+        #orderdate,
+        #quantityOrder,
+        #paymentmethod,
+        #statusOrder,
+        #baseprice,
+        #finalPrice1,
+        #fullname,
+        #mobile,
+        #email,
+        #houseNo,
+        #city,
+        #state,
+        #zip,
+        #addetails {
+            color: #ffffff;
+            /* Set the desired text color */
+        }
+
+        .modal-title {
+            color: #c7a2a2;
+        }
     </style>
     <main class="main">
         <div class="page-header text-center" style="background-image: url('user/images/page-header-bg.jpg')">
@@ -69,7 +71,7 @@
             <div class="container">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="/">Home</a></li>
-                   
+
                     <li class="breadcrumb-item active" aria-current="page">My Account</li>
                 </ol>
             </div><!-- End .container -->
@@ -94,12 +96,12 @@
                                     <a class="nav-link" id="tab-orders-link" data-toggle="tab" href="#tab-orders"
                                         role="tab" aria-controls="tab-orders" aria-selected="false">Orders</a>
                                 </li>
-                               
+
                                 <li class="nav-item">
                                     <a class="nav-link" id="tab-address-link" data-toggle="tab" href="#tab-address"
                                         role="tab" aria-controls="tab-address" aria-selected="false">Address</a>
                                 </li>
-                                
+
                                 <li class="nav-item">
                                     <a class="nav-link" href="/logout">Sign Out</a>
                                 </li>
@@ -109,109 +111,134 @@
                         <div class="col-md-8 col-lg-9">
 
                             <div class="tab-content">
-                                <div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel" aria-labelledby="tab-dashboard-link">
+                                <div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel"
+                                    aria-labelledby="tab-dashboard-link">
                                     <% if (accountDetails) { %>
-                                      <div class="row">
-                                        <div class="col-lg-6">
-                                          <a href="#" id="edit-profile-button"><i class="bi bi-pen float-right"></i></a>
-                                          <form id="edit-profile-form" action="/updateUserDetails" method="post">
-                                            <div class="mb-3" id="name-field">
-                                              <label for="exampleInputName" class="form-label">Name</label>
-                                              <input type="text" class="form-control" id="edit-name-input" value="<%= accountDetails.name %>" name="name" readonly>
-                                              <span id="name-error" style="color: red;"></span>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <a href="#" id="edit-profile-button"><i
+                                                        class="bi bi-pen float-right"></i></a>
+                                                <form id="edit-profile-form" action="/updateUserDetails" method="post">
+                                                    <div class="mb-3" id="name-field">
+                                                        <label for="exampleInputName" class="form-label">Name</label>
+                                                        <input type="text" class="form-control" id="edit-name-input"
+                                                            value="<%= accountDetails.name %>" name="name" readonly>
+                                                        <span id="name-error" style="color: red;"></span>
+                                                    </div>
+                                                    <div class="mb-3" id="password-field" style="display: none;">
+                                                        <label for="new-password-input" class="form-label">New
+                                                            Password</label>
+                                                        <input type="password" class="form-control"
+                                                            id="new-password-input" name="newPassword">
+                                                    </div>
+                                                    <div class="mb-3" id="confirm-password-field"
+                                                        style="display: none;">
+                                                        <label for="confirm-password-input" class="form-label">Confirm
+                                                            Password</label>
+                                                        <input type="password" class="form-control"
+                                                            id="confirm-password-input" name="confirmPassword">
+                                                        <span id="password-match-error" style="color: red;"></span>
+                                                    </div>
+                                                    <div class="mb-3" id="email-field">
+                                                        <label for="exampleInputEmail1" class="form-label">Email
+                                                            address</label>
+                                                        <input type="email" class="form-control" id="edit-email-input"
+                                                            value="<%= accountDetails.email %>" name="email" readonly>
+                                                    </div>
+                                                    <div class="mb-3" id="mobile-field">
+                                                        <label for="edit-mobile-input" class="form-label">Mobile</label>
+                                                        <input type="text" class="form-control" id="edit-mobile-input"
+                                                            value="<%= accountDetails.Mobile %>" name="Mobile" readonly>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary"
+                                                        id="edit-profile-submit-button"
+                                                        style="display: none;">Submit</button>
+                                                </form>
                                             </div>
-                                            <div class="mb-3" id="password-field" style="display: none;">
-                                              <label for="new-password-input" class="form-label">New Password</label>
-                                              <input type="password" class="form-control" id="new-password-input" name="newPassword">
-                                            </div>
-                                            <div class="mb-3" id="confirm-password-field" style="display: none;">
-                                              <label for="confirm-password-input" class="form-label">Confirm Password</label>
-                                              <input type="password" class="form-control" id="confirm-password-input" name="confirmPassword">
-                                              <span id="password-match-error" style="color: red;"></span>
-                                            </div>
-                                            <div class="mb-3" id="email-field">
-                                              <label for="exampleInputEmail1" class="form-label">Email address</label>
-                                              <input type="email" class="form-control" id="edit-email-input" value="<%= accountDetails.email %>" name="email" readonly>
-                                            </div>
-                                            <div class="mb-3" id="mobile-field">
-                                              <label for="edit-mobile-input" class="form-label">Mobile</label>
-                                              <input type="text" class="form-control" id="edit-mobile-input" value="<%= accountDetails.Mobile %>" name="Mobile" readonly>
-                                            </div>
-                                            <button type="submit" class="btn btn-primary" id="edit-profile-submit-button" style="display: none;">Submit</button>
-                                          </form>
                                         </div>
-                                      </div>
-                                    </div>
-                                  
+                                </div>
+
                                 <div class="tab-pane fade show" id="tab-wallet" role="tabpanel"
                                     aria-labelledby="tab-wallet-link">
                                     <div class="container">
                                         <div class="row justify-content-center">
-                                     
-                                           <% if (walletData) { %>
-                                            
-                                            <div class="col-md-6 d-flex align-items-center mb-4 mr-1">
-                                                <!-- Added 'mb-4' for margin-bottom spacing -->
-                                                <div class="card" style="width: 400px; height: 300px;">
-                                                    <!-- Adjust width and height as needed -->
-                                                    <div class="card-body text-center">
-                                                        <!-- Added 'text-center' class here -->
-                                                        <h3>My Wallet</h3>
-                                                        <!-- Added 'card-title' class for the heading -->
-                                                        <p class="card-text">Wallet Id: **** **** **** 1234</p>
-                                                        <div class="capsule">
-                                                            <h5>Avl Bal</h5>
-                                                            <h6>₹<%= walletData.balance %>.00</h6>
-                                                        </div>
-                                                        <br>
-                                                        <!-- <a href="#" class="btn btn-outline-primary-2 shop-button"> Add
+
+                                            <% if (walletData) { %>
+
+                                                <div class="col-md-6 d-flex align-items-center mb-4 mr-1">
+                                                    <!-- Added 'mb-4' for margin-bottom spacing -->
+                                                    <div class="card" style="width: 400px; height: 300px;">
+                                                        <!-- Adjust width and height as needed -->
+                                                        <div class="card-body text-center">
+                                                            <!-- Added 'text-center' class here -->
+                                                            <h3>My Wallet</h3>
+                                                            <!-- Added 'card-title' class for the heading -->
+                                                            <p class="card-text">Wallet Id: **** **** **** 1234</p>
+                                                            <div class="capsule">
+                                                                <h5>Avl Bal</h5>
+                                                                <h6>₹<%= walletData.balance %>.00</h6>
+                                                            </div>
+                                                            <br>
+                                                            <!-- <a href="#" class="btn btn-outline-primary-2 shop-button"> Add
                                                             Money To Wallet
                                                             <i class="icon-long-arrow-right"></i></a> -->
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
 
-                                            <!-- Second Card -->
-                                            <div class="col-md-6 pl-6 d-flex align-items-center mb-4">
-                                                <div class="card" style="width: 400px; height: 300px; position: relative;">
-                                                    <div class="card-body text-center" style="overflow: scroll; max-height: 300px;">
-                                                        <h3>Recent Transactions</h3>
-                                                        <table class="table">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Date</th>
-                                                                    <th>Description</th>
-                                                                    <th>Amount</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                 
-                                                                 
-                                                                         
-                                                      
-                                                           <% const wallet = walletData.items  %>
-                                                            
-                                                            <% for (let i=0; i < wallet.length; i++) { %>
-                                                                <% const value = wallet[i]; %>
-                                                                <tr>
-                                                                    <td><%= value.date.toLocaleString('en-US', { year: 'numeric' ,
-                                                                        month: 'short' , day: '2-digit' , hour: '2-digit' , minute: '2-digit' ,
-                                                                        second: '2-digit' }).replace(/,/, '' ).replace(/\//g, '-' ) %></td>
-                                                                    <td> <%= value.type %></td>
-                                                                    <td>₹<%= value.amount %>.00</td>
-                                                                </tr>
-                                                                
-                                                                <% } %>
-                                                               
+                                                <!-- Second Card -->
+                                                <div class="col-md-6 pl-6 d-flex align-items-center mb-4">
+                                                    <div class="card"
+                                                        style="width: 400px; height: 300px; position: relative;">
+                                                        <div class="card-body text-center"
+                                                            style="overflow: scroll; max-height: 300px;">
+                                                            <h3>Recent Transactions</h3>
+                                                            <table class="table">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Date</th>
+                                                                        <th>Description</th>
+                                                                        <th>Amount</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
 
-                                                            </tbody>
-                                                        </table>
+
+
+
+                                                                    <% const wallet=walletData.items %>
+
+                                                                        <% for (let i=0; i < wallet.length; i++) { %>
+                                                                            <% const value=wallet[i]; %>
+                                                                                <tr>
+                                                                                    <td>
+                                                                                        <%= value.date.toLocaleString('en-US',
+                                                                                            { year: 'numeric' ,
+                                                                                            month: 'short' ,
+                                                                                            day: '2-digit' ,
+                                                                                            hour: '2-digit' ,
+                                                                                            minute: '2-digit' ,
+                                                                                            second: '2-digit'
+                                                                                            }).replace(/,/, ''
+                                                                                            ).replace(/\//g, '-' ) %>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <%= value.type %>
+                                                                                    </td>
+                                                                                    <td>₹<%= value.amount %>.00</td>
+                                                                                </tr>
+
+                                                                                <% } %>
+
+
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <% } else { %>
-                                                <p>No wallet found.</p>
-                                                <% } %>
+                                                <% } else { %>
+                                                    <p>No wallet found.</p>
+                                                    <% } %>
                                         </div>
                                     </div>
                                 </div>
@@ -244,7 +271,7 @@
 
                                                                 <tr>
 
-     
+
 
                                                                     <td class="product-col">
                                                                         <div class="product">
@@ -256,14 +283,14 @@
                                                                             </figure>
                                                                             <h3 class="product-title">
                                                                                 <a href="#">
-                                                                                    <%= value.productname  %>
+                                                                                    <%= value.productname %>
                                                                                 </a>
                                                                             </h3>
                                                                         </div>
                                                                     </td>
                                                                     <% if(value.discountPricepro){ %>
-                                                                        <td class="price-col">₹<%= value.discountPricepro
-                                                                                %>
+                                                                        <td class="price-col">₹<%=
+                                                                                value.discountPricepro %>
                                                                         </td>
                                                                         <% } else { %>
                                                                             <td class="price-col">₹<%= value.price %>
@@ -271,33 +298,33 @@
                                                                             <% } %>
                                                                                 <td class="status-col">
                                                                                     <%= orderData[j].status %>
-                                                                                    <td class="status-col">
-                                                                                        <%= orderData[j].status %>
-                                                                                      
-                                                                                        <i data-toggle="modal" data-target="#transparentModal" class="bi bi-caret-up-square"
-                                                                                           data-order-id="<%= orderData[j]._id %>"
-                                                                                           data-product-name="<%= value.productname %>"
-                                                                                           data-quantity="<%= product[i].count %>"
-                                                                                           data-mrp="<%= value.price %>"
-                                                                                           data-final-price="<%= product[i].total %>"
-                                                                                           
-                                                                                           data-delivery-fullname="<%= orderData[j].deliveryDetails.address.address[0].fullname %>"
-                                                                                           data-delivery-mobile= "<%= orderData[j].deliveryDetails.address.address[0].mobile %>"
-                                                                                           data-delivery-email="<%= orderData[j].deliveryDetails.address.address[0].email %>"
-                                                                                           data-delivery-houseNo="<%= orderData[j].deliveryDetails.address.address[0].houseNo %>"
-                                                                                           data-delivery-city="<%= orderData[j].deliveryDetails.address.address[0].city %>"
-                                                                                           data-delivery-state="<%= orderData[j].deliveryDetails.address.address[0].state %>"
-                                                                                           data-delivery-zip="<%= orderData[j].deliveryDetails.address.address[0].zipcode %>"
-                                                                                           data-delivery-addetails="<%= orderData[j].deliveryDetails.address.address[0].additionalDetails %>"
-                                                                                          
-                                                                                           data-order-status="<%= orderData[j].status %>"
-                                                                                           data-date-of-order="<%= orderData[j].purchaseDate %>"
-                                                                                           data-payment-method="<%= orderData[j].paymentMethod %>"
-                                                                                           data-product-image="/products/images/<%= value.image[0] %>">
+                                                                                <td class="status-col">
+                                                                                    <%= orderData[j].status %>
 
-                                                                                           </i>
-                                                                                    </td>
-                                                                                 
+                                                                                        <i data-toggle="modal"
+                                                                                            data-target="#transparentModal"
+                                                                                            class="bi bi-caret-up-square"
+                                                                                            data-order-id="<%= orderData[j]._id %>"
+                                                                                            data-product-name="<%= value.productname %>"
+                                                                                            data-quantity="<%= product[i].count %>"
+                                                                                            data-mrp="<%= value.price %>"
+                                                                                            data-final-price="<%= product[i].total %>"
+                                                                                            data-delivery-fullname="<%= orderData[j].deliveryDetails.address.address[0].fullname %>"
+                                                                                            data-delivery-mobile="<%= orderData[j].deliveryDetails.address.address[0].mobile %>"
+                                                                                            data-delivery-email="<%= orderData[j].deliveryDetails.address.address[0].email %>"
+                                                                                            data-delivery-houseNo="<%= orderData[j].deliveryDetails.address.address[0].houseNo %>"
+                                                                                            data-delivery-city="<%= orderData[j].deliveryDetails.address.address[0].city %>"
+                                                                                            data-delivery-state="<%= orderData[j].deliveryDetails.address.address[0].state %>"
+                                                                                            data-delivery-zip="<%= orderData[j].deliveryDetails.address.address[0].zipcode %>"
+                                                                                            data-delivery-addetails="<%= orderData[j].deliveryDetails.address.address[0].additionalDetails %>"
+                                                                                            data-order-status="<%= orderData[j].status %>"
+                                                                                            data-date-of-order="<%= orderData[j].purchaseDate %>"
+                                                                                            data-payment-method="<%= orderData[j].paymentMethod %>"
+                                                                                            data-product-image="/products/images/<%= value.image[0] %>">
+
+                                                                                        </i>
+                                                                                </td>
+
                                                                                 </td>
 
 
@@ -305,8 +332,7 @@
                                                                                     <% if
                                                                                         (orderData[j].status==='Delivered'
                                                                                         ) { %>
-                                                                                        <a href=""
-                                                                                            data-type="order"
+                                                                                        <a href="" data-type="order"
                                                                                             data-id="<%= orderData[j]._id %>"
                                                                                             class="btn btn-outline-primary-2 return-button">RETURN<i
                                                                                                 class="icon-long-arrow-right"></i></a>
@@ -335,9 +361,9 @@
                                                                                                         class="btn btn-outline-primary-2 cancel-button">CANCEL<i
                                                                                                             class="icon-long-arrow-right"></i></a>
                                                                                                     <% } %>
-                                                                                                   
+
                                                                                 </td>
-                                          
+
                                                                                 <td>
                                                                                     <% if(orderData[j].status=="Delivered"
                                                                                         ){ %>
@@ -373,7 +399,7 @@
                                 </div>
 
 
-                               
+
 
                                 <div class="tab-pane fade" id="tab-address" role="tabpanel"
                                     aria-labelledby="tab-address-link">
@@ -386,9 +412,7 @@
                                             <i class="icon-long-arrow-right"></i>
                                         </button>
                                     </a>
-                                    <!-- <div class="col-md-8 offset-md-4">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
-                                  </div> -->
+
                                     <div class="row">
 
 
@@ -448,7 +472,7 @@
 
                                     </div><!-- .End .tab-pane -->
                                 </div>
-                              
+
                                 <div class="row mt-3">
                                     <div class="col-lg-6">
                                         <% if (accountDetails.image) { %>
@@ -457,10 +481,10 @@
                                                     class="btn btn-danger profile-button">Remove profile</a>
                                             </div>
                                             <% } %>
-                                    
-                                <% } else { %>
-                                    <p>No user  found.</p>
-                                    <% } %>
+
+                                                <% } else { %>
+                                                    <p>No user found.</p>
+                                                    <% } %>
                                     </div>
 
                                 </div>
@@ -476,52 +500,53 @@
 
 
 
-           
-<!-- MODAL -->
-<div class="modal fade" id="transparentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content bg-transparent border-0">
-            <div class="modal-body text-white">
-                
-                <img src="" alt="Product Image" class="img-fluid mb-3" id="productImage" width="100px" height="100px">
 
-               
-                <p><strong>Product Name:</strong> <span id="productname"></span></p>
+    <!-- MODAL -->
+    <div class="modal fade" id="transparentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content bg-transparent border-0">
+                <div class="modal-body text-white">
 
-                <p><strong>Order Id: </strong> <span id="uniqueOrder"></span></p>
-                <p><strong>Date Of Order: </strong> <span id="orderdate"></span></p>
-                <p><strong>Quantity: </strong> <span id="quantityOrder"></span></p>
-                <p><strong>Payment Method: </strong> <span id="paymentmethod"></span></p>
-                <p><strong>Status: </strong><span id="statusOrder"></span></p>
-          
-                <p><strong>Max.Retail Price:</strong> ₹<span id="baseprice"></span></p>
-                <p><strong>Price After Deductions:</strong> ₹<span id="finalPrice1"></span></p>
-                <br>
-                <h5 class="modal-title mb-3">Delivery Address:</h5>
-              
-                <p><strong></strong> <span id="fullname"></span></p>
-                <p><strong></strong> <span id="mobile"></span></p>
-                <p><strong></strong> <span id="email"></span></p>
-                <p><strong></strong> <span id="houseNo"></span></p>
-                <p><strong></strong> <span id="city"></span></p>
-                <p><strong></strong> <span id="state"></span></p>
-                <p><strong></strong> <span id="zip"></span></p>
-                <p><strong></strong> <span id="addetails"></span></p>
+                    <img src="" alt="Product Image" class="img-fluid mb-3" id="productImage" width="100px"
+                        height="100px">
+
+
+                    <p><strong>Product Name:</strong> <span id="productname"></span></p>
+
+                    <p><strong>Order Id: </strong> <span id="uniqueOrder"></span></p>
+                    <p><strong>Date Of Order: </strong> <span id="orderdate"></span></p>
+                    <p><strong>Quantity: </strong> <span id="quantityOrder"></span></p>
+                    <p><strong>Payment Method: </strong> <span id="paymentmethod"></span></p>
+                    <p><strong>Status: </strong><span id="statusOrder"></span></p>
+
+                    <p><strong>Max.Retail Price:</strong> ₹<span id="baseprice"></span></p>
+                    <p><strong>Price After Deductions:</strong> ₹<span id="finalPrice1"></span></p>
+                    <br>
+                    <h5 class="modal-title mb-3">Delivery Address:</h5>
+
+                    <p><strong></strong> <span id="fullname"></span></p>
+                    <p><strong></strong> <span id="mobile"></span></p>
+                    <p><strong></strong> <span id="email"></span></p>
+                    <p><strong></strong> <span id="houseNo"></span></p>
+                    <p><strong></strong> <span id="city"></span></p>
+                    <p><strong></strong> <span id="state"></span></p>
+                    <p><strong></strong> <span id="zip"></span></p>
+                    <p><strong></strong> <span id="addetails"></span></p>
+                </div>
+
             </div>
-            
         </div>
     </div>
-</div>                                                       
 
 
 
 
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-   
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var productName = document.getElementById('productname');
@@ -532,7 +557,7 @@
             var orderidun = document.getElementById('uniqueOrder');
             var baseMrp = document.getElementById('baseprice');
             var finalprice = document.getElementById('finalPrice1');
-            var productImage = document.getElementById('productImage'); 
+            var productImage = document.getElementById('productImage');
 
             var fullname1 = document.getElementById('fullname');
             var mobile1 = document.getElementById('mobile');
@@ -542,15 +567,15 @@
             var state1 = document.getElementById('state');
             var zip1 = document.getElementById('zip');
             var addetails1 = document.getElementById('addetails');
-            
 
-            
+
+
             var caretIcons = document.querySelectorAll('.bi-caret-up-square');
-    
+
             caretIcons.forEach(function (icon) {
                 icon.addEventListener('click', function () {
                     // Retrieve order details from data attributes
-                    
+
                     var productName1 = icon.getAttribute('data-product-name');
                     var dateOfOrder1 = icon.getAttribute('data-date-of-order');
                     var quantityOrder = icon.getAttribute('data-quantity');
@@ -559,7 +584,7 @@
                     var orderId = icon.getAttribute('data-order-id');
                     var mrp = icon.getAttribute('data-mrp');
                     var fprice = icon.getAttribute('data-final-price');
-                    
+
                     var fullname = icon.getAttribute('data-delivery-fullname');
                     var mobile = icon.getAttribute('data-delivery-mobile');
                     var email = icon.getAttribute('data-delivery-email');
@@ -570,7 +595,7 @@
                     var addetails = icon.getAttribute('data-delivery-addetails');
                     var productImageSrc = icon.getAttribute('data-product-image');
 
-                    
+
 
 
 
@@ -600,106 +625,106 @@
             });
         });
     </script>
-    
+
 
 
     <script>
         // Add an event listener to the name input for real-time validation
         document.getElementById('edit-name-input').addEventListener('input', function () {
-          validateName();
+            validateName();
         });
-      
+
         function validateName() {
-          var nameInput = document.getElementById('edit-name-input');
-          var nameError = document.getElementById('name-error');
-          var submitButton = document.getElementById('edit-profile-submit-button');
-      
-          // Check if the name is empty
-          if (nameInput.value.trim() === '') {
-            nameError.textContent = 'Name cannot be empty';
-            submitButton.disabled = true;
-            return;
-          }
-      
-          // Check if the name starts or ends with spaces
-          if (/^\s|\s$/.test(nameInput.value)) {
-            nameError.textContent = 'Name cannot start or end with spaces';
-            submitButton.disabled = true;
-            return;
-          }
-      
-          // Clear name errors
-          nameError.textContent = '';
-      
-          // Enable the submit button if all checks pass
-          submitButton.disabled = false;
+            var nameInput = document.getElementById('edit-name-input');
+            var nameError = document.getElementById('name-error');
+            var submitButton = document.getElementById('edit-profile-submit-button');
+
+            // Check if the name is empty
+            if (nameInput.value.trim() === '') {
+                nameError.textContent = 'Name cannot be empty';
+                submitButton.disabled = true;
+                return;
+            }
+
+            // Check if the name starts or ends with spaces
+            if (/^\s|\s$/.test(nameInput.value)) {
+                nameError.textContent = 'Name cannot start or end with spaces';
+                submitButton.disabled = true;
+                return;
+            }
+
+            // Clear name errors
+            nameError.textContent = '';
+
+            // Enable the submit button if all checks pass
+            submitButton.disabled = false;
         }
-      </script>
-      
+    </script>
+
     <script>
         document.getElementById('edit-profile-button').addEventListener('click', function () {
-          // Toggle the visibility of the form fields
-          toggleVisibility('password-field');
-          toggleVisibility('confirm-password-field');
-          toggleVisibility('edit-profile-submit-button');
-          toggleReadOnly('name-field');
-          toggleReadOnly('email-field');
-          toggleReadOnly('mobile-field');
+            // Toggle the visibility of the form fields
+            toggleVisibility('password-field');
+            toggleVisibility('confirm-password-field');
+            toggleVisibility('edit-profile-submit-button');
+            toggleReadOnly('name-field');
+            toggleReadOnly('email-field');
+            toggleReadOnly('mobile-field');
         });
-    
+
         function toggleVisibility(elementId) {
-          const element = document.getElementById(elementId);
-          element.style.display = element.style.display === 'none' ? 'block' : 'none';
+            const element = document.getElementById(elementId);
+            element.style.display = element.style.display === 'none' ? 'block' : 'none';
         }
-    
+
         function toggleReadOnly(elementId) {
-          const inputElement = document.getElementById(elementId).querySelector('input');
-          inputElement.readOnly = !inputElement.readOnly;
+            const inputElement = document.getElementById(elementId).querySelector('input');
+            inputElement.readOnly = !inputElement.readOnly;
         }
-      </script>
-<script>
-    // Add an event listener to the new password input for real-time validation
-    document.getElementById('new-password-input').addEventListener('input', function () {
-      validatePassword();
-    });
-  
-    // Add an event listener to the confirm password input for real-time validation
-    document.getElementById('confirm-password-input').addEventListener('input', function () {
-      validatePassword();
-    });
-  
-    function validatePassword() {
-      var newPasswordInput = document.getElementById('new-password-input');
-      var confirmPasswordInput = document.getElementById('confirm-password-input');
-      var passwordMatchError = document.getElementById('password-match-error');
-      var submitButton = document.getElementById('edit-profile-submit-button');
-  
-      // Check if passwords match
-      if (newPasswordInput.value !== confirmPasswordInput.value) {
-        passwordMatchError.textContent = 'Passwords do not match';
-        submitButton.disabled = true;
-        return;
-      }
-  
-      // Clear password match error
-      passwordMatchError.textContent = '';
-  
-      // Validate password format
-      var passwordFormatRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+])[0-9a-zA-Z!@#$%^&*()_+]{8,}$/;
-      if (!passwordFormatRegex.test(newPasswordInput.value)) {
-        passwordMatchError.textContent = 'Password must be 8 characters long and include at least one uppercase letter, one lowercase letter, one special character, and one number.';
-        submitButton.disabled = true;
-        return;
-      }
-  
-      // Clear password format error
-      passwordMatchError.textContent = '';
-  
-      // Enable the submit button if all checks pass
-      submitButton.disabled = false;
-    }
-  </script>
-  
+    </script>
+    <script>
+        // Add an event listener to the new password input for real-time validation
+        document.getElementById('new-password-input').addEventListener('input', function () {
+            validatePassword();
+        });
+
+        // Add an event listener to the confirm password input for real-time validation
+        document.getElementById('confirm-password-input').addEventListener('input', function () {
+            validatePassword();
+        });
+
+        function validatePassword() {
+            var newPasswordInput = document.getElementById('new-password-input');
+            var confirmPasswordInput = document.getElementById('confirm-password-input');
+            var passwordMatchError = document.getElementById('password-match-error');
+            var submitButton = document.getElementById('edit-profile-submit-button');
+
+            // Check if passwords match
+            if (newPasswordInput.value !== confirmPasswordInput.value) {
+                passwordMatchError.textContent = 'Passwords do not match';
+                submitButton.disabled = true;
+                return;
+            }
+
+            // Clear password match error
+            passwordMatchError.textContent = '';
+
+            // Validate password format
+            var passwordFormatRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+])[0-9a-zA-Z!@#$%^&*()_+]{8,}$/;
+            if (!passwordFormatRegex.test(newPasswordInput.value)) {
+                passwordMatchError.textContent = 'Password must be 8 characters long and include at least one uppercase letter, one lowercase letter, one special character, and one number.';
+                submitButton.disabled = true;
+                return;
+            }
+
+            // Clear password format error
+            passwordMatchError.textContent = '';
+
+            // Enable the submit button if all checks pass
+            submitButton.disabled = false;
+        }
+    </script>
+
 
     <script>
         $(document).ready(function () {
@@ -759,66 +784,66 @@
                     });
             });
         });
-   
+
         $(document).ready(function () {
-    // Handle the return button click event
-    $('.return-button').click(function (event) {
-        event.preventDefault(); // Prevent the default form submission behavior
+            // Handle the return button click event
+            $('.return-button').click(function (event) {
+                event.preventDefault(); // Prevent the default form submission behavior
 
-        const $button = $(this);
-        const type = $button.data('type');
-        const id = $button.data('id');
+                const $button = $(this);
+                const type = $button.data('type');
+                const id = $button.data('id');
 
-        // Display SweetAlert confirmation dialog
-        Swal.fire({
-            title: 'Return Order',
-            html:
-                '<div>Select a reason for return:<br>' +
-                '<input type="radio" id="reason1" name="returnReason" value="Defective"> <label for="reason1">Defective</label><br>' +
-                '<input type="radio" id="reason2" name="returnReason" value="Not as Expected"> <label for="reason2">Not as Expected</label><br>' +
-                '<input type="radio" id="reason3" name="returnReason" value="Changed Mind"> <label for="reason3">Changed Mind</label></div>',
-            showCancelButton: true,
-            confirmButtonText: 'Proceed',
-            cancelButtonText: 'Cancel',
-            showLoaderOnConfirm: true,
-            preConfirm: async () => {
-                // Get the selected return reason
-                const returnReason = $("input[name='returnReason']:checked").val();
+                // Display SweetAlert confirmation dialog
+                Swal.fire({
+                    title: 'Return Order',
+                    html:
+                        '<div>Select a reason for return:<br>' +
+                        '<input type="radio" id="reason1" name="returnReason" value="Defective"> <label for="reason1">Defective</label><br>' +
+                        '<input type="radio" id="reason2" name="returnReason" value="Not as Expected"> <label for="reason2">Not as Expected</label><br>' +
+                        '<input type="radio" id="reason3" name="returnReason" value="Changed Mind"> <label for="reason3">Changed Mind</label></div>',
+                    showCancelButton: true,
+                    confirmButtonText: 'Proceed',
+                    cancelButtonText: 'Cancel',
+                    showLoaderOnConfirm: true,
+                    preConfirm: async () => {
+                        // Get the selected return reason
+                        const returnReason = $("input[name='returnReason']:checked").val();
 
-                // Return an object with the return reason
-                return { returnReason };
-            }
-        })
-        .then(async (result) => {
-            if (result.isConfirmed) {
-                // Perform the return action with the selected reason
-                const response = await $.ajax({
-                    type: 'POST',
-                    url: '/returnOrder',
-                    data: {
-                        type: type,
-                        id: id,
-                        reason: result.value.returnReason
+                        // Return an object with the return reason
+                        return { returnReason };
                     }
-                });
+                })
+                    .then(async (result) => {
+                        if (result.isConfirmed) {
+                            // Perform the return action with the selected reason
+                            const response = await $.ajax({
+                                type: 'POST',
+                                url: '/returnOrder',
+                                data: {
+                                    type: type,
+                                    id: id,
+                                    reason: result.value.returnReason
+                                }
+                            });
 
-                if (response.success === true) {
-                    // Update the status column without reloading the page
-                    $button.parent().find('.status-col').text('Order Status: Returned');
+                            if (response.success === true) {
+                                // Update the status column without reloading the page
+                                $button.parent().find('.status-col').text('Order Status: Returned');
 
-                    // Redirect to the order return page
-                    window.location.href = '/returnPage';
-                } else {
-                    Swal.fire('Error!', 'Failed to return ' + type, 'error');
-                }
-            }
-        })
-        .catch((error) => {
-            console.error(error);
-            Swal.fire('Error!', 'An error occurred.', 'error');
+                                // Redirect to the order return page
+                                window.location.href = '/returnPage';
+                            } else {
+                                Swal.fire('Error!', 'Failed to return ' + type, 'error');
+                            }
+                        }
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                        Swal.fire('Error!', 'An error occurred.', 'error');
+                    });
+            });
         });
-    });
-});
 
 
 

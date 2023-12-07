@@ -103,16 +103,17 @@
 
           <div class="form-group">
             <label for="images">Upload Images</label>
-            <input type="file" accept="image/*" class="form-control-file" id="images" name="image" multiple onchange="validateAndPreviewImages(this)">
+            <input type="file" accept="image/*" class="form-control-file" id="images" name="image" multiple
+              onchange="validateAndPreviewImages(this)">
             <span id="image1Error" style="color: red;"></span>
-        </div>
-        <div id="imagePreviewContainer"></div>
-        <button type="submit" class="btn btn-primary mr-2">Submit</button>
-        <button class="btn btn-dark"><a href="/admin/productManagement">Cancel</a></button>
+          </div>
+          <div id="imagePreviewContainer"></div>
+          <button type="submit" class="btn btn-primary mr-2">Submit</button>
+          <button class="btn btn-dark"><a href="/admin/productManagement">Cancel</a></button>
 
-         
-          
-        
+
+
+
         </form>
 
       </div>
@@ -123,30 +124,30 @@
 
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
   <script>
-    function deleteImage(productid,imageid){
-        console.log(productid,"pppp",imageid);
-        $.ajax({
-            method:'delete',
-        url:'/admin/delete-image',
-        data:JSON.stringify({productid:productid,imageid:imageid}),
-        contentType:'application/json',
-        success:function(response){
-            if(response.result==true){
-              
-                window.location.reload()
-  
-               
-            }else{
-                console.log('Error');
-            }
+    function deleteImage(productid, imageid) {
+      console.log(productid, "pppp", imageid);
+      $.ajax({
+        method: 'delete',
+        url: '/admin/delete-image',
+        data: JSON.stringify({ productid: productid, imageid: imageid }),
+        contentType: 'application/json',
+        success: function (response) {
+          if (response.result == true) {
+
+            window.location.reload()
+
+
+          } else {
+            console.log('Error');
+          }
         }
-        })
-  
+      })
+
     }
-    
-    function updateImage(productid,imageid){
-        console.log(productid,imageid);
-  
+
+    function updateImage(productid, imageid) {
+      console.log(productid, imageid);
+
     }
   </script>
 
@@ -206,60 +207,60 @@
       updateSubmitButton();
     });
   </script>
-<script>
-  // Function to handle new image uploads
-  function previewImages(input) {
+  <script>
+    // Function to handle new image uploads
+    function previewImages(input) {
       var previewContainer = document.getElementById('imagePreviewContainer');
       previewContainer.innerHTML = ''; // Clear previous previews
 
       var files = input.files;
       for (var i = 0; i < files.length; i++) {
-          var reader = new FileReader();
+        var reader = new FileReader();
 
-          reader.onload = function (e) {
-              var img = document.createElement('img');
-              img.src = e.target.result;
-              img.style.maxWidth = '300px'; // Set a maximum width for the preview image
+        reader.onload = function (e) {
+          var img = document.createElement('img');
+          img.src = e.target.result;
+          img.style.maxWidth = '300px'; // Set a maximum width for the preview image
 
-              previewContainer.appendChild(img);
-          };
+          previewContainer.appendChild(img);
+        };
 
-          reader.readAsDataURL(files[i]);
+        reader.readAsDataURL(files[i]);
       }
-  }
-</script>
+    }
+  </script>
 
-<script>
-  function validateAndPreviewImages(input) {
+  <script>
+    function validateAndPreviewImages(input) {
       var previewContainer = document.getElementById('imagePreviewContainer');
       var errorSpan = document.getElementById('image1Error');
-      
+
       // Get the selected files
       var files = input.files;
-  
+
       // Define the maximum allowed images
       var maxImages = 4;
-  
+
       // Check if the number of selected images exceeds the limit
       if (files.length > maxImages) {
-          // Clear the file input
-          input.value = '';
-  
-          // Display an error message
-          errorSpan.textContent = 'Please upload a maximum of ' + maxImages + ' images.';
-          errorSpan.style.display = 'block';
-  
-          // Clear the image preview container
-          previewContainer.innerHTML = '';
+        // Clear the file input
+        input.value = '';
+
+        // Display an error message
+        errorSpan.textContent = 'Please upload a maximum of ' + maxImages + ' images.';
+        errorSpan.style.display = 'block';
+
+        // Clear the image preview container
+        previewContainer.innerHTML = '';
       } else {
-          // Hide any previous error messages
-          errorSpan.style.display = 'none';
-  
-          // Proceed with previewing the images
-          previewImages(input);
+        // Hide any previous error messages
+        errorSpan.style.display = 'none';
+
+        // Proceed with previewing the images
+        previewImages(input);
       }
-  }
-  
-  // The rest of your previewImages function goes here
+    }
+
+
   </script>
   <%- include('../admin/layout/adminFooter.ejs') -%>

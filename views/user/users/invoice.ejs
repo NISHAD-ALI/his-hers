@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -47,7 +48,8 @@
       margin-top: 20px;
     }
 
-    .items-table th, .items-table td {
+    .items-table th,
+    .items-table td {
       border: 1px solid #ddd;
       padding: 8px;
       text-align: left;
@@ -64,91 +66,110 @@
     }
   </style>
 </head>
+
 <body>
 
-<div class="invoice">
-  <div class="header">
-    <h1>Invoice</h1>
-  </div>
+  <div class="invoice">
+    <div class="header">
+      <h1>Invoice</h1>
+    </div>
 
-  <div class="details">
-    <p><strong>Order ID:</strong><%= order._id %></p>
-    <p><strong>Customer Name:</strong><%= user.name %></p>
-    <p><strong>Customer Email:</strong><%= user.email %></p>
+    <div class="details">
+      <p><strong>Order ID:</strong>
+        <%= order._id %>
+      </p>
+      <p><strong>Customer Name:</strong>
+        <%= user.name %>
+      </p>
+      <p><strong>Customer Email:</strong>
+        <%= user.email %>
+      </p>
 
-    <p><strong>Date:</strong><%= order.purchaseDate.toLocaleDateString('en-US', { year:
-      'numeric', month: 'short', day: '2-digit'
-      }).replace(/\//g, '-') %></p>
-    <p><strong>Payment Mode:</strong><%= order.paymentMethod %></p>
-    
-  </div>
+      <p><strong>Date:</strong>
+        <%= order.purchaseDate.toLocaleDateString('en-US', { year: 'numeric' , month: 'short' , day: '2-digit'
+          }).replace(/\//g, '-' ) %>
+      </p>
+      <p><strong>Payment Mode:</strong>
+        <%= order.paymentMethod %>
+      </p>
+
+    </div>
 
 
 
-  <table class="items-table">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Item</th>
-        <th>Quantity</th>
-        <th>Price</th>
-        <th>Total</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% const products = order.products; %>
-      <% for (let i = 0; i < products.length; i++) { %>
-        <% const product = products[i].productId; %>
-         
-      
-          <tr>
-            <td><%= i + 1 %></td>
-            <td><%= product.productname %></td>
-            <td><%= products[i].count %></td>
-            <% if(product.discountPricepro){ %>
-            <td>₹<%= product.discountPricepro %></td>
-            <%  } else { %>
-              <td>₹<%= product.price %></td>
+    <table class="items-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Item</th>
+          <th>Quantity</th>
+          <th>Price</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% const products=order.products; %>
+          <% for (let i=0; i < products.length; i++) { %>
+            <% const product=products[i].productId; %>
+
+
+              <tr>
+                <td>
+                  <%= i + 1 %>
+                </td>
+                <td>
+                  <%= product.productname %>
+                </td>
+                <td>
+                  <%= products[i].count %>
+                </td>
+                <% if(product.discountPricepro){ %>
+                  <td>₹<%= product.discountPricepro %>
+                  </td>
+                  <% } else { %>
+                    <td>₹<%= product.price %>
+                    </td>
+                    <% } %>
+                      <% if(product.discountPricepro){ %>
+                        <td>₹<%= product.discountPricepro %>*</td>
+                        <% } else { %>
+                          <td>₹<%= product.price %>*</td>
+                          <% } %>
+              </tr>
               <% } %>
-              <% if(product.discountPricepro){ %>
-                <td>₹<%= product.discountPricepro %>*</td>
-                <%  } else { %>
-                  <td>₹<%= product.price %>*</td>
-                  <% } %>
-          </tr>
-        <% } %>
 
-    </tbody>
-  </table>
+      </tbody>
+    </table>
 
-  <div class="additional-text">
-    <p>This is a Computer Generated Invoice.</p>
+    <div class="additional-text">
+      <p>This is a Computer Generated Invoice.</p>
+    </div>
+
+
+
+    <div class="total">
+      <p><strong>Total:</strong> ₹<%= order.totalAmount %>**</p>
+    </div>
+    <p style="font-size: 12px;">* After including discounts</p>
+    <p style="font-size: 12px;">** After including Coupon discounts</p>
+
+  </div>
+  <div class="company-details details">
+    <p><strong>HIS&HERS Ltd.</strong> </p>
+    <p><strong>6th Avenue</strong></p>
+    <p><strong>Manhattan,NY</strong></p>
+
   </div>
 
-  
+  <img src="/user/images/logo.jpg" alt="Company Logo" class="logo">
 
-  <div class="total">
-    <p><strong>Total:</strong> ₹<%= order.totalAmount %>**</p>
-  </div>
-  <p style="font-size: 12px;">* After including discounts</p>
-  <p style="font-size: 12px;">** After including Coupon discounts</p>
-  
-</div>
-<div class="company-details details">
-  <p><strong>HIS&HERS Ltd.</strong> </p>
-  <p><strong>6th Avenue</strong></p>
-  <p><strong>Manhattan,NY</strong></p>
-
-</div>
-
-<img src="/user/images/logo.jpg" alt="Company Logo" class="logo">
-<!-- <img src="C:\confidential\brototype\BROCAMP\WEEK8\HISHERS\public\user\images\logo.jpg" alt="Molla Logo" width="82" height="20"> -->
 </body>
 <script>
-  function download(){
+  function download() {
     window.print()
   }
-  
+
   download()
 </script>
+
 </html>

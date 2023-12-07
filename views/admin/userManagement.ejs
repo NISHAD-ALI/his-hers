@@ -1,63 +1,57 @@
-
 <%- include('../admin/layout/adminHeader.ejs') -%>
 
-    
-        <div class="main-panel">
-            <div class="card-body">
-                <h4 class="card-title">USER MANAGEMENT</h4>
-                <!-- <p class="card-description"> 
-                </p> -->
-                <br>
-                <br>
-                <div class="table-responsive">
-                  <table class="table">
-                    <thead>
-                      <tr>
-                        <th>No.</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Mobile</th>
-                        <th>Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                        <%
-                        if(user.length > 0){
-                          for(let i=0;i<user.length;i++){ %>
-                            <tr>
-                              <td><%=i+1 %></td>
-                              <td><%= user[i].name %></td>
-                              <td><%= user[i].email %></td>
-                              <td><%= user[i].Mobile %></td>
-                              
-                              <td>
-                                <%
-                                if(user[i].is_block == 0){
-                                  %>
-                                  <p><a href="/admin/block-user?id=<%= user[i]._id %>" class="badge badge-success">BLOCK USER</a></p>
-                                  <%
-                                }else{
-                                  %>
-                                  <p><a href="/admin/block-user?id=<%= user[i]._id %>" class="badge badge-danger">UNBLOCK</a></p>
-                                  <%
-                                }
-                                %>
-                              </td>
-                            </tr>
-                            <%
-                          }
 
-                        }else{
-                          %>
-                          <tr>
-                            <td colspan="5">user Not Found</td>
-                          </tr><%
-                        }
-                        %>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-          <!-- content-wrapper ends -->
-          <!-- partial:partials/_footer.html -->
-          <%- include('../admin/layout/adminFooter.ejs') -%>
+  <div class="main-panel">
+    <div class="card-body">
+      <h4 class="card-title">USER MANAGEMENT</h4>
+
+      <br>
+      <br>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>No.</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Mobile</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if(user.length> 0){
+              for(let i=0;i<user.length;i++){ %>
+                <tr>
+                  <td>
+                    <%=i+1 %>
+                  </td>
+                  <td>
+                    <%= user[i].name %>
+                  </td>
+                  <td>
+                    <%= user[i].email %>
+                  </td>
+                  <td>
+                    <%= user[i].Mobile %>
+                  </td>
+
+                  <td>
+                    <% if(user[i].is_block==0){ %>
+                      <p><a href="/admin/block-user?id=<%= user[i]._id %>" class="badge badge-success">BLOCK USER</a>
+                      </p>
+                      <% }else{ %>
+                        <p><a href="/admin/block-user?id=<%= user[i]._id %>" class="badge badge-danger">UNBLOCK</a></p>
+                        <% } %>
+                  </td>
+                </tr>
+                <% } }else{ %>
+                  <tr>
+                    <td colspan="5">user Not Found</td>
+                  </tr>
+                  <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <%- include('../admin/layout/adminFooter.ejs') -%>

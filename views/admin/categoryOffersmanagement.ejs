@@ -26,7 +26,7 @@
                                         <th>Category Name</th>
                                         <th>Offer %</th>
                                         <th>Ending Time</th>
-                                        <!-- <th>Action</th> -->
+                                  
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -42,13 +42,7 @@
                                             month: 'short',
                                             day: '2-digit'
                                             }).replace(/\//g, '-') %></td>
-                                            <!-- <%  if(categoryOffers[i].is_block==0){ %>
-                                              
-                                            <td><a href="/admin/block-off?id=<%= categoryOffers[i]._id %>" class="badge badge-danger" onclick="return confirm('Are you sure? Do you want to Block>?')">UNLIST</a></td>
-                                            <% }else{ %>
-                                            
-                                             <td><a href="/admin/block-off?id=<%= categoryOffers[i]._id %>" class="badge badge-success" onclick="return confirm('Are you sure you? Do you want to Unblock>?')">LIST</a></td>
-                                             <% } %> -->
+                                           
                                         <td> <a href="/admin/deletecatOff?id=<%= categoryOffers[i]._id %>"" class="delete-link"><i class="bi bi-trash3"></i></a></td>
                                     </tr>
                                     <% } %>

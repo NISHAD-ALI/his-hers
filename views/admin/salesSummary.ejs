@@ -1,99 +1,100 @@
-
 <%- include('../admin/layout/adminHeader.ejs') -%>
 
 
 
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
-<div class="main-panel">
-  <div class="content-wrapper">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-lg-12 grid-margin stretch-card">
-          <div class="card">
-            <div class="card-body">
+  <div class="main-panel">
+    <div class="content-wrapper">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body">
                 <h4 class="card-title">All Sales</h4>
                 <div class="text-right">
-                
-                      <a href="#" data-toggle="modal" data-target="#reportModal">
-                        <button type="button" class="btn btn-success ml-auto" data-toggle="button" aria-pressed="false" autocomplete="off">
-                          FILTER REPORT
-                        </button>
-                      </a>
-                  </div>
+
+                  <a href="#" data-toggle="modal" data-target="#reportModal">
+                    <button type="button" class="btn btn-success ml-auto" data-toggle="button" aria-pressed="false"
+                      autocomplete="off">
+                      FILTER REPORT
+                    </button>
+                  </a>
+                </div>
                 <div class="table-responsive">
-                    <table class="table" style="color: white;">
-                      <thead>
-                        <tr>
-                          <!-- Empty header cells -->
+                  <table class="table" style="color: white;">
+                    <thead>
+                      <tr>
 
-                          <th> User Name</th>
-                          <th> Product Name</th>
-                          <th> Price</th>
-                          <th> Date</th>
-                          <th> Order Status</th>
-                          <th> Payment</th>
-                         
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <% if (orderDat) { %>
-                          <% for (let j=0; j < orderDat.length; j++) { %>
-                            <% let products=orderDat[j].products; %>
-                              <% const username=orderDat[j].userid.name; %>
-                                <% for (let i=0; i < products.length; i++) { %>
-                                  <% const product=products[i].productId; %>
-                                    <tr>
 
-                                      <td>
-                                        <!-- Username -->
-                                        <%= username %>
-                                      </td>
-                                      <td class="product-name-cell">
-                                        <img src="/products/images/upload/<%= product.image[0] %>" alt="image" />
-                                        <span class="pl-2 product-name">
-                                          <%= product.productname %>
-                                        </span>
-                                      </td>
-                                      <td>
-                                        <!-- Product Price -->
-                                        <%= product.price %>
-                                      </td>
-                                      <td>
-                                        <!-- Purchase Date -->
-                                        <%= orderDat[j].purchaseDate.toLocaleString('en-US', { year: 'numeric' ,
-                                          month: 'short' , day: '2-digit' , hour: '2-digit' , minute: '2-digit' ,
-                                          second: '2-digit' }).replace(/,/, '' ).replace(/\//g, '-' ) %>
-                                      </td>
-                                      <td>
-                                        <!-- Order Status -->
-                                        <%= orderDat[j].status %>
-                                      </td>
-                                      <td>
-                                        <!-- Payment Method -->
-                                        <%= orderDat[j].paymentMethod %>
-                                      </td>
-                                   
-                                    </tr>
+                        <th> User Name</th>
+                        <th> Product Name</th>
+                        <th> Price</th>
+                        <th> Date</th>
+                        <th> Order Status</th>
+                        <th> Payment</th>
+
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% if (orderDat) { %>
+                        <% for (let j=0; j < orderDat.length; j++) { %>
+                          <% let products=orderDat[j].products; %>
+                            <% const username=orderDat[j].userid.name; %>
+                              <% for (let i=0; i < products.length; i++) { %>
+                                <% const product=products[i].productId; %>
+                                  <tr>
+
+                                    <td>
+
+                                      <%= username %>
+                                    </td>
+                                    <td class="product-name-cell">
+                                      <img src="/products/images/upload/<%= product.image[0] %>" alt="image" />
+                                      <span class="pl-2 product-name">
+                                        <%= product.productname %>
+                                      </span>
+                                    </td>
+                                    <td>
+                                      <!-- Product Price -->
+                                      <%= product.price %>
+                                    </td>
+                                    <td>
+                                      <!-- Purchase Date -->
+                                      <%= orderDat[j].purchaseDate.toLocaleString('en-US', { year: 'numeric' ,
+                                        month: 'short' , day: '2-digit' , hour: '2-digit' , minute: '2-digit' ,
+                                        second: '2-digit' }).replace(/,/, '' ).replace(/\//g, '-' ) %>
+                                    </td>
+                                    <td>
+                                      <!-- Order Status -->
+                                      <%= orderDat[j].status %>
+                                    </td>
+                                    <td>
+                                      <!-- Payment Method -->
+                                      <%= orderDat[j].paymentMethod %>
+                                    </td>
+
+                                  </tr>
+                                  <% } %>
                                     <% } %>
                                       <% } %>
-                                        <% } %>
-                      </tbody>
-                    </table>
-                  </div>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
-        </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<div class="modal fade" id="reportModal" tabindex="-1" role="dialog" aria-labelledby="reportModalLabel" aria-hidden="true">
+  <div class="modal fade" id="reportModal" tabindex="-1" role="dialog" aria-labelledby="reportModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -104,14 +105,17 @@
         </div>
         <div class="modal-body">
           <!-- Three buttons below each other -->
- 
-         <a href="/admin/sales?filter=week"> <button type="button" class="btn btn-primary" id="generateWeek">Last Week</button></a>
-         <a href="/admin/sales?filter=month"><button type="button" class="btn btn-primary" id="generateMonth">Last Month</button></a>
-            <a href="/admin/sales?filter=year"><button type="button" class="btn btn-primary" id="generateYear">Last Year</button></a>
-     <br>
-          
+
+          <a href="/admin/sales?filter=week"> <button type="button" class="btn btn-primary" id="generateWeek">Last
+              Week</button></a>
+          <a href="/admin/sales?filter=month"><button type="button" class="btn btn-primary" id="generateMonth">Last
+              Month</button></a>
+          <a href="/admin/sales?filter=year"><button type="button" class="btn btn-primary" id="generateYear">Last
+              Year</button></a>
+          <br>
+
           <form action="/admin/sales" method="get" id="reportForm" class="mt-3">
-           
+
             <div class="form-group">
               <label for="fromDate">From Date</label>
               <input type="date" class="form-control" id="fromDate" name="fromDate" required>
@@ -120,13 +124,14 @@
               <label for="toDate">To Date</label>
               <input type="date" class="form-control" id="toDate" name="toDate" required>
             </div>
-          
+
             <span id="dateError" style="color: red;"></span>
             <br>
-            <button type="submit" class="btn btn-success" name="filter" value="custom" id="submitDateRangeBtn">Submit Date Range</button>
+            <button type="submit" class="btn btn-success" name="filter" value="custom" id="submitDateRangeBtn">Submit
+              Date Range</button>
           </form>
-          
-          
+
+
         </div>
       </div>
     </div>
@@ -141,7 +146,7 @@
         var toDate = $('#toDate').val();
         var submitButton = $('#submitDateRangeBtn');
         var errorSpan = $('#dateError');
-  
+
         if (fromDate && toDate && new Date(fromDate) < new Date(toDate) && new Date(toDate) <= new Date() && new Date(fromDate) < new Date()) {
           submitButton.prop('disabled', false);
           errorSpan.text('');
@@ -158,85 +163,27 @@
           }
         }
       }
-  
+
       // Attach event listeners to date inputs
       $('#fromDate, #toDate').on('input', function () {
         updateValidation();
       });
-  
+
       // Attach event listener to the form for initial validation
       $('#reportForm').on('submit', function (event) {
         var fromDate = $('#fromDate').val();
         var toDate = $('#toDate').val();
-  
+
         if (!fromDate || !toDate || new Date(fromDate) >= new Date(toDate)) {
           $('#dateError').text('Invalid date range. Please check your dates.');
           event.preventDefault();
         }
       });
-  
+
       // Initial validation on page load
       updateValidation();
     });
   </script>
-  <!-- <script>
-    $(document).ready(function () {
-      // Function to check if a date is valid
-      function isValidDate(dateString) {
-        var regex = /^\d{4}-\d{2}-\d{2}$/;
-        return dateString.match(regex) !== null;
-      }
-  
-      // Function to update the error span and submit button
-      function updateValidation() {
-        var fromDate = $('#fromDate').val();
-        var toDate = $('#toDate').val();
-        var submitButton = $('#submitDateRangeBtn');
-        var errorSpan = $('#dateError');
-  
-        if (
-          isValidDate(fromDate) &&
-          isValidDate(toDate) &&
-          new Date(fromDate) < new Date(toDate) &&
-          new Date(toDate) <= new Date() &&
-          new Date(fromDate) < new Date()
-        ) {
-          submitButton.prop('disabled', false);
-          errorSpan.text('');
-        } else {
-          submitButton.prop('disabled', true);
-          if (!isValidDate(fromDate) || !isValidDate(toDate)) {
-            errorSpan.text('Invalid date format. Please use YYYY-MM-DD.');
-          } else if (new Date(fromDate) >= new Date(toDate)) {
-            errorSpan.text('From Date must be earlier than To Date.');
-          } else if (new Date(toDate) > new Date()) {
-            errorSpan.text('To Date cannot be in the future.');
-          } else if (new Date(fromDate) >= new Date()) {
-            errorSpan.text('From Date must be earlier than the current date.');
-          }
-        }
-      }
-  
-      // Attach event listeners to date inputs
-      $('#fromDate, #toDate').on('input', function () {
-        updateValidation();
-      });
-  
-      // Attach event listener to the form for initial validation
-      $('#reportForm').on('submit', function (event) {
-        var fromDate = $('#fromDate').val();
-        var toDate = $('#toDate').val();
-  
-        if (!isValidDate(fromDate) || !isValidDate(toDate) || new Date(fromDate) >= new Date(toDate)) {
-          $('#dateError').text('Invalid date range. Please check your dates.');
-          event.preventDefault();
-        }
-      });
-  
-      // Initial validation on page load
-      updateValidation();
-    });
-  </script> -->
-  
 
-<%- include('../admin/layout/adminFooter.ejs') -%>
+
+  <%- include('../admin/layout/adminFooter.ejs') -%>

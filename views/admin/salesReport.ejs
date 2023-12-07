@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -11,12 +12,14 @@
     body {
       background-color: #f8f9fa;
     }
+
     .sales-report-card {
       margin-top: 20px;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     }
   </style>
 </head>
+
 <body>
 
   <div class="container mt-5">
@@ -38,22 +41,30 @@
                 </thead>
                 <tbody>
                   <% if (orderDat) { %>
-                    <% orderDat.forEach(order => { %>
-                      <% order.products.forEach(product => { %>
+                    <% orderDat.forEach(order=> { %>
+                      <% order.products.forEach(product=> { %>
                         <tr>
-                          <td><%= order.purchaseDate.toLocaleString('en-US') %></td>
-                          <td><%= product.productId.productname %></td>
-                          <td><%= product.count %></td>
-                          <td>₹<%= product.productId.price.toFixed(2) %></td>
-                          <td>₹<%= (product.count * product.productId.price).toFixed(2) %></td>
+                          <td>
+                            <%= order.purchaseDate.toLocaleString('en-US') %>
+                          </td>
+                          <td>
+                            <%= product.productId.productname %>
+                          </td>
+                          <td>
+                            <%= product.count %>
+                          </td>
+                          <td>₹<%= product.productId.price.toFixed(2) %>
+                          </td>
+                          <td>₹<%= (product.count * product.productId.price).toFixed(2) %>
+                          </td>
                         </tr>
-                      <% }); %>
-                    <% }); %>
-                  <% } else { %>
-                    <tr>
-                      <td colspan="5" class="text-center">No data available</td>
-                    </tr>
-                  <% } %>
+                        <% }); %>
+                          <% }); %>
+                            <% } else { %>
+                              <tr>
+                                <td colspan="5" class="text-center">No data available</td>
+                              </tr>
+                              <% } %>
                 </tbody>
               </table>
             </div>
@@ -69,4 +80,5 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
+
 </html>

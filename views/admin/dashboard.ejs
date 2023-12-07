@@ -5,18 +5,14 @@
   <style>
     .product-name-cell {
       max-width: 150px;
-      /* Set your desired maximum width */
       white-space: nowrap;
       overflow: hidden;
       text-overflow: hidden;
-      /* Show an ellipsis (...) for overflowed content */
     }
 
     .product-name {
       display: inline-block;
-      /* Ensure inline-block so ellipsis works */
       vertical-align: middle;
-      /* Align vertically in the middle */
     }
 
     #chart-container {
@@ -50,9 +46,9 @@
                   <div class="d-flex d-sm-block d-md-flex align-items-center">
                     <h2 class="mb-0">₹<%= totalRevenue %>
                     </h2>
-                    <!-- <p class="text-success ml-2 mb-0 font-weight-medium">+3.5%</p> -->
+
                   </div>
-                  <h6 class="text-muted font-weight-normal">11.38% Since last month</h6>
+
                 </div>
                 <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
                   <i class="icon-lg mdi mdi-codepen text-primary ml-auto"></i>
@@ -71,9 +67,9 @@
                     <h2 class="mb-0">
                       <%= orderCount %> +
                     </h2>
-                    <!-- <p class="text-success ml-2 mb-0 font-weight-medium">+8.3%</p> -->
+
                   </div>
-                  <h6 class="text-muted font-weight-normal"> 9.61% Since last month</h6>
+
                 </div>
                 <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
                   <i class="icon-lg mdi mdi-wallet-travel text-danger ml-auto"></i>
@@ -94,7 +90,7 @@
                     </h2>
                     <p class="text-danger ml-2 mb-0 font-weight-medium"></p>
                   </div>
-                  <h6 class="text-muted font-weight-normal">2.27% Since last month</h6>
+
                 </div>
                 <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
                   <i class="icon-lg mdi mdi-monitor text-success ml-auto"></i>
@@ -134,52 +130,57 @@
                 <div class="card-body">
                   <h5>Newly Added</h5>
                   <br>
-                  <% if (newProduct && newProduct.length > 0) { %>
+                  <% if (newProduct && newProduct.length> 0) { %>
                     <div class="col-12 col-md-8">
-                      <% if (newProduct[0].image && newProduct[0].image.length > 0) { %>
-                        <img src="/products/images/<%= newProduct[0].image[0] %>" class="img-fluid custom-image" alt="Product Image">
+                      <% if (newProduct[0].image && newProduct[0].image.length> 0) { %>
+                        <img src="/products/images/<%= newProduct[0].image[0] %>" class="img-fluid custom-image"
+                          alt="Product Image">
                         <br>
                         <p></p>
-                      <% } else { %>
-                        <!-- Handle the case when newProduct or its image property is undefined -->
-                        <p>No new product image available</p>
-                      <% } %>
-                  
-                      <% if (newProduct[0].productname) { %>
-                        <p>Product Name: <%= newProduct[0].productname %></p>
-                      <% } else { %>
-                        <!-- Handle the case when productname is undefined -->
-                        <p>No product name available</p>
-                      <% } %>
-                  
-                      <% if (newProduct[0].price !== undefined) { %>
-                        <p>Actual Price: <%= newProduct[0].price %></p>
-                      <% } else { %>
-                        <!-- Handle the case when price is undefined -->
-                        <p>No price available</p>
-                      <% } %>
-                  
-                      <% if (newProduct[0].quantity !== undefined) { %>
-                        <p>Available Stocks: <%= newProduct[0].quantity %></p>
-                      <% } else { %>
-                        <!-- Handle the case when quantity is undefined -->
-                        <p>No quantity available</p>
-                      <% } %>
-                  
-                      <% if (newProduct[0].category) { %>
-                        <p>Category: <%= newProduct[0].category %></p>
-                      <% } else { %>
-                        <!-- Handle the case when category is undefined -->
-                        <p>No category available</p>
-                      <% } %>
+                        <% } else { %>
+                          <!-- Handle the case when newProduct or its image property is undefined -->
+                          <p>No new product image available</p>
+                          <% } %>
+
+                            <% if (newProduct[0].productname) { %>
+                              <p>Product Name: <%= newProduct[0].productname %>
+                              </p>
+                              <% } else { %>
+                                <!-- Handle the case when productname is undefined -->
+                                <p>No product name available</p>
+                                <% } %>
+
+                                  <% if (newProduct[0].price !==undefined) { %>
+                                    <p>Actual Price: <%= newProduct[0].price %>
+                                    </p>
+                                    <% } else { %>
+                                      <!-- Handle the case when price is undefined -->
+                                      <p>No price available</p>
+                                      <% } %>
+
+                                        <% if (newProduct[0].quantity !==undefined) { %>
+                                          <p>Available Stocks: <%= newProduct[0].quantity %>
+                                          </p>
+                                          <% } else { %>
+                                            <!-- Handle the case when quantity is undefined -->
+                                            <p>No quantity available</p>
+                                            <% } %>
+
+                                              <% if (newProduct[0].category) { %>
+                                                <p>Category: <%= newProduct[0].category %>
+                                                </p>
+                                                <% } else { %>
+                                                  <!-- Handle the case when category is undefined -->
+                                                  <p>No category available</p>
+                                                  <% } %>
                     </div>
-                  <% } else { %>
-                    <!-- Handle the case when newProduct or its properties are undefined -->
-                    <div class="col-12 col-md-8">
-                      <p>No new product information available</p>
-                    </div>
-                  <% } %>
-                  
+                    <% } else { %>
+                      <!-- Handle the case when newProduct or its properties are undefined -->
+                      <div class="col-12 col-md-8">
+                        <p>No new product information available</p>
+                      </div>
+                      <% } %>
+
                 </div>
               </div>
             </div>

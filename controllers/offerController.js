@@ -11,11 +11,7 @@ const CategoryOffer = require('../models/categoryOfferModel');
 const loadOffers = async (req, res) => {
     try {
         const offerDB = await Offers.find({}).lean();
-        if (offerDB) {
-            res.render('offerManagement', { offerDB });
-        }
-        res.render('offerManagement', { offerDB: [] });
-
+            res.render('offerManagement', { offerDB });   
     } catch (error) {
         console.log(error.message);
         res.render('500')
