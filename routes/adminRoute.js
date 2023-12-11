@@ -3,7 +3,7 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 dotenv.config();
-const config = require('../config/config')
+const config = require('../config/config1')
 const adminRoute = express()
 adminRoute.use(session({
   resave: true,
