@@ -1,29 +1,52 @@
 
 <%- include('../admin/layout/adminHeader.ejs') -%>
 
+
+
 <div class="col-12 grid-margin stretch-card">
-    <div class="card">
-      <div class="card-body">
-        <h4 class="card-title">Add New Category</h4>
-        <% if(typeof message !== 'undefined'){ %>
-          <span
-            id="er2"
-            style="color: rgb(241, 7, 7); text-align: center"
-            ><%= message %></span
-          >
-          <% } %>
-        <form class="forms-sample" action="/admin/addCat" method="post">
-          <div class="form-group">
-            <label for="exampleInputName1">Name of Category</label>
-            <input type="text" class="form-control" id="exampleInputName1" placeholder="Category Name" name="catName">
-          </div>
-    
-          <button type="submit" class="btn btn-primary mr-2">Submit</button>
-          <button class="btn btn-dark">Cancel</button>
-        </form>
-      </div>
+  <div class="card">
+    <div class="card-body">
+      <h4 class="card-title">Add New Category</h4>
+      <% if(typeof message !== 'undefined'){ %>
+        <span id="er2" style="color: rgb(241, 7, 7); text-align: center"><%= message %></span>
+      <% } %>
+      <form class="forms-sample" action="/admin/addCat" method="post" onsubmit="return validateForm()">
+        <div class="form-group">
+          <label for="exampleInputName1">Name of Category</label>
+          <input type="text" class="form-control" id="exampleInputName1" placeholder="Category Name" name="catName" oninput="validateCategoryName()">
+          <span id="categoryNameError" style="color: red;"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary mr-2" id="submitButton" disabled>Submit</button>
+        <button class="btn btn-dark">Cancel</button>
+      </form>
     </div>
   </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+  function validateCategoryName() {
+    const categoryNameInput = document.getElementById('exampleInputName1');
+    const categoryNameError = document.getElementById('categoryNameError');
+    const submitButton = document.getElementById('submitButton');
 
+    const categoryName = categoryNameInput.value.trim();
 
+    // Validate category name
+    const isValidCategoryName = /^[a-zA-Z0-9]+[a-zA-Z0-9\s]*[a-zA-Z0-9]+$/.test(categoryName);
+
+    if (categoryName === '') {
+      categoryNameError.textContent = 'Category name cannot be empty.';
+    } else if (!isValidCategoryName) {
+      categoryNameError.textContent = 'Invalid category name. It must not contain spaces at the beginning or end, special characters, and be between 1 to 15 characters.';
+    } else {
+      categoryNameError.textContent = '';
+    }
+
+    // Enable/disable the submit button based on validation
+    submitButton.disabled = !isValidCategoryName;
+  }
+
+</script>
   <%- include('../admin/layout/adminFooter.ejs') -%>
+

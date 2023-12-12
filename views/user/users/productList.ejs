@@ -36,184 +36,41 @@
                             </a>
 
                             <!--  FILTER      -->
-                            <div class="modal fade" id="filtersModal" tabindex="-1" role="dialog"
-                                aria-labelledby="filtersModalLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
+<div class="modal fade" id="filtersModal" tabindex="-1" role="dialog" aria-labelledby="filtersModalLabel"
+aria-hidden="true">
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <form action="/filter" method="post" id="filtersForm">
+            <div class="modal-header">
+                <h5 class="modal-title" id="filtersModalLabel">Filters</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <h6>Categories</h6>
+                <div class="row">
+                    <% availableCategories?.forEach(category => { %>
+                    <div class="col-6 col-sm-4">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input category-checkbox"
+                                id="category<%= category.id %>" value="<%= category.name %>" name="categories">
+                            <label class="form-check-label" for="category<%= category.id %>"><%= category.name %></label>
+                        </div>
+                    </div>
+                    <% }); %>
+                </div>
+                <!-- Add other filter options as needed -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary apply-filters-btn">Apply Filters</button>
+            </div>
+        </form>
+    </div>
+</div>
+</div>
 
-                                    <div class="modal-content">
-                                        <form action="/filter" method="post" id="filtersForm">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="filtersModalLabel">Filters</h5>
-                                                <button type="button" class="close" data-dismiss="modal"
-                                                    aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-
-                                            <div class="modal-body text-center">
-                                                <h6>Categories</h6>
-                                                <div class="row">
-                                                    <div class="col-6 col-sm-4">
-                                                        <div class="form-check">
-                                                            <input type="checkbox"
-                                                                class="form-check-input category-checkbox"
-                                                                id="category1" value="Men Shirts" name="categories">
-                                                            <label class="form-check-label" for="category1">Men
-                                                                Shirts</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-6 col-sm-4">
-                                                        <div class="form-check">
-                                                            <input type="checkbox"
-                                                                class="form-check-input category-checkbox"
-                                                                id="category2" value="Men Pants" name="categories">
-                                                            <label class="form-check-label" for="category2">Men
-                                                                Pants</label>
-                                                        </div>
-                                                    </div>
-                                                    <!-- Add values for the rest of the checkboxes -->
-                                                    <div class="col-6 col-sm-4">
-                                                        <div class="form-check">
-                                                            <input type="checkbox"
-                                                                class="form-check-input category-checkbox"
-                                                                id="category3" value="Men Shoes" name="categories">
-                                                            <label class="form-check-label" for="category3">Men
-                                                                Shoes</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-6 col-sm-4">
-                                                        <div class="form-check">
-                                                            <input type="checkbox"
-                                                                class="form-check-input category-checkbox"
-                                                                id="category4" value="Men Formals" name="categories">
-                                                            <label class="form-check-label" for="category4">Men
-                                                                Formals</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-6 col-sm-4">
-                                                        <div class="form-check">
-                                                            <input type="checkbox"
-                                                                class="form-check-input category-checkbox"
-                                                                id="category5" value="Women Shirts" name="categories">
-                                                            <label class="form-check-label" for="category5">Women
-                                                                Shirts</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-6 col-sm-4">
-                                                        <div class="form-check">
-                                                            <input type="checkbox"
-                                                                class="form-check-input category-checkbox"
-                                                                id="category6" value="Women Pants" name="categories">
-                                                            <label class="form-check-label" for="category6">Women
-                                                                Pants</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-6 col-sm-4">
-                                                        <div class="form-check">
-                                                            <input type="checkbox"
-                                                                class="form-check-input category-checkbox"
-                                                                id="category7" value="Women Scarfs" name="categories">
-                                                            <label class="form-check-label" for="category7">Women
-                                                                Scarfs</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-6 col-sm-4">
-                                                        <div class="form-check">
-                                                            <input type="checkbox"
-                                                                class="form-check-input category-checkbox"
-                                                                id="category8" value="Women Essentials"
-                                                                name="categories">
-                                                            <label class="form-check-label" for="category8">Women
-                                                                Essentials</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-6 col-sm-4">
-                                                        <div class="form-check">
-                                                            <input type="checkbox"
-                                                                class="form-check-input category-checkbox"
-                                                                id="category9" value="Women Tops" name="categories">
-                                                            <label class="form-check-label" for="category9">Women
-                                                                Tops</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-6 col-sm-4">
-                                                        <div class="form-check">
-                                                            <input type="checkbox"
-                                                                class="form-check-input category-checkbox"
-                                                                id="category10" value="Kids" name="categories">
-                                                            <label class="form-check-label"
-                                                                for="category10">Kids</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-6 col-sm-4">
-                                                        <div class="form-check">
-                                                            <input type="checkbox"
-                                                                class="form-check-input category-checkbox"
-                                                                id="category11" value="Men Essentials"
-                                                                name="categories">
-                                                            <label class="form-check-label" for="category11">Men
-                                                                Essentials</label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <h6 class="mt-4">Price Range</h6>
-                                                <div class="row">
-                                                    <div class="col-4">
-                                                        <div class="form-check">
-                                                            <input type="checkbox" class="form-check-input category-checkbox" id="price200-500" value="200-500" name="priceRange">
-                                                            <label class="form-check-label" for="price200-500">₹200 - ₹500</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-4">
-                                                        <div class="form-check">
-                                                            <input type="checkbox" class="form-check-input category-checkbox" id="price500-1000" value="500-1000" name="priceRange">
-                                                            <label class="form-check-label" for="price500-1000">₹500-₹1000</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-4">
-                                                        <div class="form-check">
-                                                            <input type="checkbox" class="form-check-input category-checkbox" id="price1000-3000" value="1000-3000" name="priceRange">
-                                                            <label class="form-check-label" for="price1000-3000">₹1000 - ₹3000</label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                
-                                                <div class="row">
-                                                    <div class="col-4">
-                                                        <div class="form-check">
-                                                            <input type="checkbox" class="form-check-input category-checkbox" id="price3000-5000" value="3000-5000" name="priceRange">
-                                                            <label class="form-check-label" for="price3000-5000">₹3000 - ₹5000</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-4">
-                                                        <div class="form-check">
-                                                            <input type="checkbox" class="form-check-input category-checkbox" id="price5000-10000" value="5000-10000" name="priceRange">
-                                                            <label class="form-check-label" for="price5000-10000">₹5000 - ₹10000</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-4">
-                                                        <div class="form-check">
-                                                            <input type="checkbox" class="form-check-input category-checkbox" id="price10000-100000" value="10000-100000" name="priceRange">
-                                                            <label class="form-check-label" for="price10000-100000">₹10000 - ₹100000</label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                               
-                                                
-
-                                            </div>
-
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-dismiss="modal">Close</button>
-                                                <button type="submit" class="btn btn-primary apply-filters-btn">Apply
-                                                    Filters</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
 
 
 

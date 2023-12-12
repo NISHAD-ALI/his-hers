@@ -25,99 +25,42 @@
                     <div class="toolbox">
                         <div class="toolbox-left">
                            
+                   
                             <!--  FILTER      -->
-                            <div class="modal fade" id="filtersModal" tabindex="-1" role="dialog"
-                                aria-labelledby="filtersModalLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-
-                                    <div class="modal-content">
-                                        <form action="/filter" method="post" id="filtersForm">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="filtersModalLabel">Filters</h5>
-                                                <button type="button" class="close" data-dismiss="modal"
-                                                    aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-
-                                            <div class="modal-body">
-                                                <h6>Categories</h6>
-                                                <div class="form-check">
-                                                    <input type="checkbox" class="form-check-input category-checkbox"
-                                                        id="category1" value="Men Shirts" name="categories">
-                                                    <label class="form-check-label" for="category1">Men Shirts</label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input type="checkbox" class="form-check-input category-checkbox"
-                                                        id="category2" value="Men Pants" name="categories">
-                                                    <label class="form-check-label" for="category2">Men Pants</label>
-                                                </div>
-                                                <!-- Add values for the rest of the checkboxes -->
-                                                <div class="form-check">
-                                                    <input type="checkbox" class="form-check-input category-checkbox"
-                                                        id="category3" value="Men Shoes" name="categories">
-                                                    <label class="form-check-label" for="category3">Men Shoes</label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input type="checkbox" class="form-check-input category-checkbox"
-                                                        id="category4" value="Men Formals" name="categories">
-                                                    <label class="form-check-label" for="category4">Men Formals</label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input type="checkbox" class="form-check-input category-checkbox"
-                                                        id="category5" value="Women Shirts" name="categories">
-                                                    <label class="form-check-label" for="category5">Women Shirts</label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input type="checkbox" class="form-check-input category-checkbox"
-                                                        id="category6" value="Women Pants" name="categories">
-                                                    <label class="form-check-label" for="category6">Women Pants</label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input type="checkbox" class="form-check-input category-checkbox"
-                                                        id="category7" value="Women Scarfs" name="categories">
-                                                    <label class="form-check-label" for="category7">Women Scarfs</label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input type="checkbox" class="form-check-input category-checkbox"
-                                                        id="category8" value="Women Essentials" name="categories">
-                                                    <label class="form-check-label" for="category8">Women
-                                                        Essentials</label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input type="checkbox" class="form-check-input category-checkbox"
-                                                        id="category9" value="Women Tops" name="categories">
-                                                    <label class="form-check-label" for="category9">Women Tops</label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input type="checkbox" class="form-check-input category-checkbox"
-                                                        id="category10" value="Kids" name="categories">
-                                                    <label class="form-check-label" for="category10">Kids</label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input type="checkbox" class="form-check-input category-checkbox"
-                                                        id="category11" value="Men Essentials" name="categories">
-                                                    <label class="form-check-label" for="category11">Men
-                                                        Essentials</label>
-                                                </div>
-
-                                                <!-- Price Slider -->
-                                               
-                                            </div>
-
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-dismiss="modal">Close</button>
-                                                <button type="submit" class="btn btn-primary apply-filters-btn">Apply
-                                                    Filters</button>
-                                            </div>
-                                        </form>
-                                    </div>
-
-
-                                </div>
-                            </div>
-
+<div class="modal fade" id="filtersModal" tabindex="-1" role="dialog" aria-labelledby="filtersModalLabel"
+aria-hidden="true">
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <form action="/filter" method="post" id="filtersForm">
+            <div class="modal-header">
+                <h5 class="modal-title" id="filtersModalLabel">Filters</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <h6>Categories</h6>
+                <div class="row">
+                    <% availableCategories?.forEach(category => { %>
+                    <div class="col-6 col-sm-4">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input category-checkbox"
+                                id="category<%= category.id %>" value="<%= category.name %>" name="categories">
+                            <label class="form-check-label" for="category<%= category.id %>"><%= category.name %></label>
+                        </div>
+                    </div>
+                    <% }); %>
+                </div>
+                <!-- Add other filter options as needed -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary apply-filters-btn">Apply Filters</button>
+            </div>
+        </form>
+    </div>
+</div>
+</div>
 
 
                         </div><!-- End .toolbox-left -->
@@ -151,14 +94,10 @@
                                                                     alt="">
                                                             </a>
                                                             <div class="product-action action-icon-top">
-                                                                <a href="/addToCart?id=<%= product._id %>"
+                                                                <a onclick="addToCart('<%= product._id %>')"
                                                                     class="btn-product btn-cart"><span>add to
                                                                         cart</span></a>
-                                                                <a href="/productView?id=<%= product._id %>"
-                                                                    class="btn-product btn-quickview"
-                                                                    title="Quick view"><span>quick view</span></a>
-                                                                <a href="#" class="btn-product btn-compare"
-                                                                    title="Compare"><span>compare</span></a>
+    
                                                             </div><!-- End .product-action -->
                                             </figure>
                                             <div class="product-body">
@@ -212,6 +151,56 @@
             </div><!-- End .page-content -->
         </main><!-- End .main -->
 
-       
+        <script>
+            function addToCart(productId) {
+                $.ajax({
+                    url: "/addToCart",
+                    method: "post",
+                    data: {
+                        id: productId,
+                    },
+                    success: (response) => {
+                        if (response.login === true) {
+        
+                            Swal.fire({
+                                icon: "warning",
+                                title: "Please Login",
+                                confirmButtonColor: "#3085d6",
+                                confirmButtonText: "Login",
+                                showCancelButton: true,
+                                cancelButtonColor: "#d33",
+                                text: response.message,
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = "/login";
+                                }
+                            });
+                        } else if (response.result) {
+        
+                            Swal.fire({
+                                icon: "success",
+                                title: "Product Added to Cart",
+                                text: "Your product has been added to the cart.",
+        
+                            }).then(() => {
+                                window.location.href = "/cart";
+                            });
+                        } else if (response.alreadyAdded) {
+                            Swal.fire({
+                                icon: "info",
+                                title: "Already Added to Cart",
+                                text: "Count of the product has been Incremented.",
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Sorry, product is Out Of Stock",
+                                text: response.message,
+                            });
+                        }
+                    },
+                });
+            }
+        </script>
 
         <%- include('../layout/footer.ejs') -%>
