@@ -5,11 +5,13 @@ const express = require('express')
 const userRoute = require('./routes/userRoute')
 const adminRoute = require('./routes/adminRoute');
 const session = require('express-session');
+const dotenv = require('dotenv');
+dotenv.config();
 const config = require('../HISHERS/config/config1')
 const app = express();
-const dotenv = require('dotenv');
+
 const { log } = require('console');
-dotenv.config();
+
 
 
 app.use((req, res, next) => {
