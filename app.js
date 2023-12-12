@@ -7,7 +7,7 @@ const adminRoute = require('./routes/adminRoute');
 const session = require('express-session');
 const dotenv = require('dotenv');
 dotenv.config();
-const config = require('../HISHERS/config/config1')
+const config = require('./config/config1')
 const app = express();
 
 const { log } = require('console');
