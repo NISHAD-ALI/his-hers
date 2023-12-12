@@ -8,6 +8,7 @@ const session = require('express-session');
 const config = require('../HISHERS/config/config1')
 const app = express();
 const dotenv = require('dotenv');
+const { log } = require('console');
 dotenv.config();
 
 
@@ -22,7 +23,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
 
-
+console.log(config);
 app.use(session({
   secret: config.sessionSecret,
   resave: false,

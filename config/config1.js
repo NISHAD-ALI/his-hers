@@ -1,4 +1,4 @@
-const sessionSecret = "siteSession";
+const sessionSecret = process.env.SESSIONSECRET;
 
 
 module.exports = {
