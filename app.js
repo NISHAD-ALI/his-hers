@@ -34,7 +34,7 @@ app.use(session({
 
 
 
-
+console.log(process.env.MONGODBURL);
 
 
 mongoose.connect(process.env.MONGODBURL)

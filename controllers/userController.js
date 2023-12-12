@@ -516,7 +516,7 @@ const resetPasswordEmailLink = async (req, res) => {
     const tokenExpiration = new Date(Date.now() + 3600000);
     console.log(token);
     storeTokenInDatabase(user.id, token, tokenExpiration);
-    const resetPasswordLink = `http://localhost:3001/loadpassReset?token=${token}`;
+    const resetPasswordLink = `https://hisandhersfashion.shop/loadpassReset?token=${token}`;
 
     const transporter = nodemailer.createTransport({
       host: 'smtp.gmail.com',
