@@ -495,30 +495,6 @@ const filterSaleYear = async (req, res) => {
       })
       .populate('products.productId');
 
-    // Render EJS template
-    const ejsPath = path.join(__dirname, '..', 'views', 'admin', 'salesReport.ejs');
-    const ejsTemplate = fs.readFileSync(ejsPath, 'utf-8');
-    const htmlContent = ejs.render(ejsTemplate, { orderDat });
-
-    const pdfPath = path.join(__dirname, 'downloads', 'sales_report.pdf');
-    const pdfStream = fs.createWriteStream(pdfPath);
-    const doc = new PDFDocument();
-
-    doc.pipe(pdfStream);
-    doc.text(htmlContent, { html: true });
-    doc.end();
-
-    const pdfPromise = new Promise((resolve, reject) => {
-      pdfStream.on('finish', () => {
-        resolve(pdfPath);
-      });
-
-      pdfStream.on('error', (err) => {
-        console.error('Error creating PDF:', err);
-        reject('Error generating PDF');
-      });
-    });
-
     // Generate Excel
     const excelPath = path.join(__dirname, 'downloads', 'sales_report.xlsx');
     const workbook = new ExcelJS.Workbook();
@@ -547,15 +523,12 @@ const filterSaleYear = async (req, res) => {
         throw new Error('Error generating Excel');
       });
 
-    // Wait for both promises to resolve
+    // Wait for the promise to resolve
     try {
-      const [pdfPath, excelPath] = await Promise.all([pdfPromise, excelPromise]);
+      const excelPath = await excelPromise;
 
-      // Send both files using express-zip
-      res.zip([
-        { path: pdfPath, name: 'sales_report.pdf' },
-        { path: excelPath, name: 'sales_report.xlsx' },
-      ]);
+      // Send the Excel file using express-zip
+      res.zip([{ path: excelPath, name: 'sales_report.xlsx' }]);
     } catch (error) {
       console.log(error);
       res.render('500');
@@ -565,6 +538,7 @@ const filterSaleYear = async (req, res) => {
     res.render('500');
   }
 };
+
 
 
 
