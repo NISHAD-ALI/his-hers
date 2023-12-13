@@ -1,79 +1,94 @@
-
 <%- include('../admin/layout/adminHeader.ejs') -%>
 
-<div class="main-panel">
-  <div class="content-wrapper">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-lg-12 grid-margin stretch-card">
-          <div class="card">
-            <div class="card-body">
-              <h4 class="card-title">Coupon Management</h4>
-              <div class="text">
-                <a href="/admin/loadAddCoupon">
-                  <button type="button" class="btn btn-success ml-auto" data-toggle="button" aria-pressed="false" autocomplete="off">
-                    + ADD COUPONS
-                  </button>
-              </a>
-            </div>
-            <br>
-            
-            <div class="table-responsive">
-              <table class="table " >
-                <thead>
-                  <tr>
-              
-                    <th>Name</th>
-                    <th>Code</th>
-                    <th>Disc.Amount</th>
-                    <th>Active Date</th>
-                    <th>Expiry Date</th>
-                    <th>Min Sale</th>
-                    <th>Status</th>
-                 
-                  </tr>
-                </thead>
-                <tbody>
-                  <% function formatDate(date) { %>
-                    <% if (date) { %>
-                        <%= date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: '2-digit' }).replace(/\//g, '-') %>
-                    <% } else { %>
-                        N/A 
-                    <% } %>
-                  
-                  <% } %>
+  <div class="main-panel">
+    <div class="content-wrapper">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body">
+                <h4 class="card-title">Coupon Management</h4>
+                <div class="text">
+                  <a href="/admin/loadAddCoupon">
+                    <button type="button" class="btn btn-success ml-auto" data-toggle="button" aria-pressed="false"
+                      autocomplete="off">
+                      + ADD COUPONS
+                    </button>
+                  </a>
+                </div>
+                <br>
 
-                  <% for(let i = 0; i < coupon.length; i++) { %>
-                  <tr>
-       
-                    <td><%= coupon[i].couponname %></td>
-                    <td><%= coupon[i].couponcode %></td>
-                    <td><%= coupon[i].discountamount %></td>
-                    <td><%= formatDate(coupon[i].activationdate) %></td>
-                    <td><%= formatDate(coupon[i].expirydate) %></td>
-                    <td><%= coupon[i].criteriaamount %></td>
-                    
-                    <td class="<%= coupon[i].status === 1 ? 'text-danger' : 'text-success' %>">
-                        <%= coupon[i].status === 1 ? 'Blocked' : 'Active' %>
-                      </td>
-                    
-                    <td>
-                      <a href="/admin/loadEditCoupon?id=<%= coupon[i]._id %>"><i class="bi bi-pencil-square"></i></a>
-                    </td>
-                    <td>
-                      <a href="/admin/deleteCoupon?id=<%= coupon[i]._id %>"" class="delete-link"><i class="bi bi-trash3"></i></a>
-                    </td>
-                  </tr>
-                  <% } %>
-                </tbody>
-              </table>
+                <div class="table-responsive">
+                  <table class="table ">
+                    <thead>
+                      <tr>
+
+                        <th>Name</th>
+                        <th>Code</th>
+                        <th>Disc.Amount</th>
+                        <th>Active Date</th>
+                        <th>Expiry Date</th>
+                        <th>Min Sale</th>
+                        <th>Status</th>
+
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% function formatDate(date) { %>
+                        <% if (date) { %>
+                          <%= date.toLocaleDateString('en-US', { year: 'numeric' , month: 'short' , day: '2-digit'
+                            }).replace(/\//g, '-' ) %>
+                            <% } else { %>
+                              N/A
+                              <% } %>
+
+                                <% } %>
+
+                                  <% for(let i=0; i < coupon.length; i++) { %>
+                                    <tr>
+
+                                      <td>
+                                        <%= coupon[i].couponname %>
+                                      </td>
+                                      <td>
+                                        <%= coupon[i].couponcode %>
+                                      </td>
+                                      <td>
+                                        <%= coupon[i].discountamount %>
+                                      </td>
+                                      <td>
+                                        <%= formatDate(coupon[i].activationdate) %>
+                                      </td>
+                                      <td>
+                                        <%= formatDate(coupon[i].expirydate) %>
+                                      </td>
+                                      <td>
+                                        <%= coupon[i].criteriaamount %>
+                                      </td>
+
+                                      <td class="<%= coupon[i].status === 1 ? 'text-danger' : 'text-success' %>">
+                                        <%= coupon[i].status===1 ? 'Blocked' : 'Active' %>
+                                      </td>
+
+                                      <td>
+                                        <a href="/admin/loadEditCoupon?id=<%= coupon[i]._id %>"><i
+                                            class="bi bi-pencil-square"></i></a>
+                                      </td>
+                                      <td>
+                                        <a href="/admin/deleteCoupon?id=<%= coupon[i]._id %>"" class=" delete-link"><i
+                                            class="bi bi-trash3"></i></a>
+                                      </td>
+                                    </tr>
+                                    <% } %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<%- include('../admin/layout/adminFooter.ejs') -%>
+  <%- include('../admin/layout/adminFooter.ejs') -%>

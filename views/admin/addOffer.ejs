@@ -1,90 +1,87 @@
-
 <%- include('../admin/layout/adminHeader.ejs') -%>
 
 
-<style>
+    <style>
+        .form-control {
 
-.form-control {
-   
-    max-width: fit-content;
-}
-
-</style>
-<div class="col-12 grid-margin stretch-card">
-    <div class="card">
-        <div class="card-body">
-            <h4 class="card-title">Add New Offer</h4>
-            <br>
-            <form class="forms-sample" action="/admin/addOfferDB" method="post" >
+            max-width: fit-content;
+        }
+    </style>
+    <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Add New Offer</h4>
+                <br>
+                <form class="forms-sample" action="/admin/addOfferDB" method="post">
 
 
-                
 
-                <div class="form-group">
-                    <label for="product">Product</label>
-                    <select class="form-control" id="product" name="product" required>
-                        <% product.forEach((item) => { %>
-                            <% if (item.blocked === 0) { %>
-                                <option value="<%= item.productname %>" required>
-                                    <%= item.productname %>
-                                </option>
-                            <% } %>
-                        <% }); %>
-                    </select>
-                </div>
-                
-                
-                
 
-                <div class="form-group">
-                    <label for="percentage">Percentage of Offer</label>
-                    <select class="form-control" id="percentage" name="percentage">
-                        <option value="5">5%</option>
-                        <option value="10">10%</option>
-                        <option value="15">15%</option>
-                        <option value="20">20%</option>
-                        <option value="25">25%</option>
-                        <option value="30">30%</option>
-                        <option value="35">35%</option>
-                        <option value="40">40%</option>
-                        <option value="45">45%</option>
-                        <option value="50">50%</option>
-                       
-                    </select>
-                </div>
+                    <div class="form-group">
+                        <label for="product">Product</label>
+                        <select class="form-control" id="product" name="product" required>
+                            <% product.forEach((item)=> { %>
+                                <% if (item.blocked===0) { %>
+                                    <option value="<%= item.productname %>" required>
+                                        <%= item.productname %>
+                                    </option>
+                                    <% } %>
+                                        <% }); %>
+                        </select>
+                    </div>
 
-                <div class="form-group">
-                    <label for="EndingDate">Ending Date</label>
-                    <input type="date" class="form-control" id="EndingDate" name="EndingDate">
-                    <p id="dateValidation" style="color: red;"></p>
-                </div>
-                
 
-                <button type="submit" id="submitBtn" class="btn btn-primary mr-2">Submit</button>
-                <button class="btn btn-dark">Cancel</button>
-            </form>
+
+
+                    <div class="form-group">
+                        <label for="percentage">Percentage of Offer</label>
+                        <select class="form-control" id="percentage" name="percentage">
+                            <option value="5">5%</option>
+                            <option value="10">10%</option>
+                            <option value="15">15%</option>
+                            <option value="20">20%</option>
+                            <option value="25">25%</option>
+                            <option value="30">30%</option>
+                            <option value="35">35%</option>
+                            <option value="40">40%</option>
+                            <option value="45">45%</option>
+                            <option value="50">50%</option>
+
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="EndingDate">Ending Date</label>
+                        <input type="date" class="form-control" id="EndingDate" name="EndingDate">
+                        <p id="dateValidation" style="color: red;"></p>
+                    </div>
+
+
+                    <button type="submit" id="submitBtn" class="btn btn-primary mr-2">Submit</button>
+                    <button class="btn btn-dark">Cancel</button>
+                </form>
+            </div>
         </div>
     </div>
-</div>
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script>
-    $(document).ready(function () {
-      $('#EndingDate').on('input', function () {
-        const selectedDate = new Date($(this).val());
-        const currentDate = new Date();
-  
-    
-        if (selectedDate <= currentDate) {
-         
-          $('#submitBtn').prop('disabled', true);
-          $('#dateValidation').text('Selected date must be greater than the current date');
-        } else {
-       
-          $('#submitBtn').prop('disabled', false);
-          $('#dateValidation').text('');
-        }
-      });
-    });
-  </script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#EndingDate').on('input', function () {
+                const selectedDate = new Date($(this).val());
+                const currentDate = new Date();
 
-<%- include('../admin/layout/adminFooter.ejs') -%>
+
+                if (selectedDate <= currentDate) {
+
+                    $('#submitBtn').prop('disabled', true);
+                    $('#dateValidation').text('Selected date must be greater than the current date');
+                } else {
+
+                    $('#submitBtn').prop('disabled', false);
+                    $('#dateValidation').text('');
+                }
+            });
+        });
+    </script>
+
+    <%- include('../admin/layout/adminFooter.ejs') -%>

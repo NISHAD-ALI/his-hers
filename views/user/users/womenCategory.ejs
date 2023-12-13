@@ -28,42 +28,50 @@
                                 <i class="icon-bars"></i> Filters
                             </a> -->
 
-                     
+
                             <!--  FILTER      -->
-<div class="modal fade" id="filtersModal" tabindex="-1" role="dialog" aria-labelledby="filtersModalLabel"
-aria-hidden="true">
-<div class="modal-dialog" role="document">
-    <div class="modal-content">
-        <form action="/filter" method="post" id="filtersForm">
-            <div class="modal-header">
-                <h5 class="modal-title" id="filtersModalLabel">Filters</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body text-center">
-                <h6>Categories</h6>
-                <div class="row">
-                    <% availableCategories?.forEach(category => { %>
-                    <div class="col-6 col-sm-4">
-                        <div class="form-check">
-                            <input type="checkbox" class="form-check-input category-checkbox"
-                                id="category<%= category.id %>" value="<%= category.name %>" name="categories">
-                            <label class="form-check-label" for="category<%= category.id %>"><%= category.name %></label>
-                        </div>
-                    </div>
-                    <% }); %>
-                </div>
-                <!-- Add other filter options as needed -->
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary apply-filters-btn">Apply Filters</button>
-            </div>
-        </form>
-    </div>
-</div>
-</div>
+                            <div class="modal fade" id="filtersModal" tabindex="-1" role="dialog"
+                                aria-labelledby="filtersModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <form action="/filter" method="post" id="filtersForm">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="filtersModalLabel">Filters</h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body text-center">
+                                                <h6>Categories</h6>
+                                                <div class="row">
+                                                    <% availableCategories?.forEach(category=> { %>
+                                                        <div class="col-6 col-sm-4">
+                                                            <div class="form-check">
+                                                                <input type="checkbox"
+                                                                    class="form-check-input category-checkbox"
+                                                                    id="category<%= category.id %>"
+                                                                    value="<%= category.name %>" name="categories">
+                                                                <label class="form-check-label"
+                                                                    for="category<%= category.id %>">
+                                                                    <%= category.name %>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <% }); %>
+                                                </div>
+                                                <!-- Add other filter options as needed -->
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary apply-filters-btn">Apply
+                                                    Filters</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
 
 
 
@@ -103,7 +111,7 @@ aria-hidden="true">
                                                                 <a onclick="addToCart('<%= product._id %>')"
                                                                     class="btn-product btn-cart"><span>add to
                                                                         cart</span></a>
-    
+
                                                             </div><!-- End .product-action -->
                                             </figure>
                                             <div class="product-body">
@@ -167,7 +175,7 @@ aria-hidden="true">
                     },
                     success: (response) => {
                         if (response.login === true) {
-        
+
                             Swal.fire({
                                 icon: "warning",
                                 title: "Please Login",
@@ -182,12 +190,12 @@ aria-hidden="true">
                                 }
                             });
                         } else if (response.result) {
-        
+
                             Swal.fire({
                                 icon: "success",
                                 title: "Product Added to Cart",
                                 text: "Your product has been added to the cart.",
-        
+
                             }).then(() => {
                                 window.location.href = "/cart";
                             });

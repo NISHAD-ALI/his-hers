@@ -1,72 +1,76 @@
-
 <%- include('../admin/layout/adminHeader.ejs') -%>
 
 
 
-    
-        <div class="main-panel">
-            <div class="card-body">
-                <h4 class="card-title">CATEGORY MANAGEMENT</h4>
-                
-                <br>
-                <div class="text-right">
-                  <a href="/admin/addCategory">
-                    <button type="button" class="btn btn-success ml-auto" data-toggle="button" aria-pressed="false" autocomplete="off">
-                      + ADD CATEGORY
-                    </button>
-                  </a>
-                </div>
-                
-                
-                
-                <br>
-               
-                <div class="table-responsive">
-                  <table class="table">
-                    
-                    <thead>
-                        <tr>
-                          <th> No. </th>
-                          <th> Category </th>
-                          <th> Status </th>
-                          <th> Action </th>
-                          <!-- <th> Update </th> -->
-                        </tr>
-                        <% if(cats.length>0){ 
-                          for(let i=0;i<cats.length;i++){  %>
-                              <tr>
-                                  <td><%= i+1 %></td>
-                                  <td><%= cats[i].name %></td>
-                                  
-                                      <% if(cats[i].blocked==0){ %>
-                                          <td class="text-success">Active</td>
-                                          <td>
-                                              <a href="/admin/block-cat?id=<%= cats[i]._id %>" class="badge badge-danger">BLOCK</a>
-                                          </td>
-                                     <% }else{ %>
-                                      <td class="text-danger">Blocked</td>
-                                      <td>
-                                          <a href="/admin/block-cat?id=<%= cats[i]._id %>" class="badge badge-success">UNBLOCK</a>
-                                      </td>
-          
-                                   <%  } %>
-                                   <td >
-                                      <a href="/admin/edit-cat?id=<%= cats[i]._id %>"><i class="bi bi-pencil-square"></i></a>
-                                   </td>
-                                  
-                              </tr>
-                          <% } %>
-                          
-          
-                        <% }else{ %>
-                          <tr>
-                              <td colspan="5">Catagories Not Found</td>
-                            </tr>
-          
-                       <% } %>
-                      </thead>
-                    <tbody>
-                       
+
+  <div class="main-panel">
+    <div class="card-body">
+      <h4 class="card-title">CATEGORY MANAGEMENT</h4>
+
+      <br>
+      <div class="text-right">
+        <a href="/admin/addCategory">
+          <button type="button" class="btn btn-success ml-auto" data-toggle="button" aria-pressed="false"
+            autocomplete="off">
+            + ADD CATEGORY
+          </button>
+        </a>
+      </div>
 
 
-          <%- include('../admin/layout/adminFooter.ejs') -%>
+
+      <br>
+
+      <div class="table-responsive">
+        <table class="table">
+
+          <thead>
+            <tr>
+              <th> No. </th>
+              <th> Category </th>
+              <th> Status </th>
+              <th> Action </th>
+              <!-- <th> Update </th> -->
+            </tr>
+            <% if(cats.length>0){
+              for(let i=0;i<cats.length;i++){ %>
+                <tr>
+                  <td>
+                    <%= i+1 %>
+                  </td>
+                  <td>
+                    <%= cats[i].name %>
+                  </td>
+
+                  <% if(cats[i].blocked==0){ %>
+                    <td class="text-success">Active</td>
+                    <td>
+                      <a href="/admin/block-cat?id=<%= cats[i]._id %>" class="badge badge-danger">BLOCK</a>
+                    </td>
+                    <% }else{ %>
+                      <td class="text-danger">Blocked</td>
+                      <td>
+                        <a href="/admin/block-cat?id=<%= cats[i]._id %>" class="badge badge-success">UNBLOCK</a>
+                      </td>
+
+                      <% } %>
+                        <td>
+                          <a href="/admin/edit-cat?id=<%= cats[i]._id %>"><i class="bi bi-pencil-square"></i></a>
+                        </td>
+
+                </tr>
+                <% } %>
+
+
+                  <% }else{ %>
+                    <tr>
+                      <td colspan="5">Catagories Not Found</td>
+                    </tr>
+
+                    <% } %>
+          </thead>
+          <tbody>
+
+
+
+            <%- include('../admin/layout/adminFooter.ejs') -%>

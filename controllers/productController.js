@@ -220,11 +220,11 @@ const loadProductList = async (req, res) => {
         userName = user.name;
       }
     }
-    const availableCategories = await category.find(); 
+    const availableCategories = await category.find();
     const discount = await Offers.find({ is_block: 0 })
     const discountcategory = await CategoryOffer.find({ is_block: 0 });
     const productData = await product.find({ blocked: 0 });
-    const renderData = { products: productData, discPrice: discount, discCat: discountcategory,availableCategories };
+    const renderData = { products: productData, discPrice: discount, discCat: discountcategory, availableCategories };
 
     if (userName) {
       renderData.userName = userName;
@@ -318,12 +318,12 @@ const sortProducts = async (req, res) => {
     }
 
     console.log('Sort Criteria:', sortCriteria);
-    const availableCategories = await category.find(); 
+    const availableCategories = await category.find();
     const discountProducts = await Offers.find({ is_block: 0 });
     const discountcategory = await CategoryOffer.find({ is_block: 0 });
     const sortedProducts = await product.find().sort(sortCriteria);
 
-    const renderData = { products: sortedProducts, discPrice: discount ,availableCategories};
+    const renderData = { products: sortedProducts, discPrice: discount, availableCategories };
     console.log(sortedProducts)
     res.render('productList', renderData);
 
@@ -337,17 +337,17 @@ const sortProducts = async (req, res) => {
 const filteredProducts = async (req, res) => {
   try {
 
-    const availableCategories = await category.find(); 
-   
+    const availableCategories = await category.find();
+
     const selectedCategories = req.body.categories;
-    
+
 
     const filteredProducts = await product.find({
       category: selectedCategories,
-     
+
     });
     const discount = await Offers.find({ is_block: 0 });
-    const renderData = { products: filteredProducts, discPrice: discount ,availableCategories};
+    const renderData = { products: filteredProducts, discPrice: discount, availableCategories };
 
 
     res.render('productList', renderData);
@@ -369,7 +369,7 @@ const menCat = async (req, res) => {
         userName = user.name;
       }
     }
-    const availableCategories = await category.find(); 
+    const availableCategories = await category.find();
     const discount = await Offers.find({ is_block: 0 });
 
 
@@ -378,7 +378,7 @@ const menCat = async (req, res) => {
       category: { $regex: /^men/, $options: 'i' }
     });
 
-    const renderData = { products: productData, discPrice: discount,availableCategories };
+    const renderData = { products: productData, discPrice: discount, availableCategories };
 
     if (userName) {
       renderData.userName = userName;
@@ -403,7 +403,7 @@ const womenCat = async (req, res) => {
         userName = user.name;
       }
     }
-    const availableCategories = await category.find(); 
+    const availableCategories = await category.find();
     const discount = await Offers.find({ is_block: 0 });
 
     const productData = await product.find({
@@ -411,7 +411,7 @@ const womenCat = async (req, res) => {
       category: { $regex: 'women', $options: 'i' }
     });
 
-    const renderData = { products: productData, discPrice: discount,availableCategories };
+    const renderData = { products: productData, discPrice: discount, availableCategories };
 
     if (userName) {
       renderData.userName = userName;
@@ -436,12 +436,12 @@ const loadfreshArrivals = async (req, res) => {
         userName = user.name;
       }
     }
-    const availableCategories = await category.find(); 
+    const availableCategories = await category.find();
     const discount = await Offers.find({ is_block: 0 });
 
 
     const productData = await product.find({ blocked: 0 }).sort({ _id: -1 }).limit(8)
-    const renderData = { products: productData, discPrice: discount ,availableCategories};
+    const renderData = { products: productData, discPrice: discount, availableCategories };
 
     if (userName) {
       renderData.userName = userName;

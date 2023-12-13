@@ -44,8 +44,8 @@ const loadCheckout = async (req, res) => {
 
     const userId = req.session.user_id;
     const cartData = await Cart.findOne({ userid: userId }).populate("products.productId");
- 
-    if(cartData){
+
+    if (cartData) {
       console.log(cartData);
       const coupon = await Coupon.find({ status: 0 })
       const discAmount = coupon.discountamount
@@ -53,7 +53,7 @@ const loadCheckout = async (req, res) => {
         return products.totalPrice * products.count;
       });
       console.log(datatotal);
-  
+
       // grand total
       let totalamount = 0;
       if (datatotal.length > 0) {
@@ -67,15 +67,15 @@ const loadCheckout = async (req, res) => {
         { $set: { total: totalamount } },
         { new: true }
       );
-  
-  
+
+
       res.render('checkout', { accountDetails, UserAddress, userName, totalamount, datatotal, cartData: cartData, coupon, discAmount });
-  }else{
-    console.log('hello');
-    
-    res.redirect('/')
-  }
-    
+    } else {
+     
+
+      res.redirect('/')
+    }
+
   } catch (error) {
     console.log(error.message);
     res.render('500')

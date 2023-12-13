@@ -168,50 +168,55 @@
     });
   </script>
 
-  
- <script>
-  function previewImages(input) {
-  var previewContainer = document.getElementById('imagePreviewContainer');
-  previewContainer.innerHTML = ''; // Clear previous previews
 
-  var files = input.files;
-  for (var i = 0; i < files.length; i++) { var reader=new FileReader(); reader.onload=function (e) { var
-    img=document.createElement('img'); img.src=e.target.result; img.style.maxWidth='300px' ; 
-   previewContainer.appendChild(img); }; reader.readAsDataURL(files[i]); } }
-     </script>
+  <script>
+    function previewImages(input) {
+      var previewContainer = document.getElementById('imagePreviewContainer');
+      previewContainer.innerHTML = ''; // Clear previous previews
 
-    
-    <script>
-      function validateAndPreviewImages(input) {
-        var previewContainer = document.getElementById('imagePreviewContainer');
-        var errorSpan = document.getElementById('image1Error');
-
-        // Get the selected files
-        var files = input.files;
-
-        // Define the maximum allowed images
-        var maxImages = 4;
-
-        // Check if the number of selected images exceeds the limit
-        if (files.length > maxImages) {
-          // Clear the file input
-          input.value = '';
-
-          // Display an error message
-          errorSpan.textContent = 'Please upload a maximum of ' + maxImages + ' images.';
-          errorSpan.style.display = 'block';
-
-          // Clear the image preview container
-          previewContainer.innerHTML = '';
-        } else {
-          // Hide any previous error messages
-          errorSpan.style.display = 'none';
-
-          // Proceed with previewing the images
-          previewImages(input);
-        }
+      var files = input.files;
+      for (var i = 0; i < files.length; i++) {
+        var reader = new FileReader(); reader.onload = function (e) {
+          var
+          img = document.createElement('img'); img.src = e.target.result; img.style.maxWidth = '300px';
+          previewContainer.appendChild(img);
+        }; reader.readAsDataURL(files[i]);
       }
+    }
+  </script>
 
-     
-    </script>
-    <%- include('../admin/layout/adminFooter.ejs') -%>
+
+  <script>
+    function validateAndPreviewImages(input) {
+      var previewContainer = document.getElementById('imagePreviewContainer');
+      var errorSpan = document.getElementById('image1Error');
+
+      // Get the selected files
+      var files = input.files;
+
+      // Define the maximum allowed images
+      var maxImages = 4;
+
+      // Check if the number of selected images exceeds the limit
+      if (files.length > maxImages) {
+        // Clear the file input
+        input.value = '';
+
+        // Display an error message
+        errorSpan.textContent = 'Please upload a maximum of ' + maxImages + ' images.';
+        errorSpan.style.display = 'block';
+
+        // Clear the image preview container
+        previewContainer.innerHTML = '';
+      } else {
+        // Hide any previous error messages
+        errorSpan.style.display = 'none';
+
+        // Proceed with previewing the images
+        previewImages(input);
+      }
+    }
+
+
+  </script>
+  <%- include('../admin/layout/adminFooter.ejs') -%>
