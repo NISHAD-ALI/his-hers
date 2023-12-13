@@ -15,10 +15,10 @@
                       <!-- Empty header cells -->
                       <th>User Name</th>
                       <th>Product Name</th>
-                      <th>Price</th>
+                    
                       <th>Date</th>
                       <th>Order Status</th>
-                      <th>Payment</th>
+                   
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -35,10 +35,30 @@
                               <img src="/products/images/<%= product.image[0] %>" alt="image" />
                               <span class="pl-2 product-name"><%= product.productname %></span>
                             </td>
-                            <td><%= product.price %></td>
+                          
                             <td><%= orderDat[j].purchaseDate.toLocaleString('en-US', { year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).replace(/,/, '').replace(/\//g, '-') %></td>
                             <td><%= orderDat[j].status %></td>
-                            <td><%= orderDat[j].paymentMethod %></td>
+                             <td>
+                              <!-- Order Status Select -->
+                              <div class="form-group">
+                                <select class="form-control order-status-select"
+                                  data-order-id="<%= orderDat[j]._id %>">
+                                  <option value="Pending" <%=orderDat[j].status==="Pending" ? 'selected' : '' %>
+                                    >Pending</option>
+                                  <option value="Processing" <%=orderDat[j].status==="Processing" ? 'selected'
+                                    : '' %>>Processing</option>
+                                  <option value="Shipped" <%=orderDat[j].status==="Shipped" ? 'selected' : '' %>
+                                    >Shipped</option>
+                                  <option value="Delivered" <%=orderDat[j].status==="Delivered" ? 'selected'
+                                    : '' %>>Delivered</option>
+                                  <option value="cancelled" <%=orderDat[j].status==="cancelled" ? 'selected'
+                                    : '' %>>cancelled</option>
+                                  <option value="Returned" <%=orderDat[j].status==="Returned" ? 'selected' : ''
+                                    %>>Returned</option>
+                                  <!-- Add more options as needed -->
+                                </select>
+                              </div>
+                            </td>
                             <td>
                               <!-- Open modal button -->
                               <button type="button" class="btn btn-outline-primary-2" data-toggle="modal" data-target="#orderDetailsModal<%= j %>">
@@ -63,7 +83,17 @@
                                       <p><strong>Date:</strong> <%= orderDat[j].purchaseDate.toLocaleString('en-US', { year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).replace(/,/, '').replace(/\//g, '-') %></p>
                                       <p><strong>Order Status:</strong> <%= orderDat[j].status %></p>
                                       <p><strong>Payment Method:</strong> <%= orderDat[j].paymentMethod %></p>
-                                      <!-- Add more details as needed -->
+
+                                      <h3>Address Details</h3>
+                                      <br>
+                                      <p><strong>Full Name:</strong> <%= orderDat[j].deliveryDetails.address.address[0].fullname %></p>
+                                      <p><strong>Mobile Number:</strong> <%=  orderDat[j].deliveryDetails.address.address[0].mobile %></p>
+                                      <p><strong>Email:</strong> <%= orderDat[j].deliveryDetails.address.address[0].email %></p>
+                                      <p><strong>House No:</strong> <%= orderDat[j].deliveryDetails.address.address[0].houseNo %></p>
+                                      <p><strong>City:</strong> <%= orderDat[j].deliveryDetails.address.address[0].city %></p>
+                                      <p><strong>State:</strong> <%= orderDat[j].deliveryDetails.address.address[0].state %></p>
+                                      <p><strong>Zipcode:</strong> <%= orderDat[j].deliveryDetails.address.address[0].zipcode %></p>
+                                      <p><strong>AdditionalDetails:</strong> <%= orderDat[j].deliveryDetails.address.address[0].additionalDetails %></p>
                                     </div>
                                     <div class="modal-footer">
                                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
