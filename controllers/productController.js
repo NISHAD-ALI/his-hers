@@ -280,20 +280,31 @@ const loadUserProduct = async (req, res) => {
 // ++++++++++++++++++++++++++++++++++++++ SEARCH PRODUCTS++++++++++++++++++++++++++++++++++++++++++++++
 const searchProducts = async (req, res) => {
   try {
-    const data = req.query.searchdata;
-    console.log(data);
-    const discount = await Offers.find({ is_block: 0 });
-    const productData = await product.find({
-      productname: { $regex: new RegExp(data, "i") },
-    });
-    console.log(productData);
-    const renderData = { products: productData, discPrice: discount };
+      console.log('Search Request Received');
+      const data = req.query.searchdata;
+      console.log('Search Data:', data);
+      const availableCategories = await category.find();
+      const discount = await Offers.find({ is_block: 0 });
+      console.log('Discount Data:', discount);
+
+      const productData = await product.find({
+          productname: { $regex: new RegExp(data, "i") },
+      });
+      console.log('Product Data:', productData);
+
+      const renderData = {
+        products: productData,
+        discPrice: discount,
+        availableCategories: availableCategories // Make sure to include this
+    };
     res.render('productList', renderData);
+    
   } catch (error) {
-    console.log(error.message);
-    res.render('500')
+      console.error('Error:', error.message);
+      res.render('500')
   }
 };
+
 
 
 // ++++++++++++++++++++++++++++++++++++++ LOAD SORTED PRODUCTS++++++++++++++++++++++++++++++++++++++++++++++

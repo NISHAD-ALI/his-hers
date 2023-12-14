@@ -93,7 +93,7 @@
 
                 </div><!-- End .toolbox -->
                 <!-- PRODUCTS -->
-                <div id="productListContainer" class="products">
+                <div id="searchResultsContainer" class="products">
 
                     <div class="products">
                         <div class="row">
@@ -155,7 +155,7 @@
                         </div>
                     </div>
                     <!-- Your existing product list code goes here -->
-                </div </div><!-- End .container -->
+                </div ></div><!-- End .container -->
             </div><!-- End .page-content -->
         </div>
 
@@ -167,40 +167,66 @@
 
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const searchToggle = document.querySelector('.search-toggle');
-            const searchModal = $('#searchModal');
-            const productNameInput = $('#productName');
-            const searchButton = $('#searchButton');
-            const productListContainer = $('#productListContainer');
-
-            searchToggle.addEventListener('click', function () {
-                searchModal.modal('show');
-            });
-
-            searchButton.on('click', function () {
-                const searchData = productNameInput.val();
-                console.log(searchData);
+         document.addEventListener('DOMContentLoaded', function () {
+         const productListContainer = $('#searchResultsContainer');
+         });
+        $(document).ready(function () {
+            $(document).on('submit', '#headerSearchForm', function (e) {
+                e.preventDefault();
+                const searchData = $('#q').val();
                 searchProducts(searchData);
-                searchModal.modal('hide');
+                console.log('hello');
             });
-
+    
             function searchProducts(searchData) {
+                console.log('Search Data:', searchData);
+    
                 $.ajax({
                     url: '/searchProducts',
                     method: 'GET',
                     data: { searchdata: searchData },
                     success: function (data) {
-                        const productListHtml = $(data).find('#productListContainer').html();
+                        const productListHtml = $(data).find('#searchResultsContainer').html();
                         productListContainer.html(productListHtml);
                     },
                     error: function (error) {
-                        console.error(error);
+                        console.error('Search Error:', error);
                     }
                 });
             }
         });
     </script>
+     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const productListContainer = $('#searchResultsContainer');
+    
+            $(document).on('submit', '#headerSearchForm', function (e) {
+                e.preventDefault();
+                const searchData = $('#q').val();
+                searchProducts(searchData);
+                console.log('hello');
+            });
+    
+            function searchProducts(searchData) {
+                console.log('Search Data:', searchData);
+    
+                $.ajax({
+                    url: '/searchProducts',
+                    method: 'GET',
+                    data: { searchdata: searchData },
+                    success: function (data) {
+                       
+                        const productListHtml = $(data).find('#searchResultsContainer').html();
+                        productListContainer.html(productListHtml);
+                    },
+                    error: function (error) {
+                        console.error('Search Error:', error);
+                    }
+                });
+            }
+        });
+    </script>
+    
 
     <script>
         function addToCart(productId) {
@@ -254,3 +280,7 @@
         }
     </script>
     <%- include('../layout/footer.ejs') -%>
+
+
+
+
