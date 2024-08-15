@@ -138,7 +138,7 @@
     "proxy-addr": "^2.0.7",
     "pstree.remy": "^1.1.8",
     "punycode": "^2.3.0",
-    "puppeteer": "^21.5.1",
+    "puppeteer": "^23.1.0",
     "qs": "^6.11.0",
     "range-parser": "^1.2.1",
     "raw-body": "^2.5.2",
