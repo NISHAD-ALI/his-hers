@@ -1,5 +1,4 @@
 const User = require('../models/userModel')
-const category = require("../models/categoryModel");
 const product = require('../models/productModel');
 const Cart = require('../models/cartModel')
 const Address = require('../models/addressModel')
@@ -10,16 +9,11 @@ const { log } = require('npmlog');
 const Razorpay = require('razorpay');
 const crypto = require("crypto")
 require('dotenv').config()
-const path = require('path')
-const fs = require('fs')
-const puppeteer = require('puppeteer')
-const ejs = require('ejs')
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAYKEYID,
   key_secret: process.env.RAZORPAYSECRETKEY,
 });
-console.log();
 // ++++++++++++++++RENDER CHECKOUT++++++++++++++++++
 
 const loadCheckout = async (req, res) => {
@@ -27,7 +21,6 @@ const loadCheckout = async (req, res) => {
     let accountDetails
     let userName
     let UserAddress;
-    let addressId = req.query.id
     if (req.session.user_id) {
       const user = await User.findOne({ _id: req.session.user_id });
       const addresses = await Address.find({ User: req.session.user_id });
@@ -62,11 +55,6 @@ const loadCheckout = async (req, res) => {
         });
       }
       console.log(totalamount);
-      const updatedCart = await Cart.findOneAndUpdate(
-        { userid: userId },
-        { $set: { total: totalamount } },
-        { new: true }
-      );
 
 
       res.render('checkout', { accountDetails, UserAddress, userName, totalamount, datatotal, cartData: cartData, coupon, discAmount });
@@ -92,7 +80,6 @@ const placeOrder = async (req, res) => {
     const paymentMethod = req.body['payment-method'];
     const status = paymentMethod === 'cod' || paymentMethod === 'Wallet' ? 'placed' : 'pending';
 
-    const statusLevel = status === 'placed' ? 1 : 0;
     console.log('XP 1');
 
     const user = await User.findOne({ _id: userId });
@@ -148,7 +135,6 @@ const placeOrder = async (req, res) => {
     console.log('XP 4');
     // Clear the user's cart
     await Cart.updateOne({ userid: userId }, { $set: { products: [] } });
-    const successPageURL = '/order-success';
 
     if (paymentMethod === 'Wallet') {
       const walletData = await Wallet.findOne({ userid: userId });
@@ -161,10 +147,6 @@ const placeOrder = async (req, res) => {
           type: 'debit',
         };
 
-        const updatedWallet = await Wallet.updateOne(
-          { userid: userId },
-          { $push: { items: newTransaction }, $set: { balance: balWallet - totalAmount } }
-        );
         await decreaseProductQuantities(orderProducts);
         return res.json({ success: true, orderId: savedOrder._id });
       } else {
@@ -233,7 +215,6 @@ const verifypayment = async (req, res) => {
 
     const user_id = req.session.user_id
     const paymentData = req.body
-    const cartData = await Cart.find({ userid: user_id });
     const hmac = crypto.createHmac("sha256", process.env.RAZORPAYSECRETKEY);
     hmac.update(paymentData.payment.razorpay_order_id + "|" + paymentData.payment.razorpay_payment_id);
     const hmacValue = hmac.digest("hex");
@@ -290,10 +271,6 @@ const cancelOrder = async (req, res) => {
             type: 'credit',
           };
 
-          const updatedWallet = await Wallet.updateOne(
-            { userid: user },
-            { $push: { items: newTransaction }, $set: { balance: balWallet + tAmount } }, { upsert: true }
-          );
 
 
 
@@ -363,10 +340,6 @@ const orderReturnPOST = async (req, res) => {
           type: 'credit',
         };
 
-        const updatedWallet = await Wallet.updateOne(
-          { userid: user },
-          { $push: { items: newTransaction }, $set: { balance: balWallet + tAmount } }, { upsert: true }
-        );
 
         res.json({ success: true });
 

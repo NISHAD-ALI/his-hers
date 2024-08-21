@@ -1,4 +1,3 @@
-const admin = require('../models/adminModel')
 const User = require('../models/userModel')
 const category = require("../models/categoryModel");
 const product = require('../models/productModel')
@@ -260,7 +259,6 @@ const loadUserProduct = async (req, res) => {
 
 
     if (viewProduct) {
-      const products = await product.find({ blocked: 0 });
       const renderData = { viewProduct, productId: req.query.id, discPrice: discount, discCat: discountcategory };
 
       if (userName) {
@@ -330,8 +328,6 @@ const sortProducts = async (req, res) => {
 
     console.log('Sort Criteria:', sortCriteria);
     const availableCategories = await category.find();
-    const discountProducts = await Offers.find({ is_block: 0 });
-    const discountcategory = await CategoryOffer.find({ is_block: 0 });
     const sortedProducts = await product.find().sort(sortCriteria);
 
     const renderData = { products: sortedProducts, discPrice: discount, availableCategories };

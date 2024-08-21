@@ -3,8 +3,6 @@ const Address = require('../models/addressModel')
 const Order = require('../models/orderModel')
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
-const multer = require("../middleware/multer");
-const Cart = require('../models/cartModel')
 const Product = require('../models/productModel')
 const Wishlist = require('../models/wishlistModel');
 const Wallet = require('../models/walletModel')
@@ -88,7 +86,6 @@ const insertNewUser = async (req, res) => {
     });
 
     // Save the default wallet
-    const savedWallet = await defaultWallet.save();
 
     if (userData) {
       // Send verification email
@@ -175,7 +172,6 @@ const verifymail = async (req, res) => {
 
     if (req.body.otp == otpsend) {
       const use = req.body.usermon
-      const updateinfo = await User.updateOne({ email: email2 }, { $set: { is_verified: 1 } });
       console.log(use + "111111111111111");
       // res.redirect('/login');
       res.render('login', { message: 'Your Account has been created.' });
@@ -308,7 +304,6 @@ const loadAcc = async (req, res) => {
     let accountDetails;
     let userName;
     let UserAddress;
-    let addressId = req.query.id;
     if (req.session.user_id) {
       const user = await User.findOne({ _id: req.session.user_id });
       const addresses = await Address.find({ User: req.session.user_id });

@@ -1,7 +1,6 @@
 const Coupon = require('../models/couponModel')
 const Cart = require('../models/cartModel')
-const User = require('../models/userModel')
-const { log } = require('npmlog')
+require('npmlog')
 
 // +++++++++++++++++++++++++++++ RENDER COUPON MANAGEMENT +++++++++++++++++++++++++++++++++
 const loadCoupon = async (req, res) => {

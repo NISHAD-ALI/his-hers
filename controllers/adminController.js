@@ -4,21 +4,14 @@ const user = require('../models/userModel')
 const category = require("../models/categoryModel");
 const product = require('../models/productModel')
 const Order = require('../models/orderModel')
-const Address = require('../models/addressModel')
-const fs = require('fs');
 const path = require('path');
-const ejs = require('ejs');
-const PDFDocument = require('pdfkit');
 const ExcelJS = require('exceljs');
-const zip = require('express-zip');
 
-// ++++++++++++++++++++++++++++++++++++++CHECKING WITH REGEX++++++++++++++++++++++++++++++++++++++++++++++
+
 function validateEmail(email) {
   const regex = /^[^\s@]+([\._][^\s@]+)*@[^\s@]+\.[^\s@]+$/;
   return regex.test(email);
 }
-
-// ++++++++++++++++++++++++++++++++++++++RENDER ADMIN LOGIN PAGE++++++++++++++++++++++++++++++++++++++++++++++
 
 const loadAdminSignin = async (req, res) => {
   try {
@@ -29,8 +22,6 @@ const loadAdminSignin = async (req, res) => {
     res.render('500')
   }
 }
-// ++++++++++++++++++++++++++++++++++++++VALIDATION OF EMAIL++++++++++++++++++++++++++++++++++++++++++++++
-
 const loginAdmin = async (req, res) => {
   const { emailAdmin, passwordAdmin } = req.body;
 
@@ -43,7 +34,6 @@ const loginAdmin = async (req, res) => {
       return res.render('adminLogin', { message: 'Invalid email format' });
     }
 
-    // Query the admin user from the database
     const adminData = await admin.findOne({ email: emailAdmin });
 
     if (!adminData) {
@@ -68,10 +58,6 @@ const loginAdmin = async (req, res) => {
 };
 
 
-
-// ++++++++++++++++++++++++++++++++++++++LOGOUT CURRENT ADMIN++++++++++++++++++++++++++++++++++++++++++++++
-
-
 const logoutAdmin = async (req, res) => {
   try {
     req.session.admin_id = false;
@@ -82,9 +68,6 @@ const logoutAdmin = async (req, res) => {
     res.render('500')
   }
 };
-
-
-// ++++++++++++++++++++++++++++++++++++++LOAD ADMIN DASHBOARD++++++++++++++++++++++++++++++++++++++++++++++
 
 const loadAdminDash = async (req, res) => {
   try {
@@ -98,7 +81,6 @@ const loadAdminDash = async (req, res) => {
 
     const orderCount = await Order.countDocuments();
     const userCount = await user.countDocuments();
-    // Fetch total revenue
     const totalRevenue = await Order.aggregate([
       {
         $group: {
@@ -142,8 +124,6 @@ const loadAdminDash = async (req, res) => {
     res.render('500')
   }
 };
-// ++++++++++++++++++++++++++++++++++++++DASHBOARD CHART WEEK FILTER++++++++++++++++++++++++++++++++++++++++++++++
-
 const chartFilterWeek = async (req, res) => {
   try {
     const totalCodWeek = await Order.countDocuments({
@@ -173,7 +153,6 @@ const chartFilterWeek = async (req, res) => {
     res.render('500')
   }
 }
-// ++++++++++++++++++++++++++++++++++++++DASHBOARD CHART MONTH FILTER++++++++++++++++++++++++++++++++++++++++++++++
 const chartFilterMonth = async (req, res) => {
   try {
     const totalCodMonth = await Order.countDocuments({
@@ -199,7 +178,6 @@ const chartFilterMonth = async (req, res) => {
     res.render('500')
   }
 }
-// ++++++++++++++++++++++++++++++++++++++DASHBOARD CHART YEAR FILTER++++++++++++++++++++++++++++++++++++++++++++++
 const chartFilterYear = async (req, res) => {
   try {
     const totalCodYear = await Order.countDocuments({
@@ -226,8 +204,6 @@ const chartFilterYear = async (req, res) => {
     res.render('500')
   }
 }
-// ++++++++++++++++++++++++++++++++++++++LOAD USER MANAGEMENT++++++++++++++++++++++++++++++++++++++++++++++
-
 
 const loadUserManag = async (req, res) => {
   try {
@@ -238,8 +214,6 @@ const loadUserManag = async (req, res) => {
     res.render('500')
   }
 };
-
-// ++++++++++++++++++++++++++++++++++++++UNBLOCK OR BLOCK USER++++++++++++++++++++++++++++++++++++++++++++++
 
 const blockUser = async (req, res) => {
   try {
@@ -258,10 +232,6 @@ const blockUser = async (req, res) => {
     res.render('500')
   }
 };
-
-
-// ++++++++++++++++++++++++++++++++++++++LOAD ADD CATEGORY MANAGE++++++++++++++++++++++++++++++++++++++++++++++
-
 const addNewCategory = async (req, res) => {
   try {
     res.render('addCategory')
@@ -288,7 +258,6 @@ const addCategoryDB = async (req, res) => {
         message: "Entered category already exists.",
       });
     } else {
-      const catData = await data.save();
       res.redirect("/admin/categoryManagement");
     }
   } catch (error) {
