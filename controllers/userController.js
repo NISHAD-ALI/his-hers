@@ -15,15 +15,13 @@ let email2;
 let nameResend;
 let otpsend = 0;
 let user_id;
-// ++++++++++++++++++++++++++++++++++++++REGEX FOR VALIDATION EMAIL++++++++++++++++++++++++++++++++++++++++++++++
+
 
 function validateEmail(email) {
   const regex = /^[^\s@]+([\._][^\s@]+)*@[^\s@]+\.[^\s@]+$/;
   return regex.test(email);
 }
 
-
-// ++++++++++++++++++++++++++++++++++++++HASHING PASSWORD++++++++++++++++++++++++++++++++++++++++++++++
 const hashPassword = async (password) => {
   try {
     const passHash = await bcrypt.hash(password, 10)
@@ -33,7 +31,6 @@ const hashPassword = async (password) => {
     res.render('500')
   }
 }
-// ++++++++++++++++++++++++++++++++++++++LOGIN SIGNUP(BOTH IN SAMEPAGE)++++++++++++++++++++++++++++++++++++++++++++++
 const loadSignup = async (req, res) => {
   try {
     res.render('login')
@@ -42,15 +39,6 @@ const loadSignup = async (req, res) => {
     res.render('500')
   }
 }
-
-
-
-
-
-
-
-// ++++++++++++++++++++++++++++++++++++++NEW USER REGISTRATION++++++++++++++++++++++++++++++++++++++++++++++
-
 
 const insertNewUser = async (req, res) => {
   try {
@@ -105,10 +93,6 @@ const insertNewUser = async (req, res) => {
 };
 
 
-
-// ++++++++++++++++++++++++++++++++++++++SEND OTP +++++++++++++++++++++++++++++++++++++++++++++
-
-
 function otpgenerator() {
   otpsend = Math.floor(100000 + Math.random() * 900000);
   console.log(otpsend);
@@ -144,8 +128,6 @@ const sendVerifyMail = async (name, email) => {
     res.render('500')
   }
 };
-// // ++++++++++++++++++++++++++++++++++++++RESEND OTP +++++++++++++++++++++++++++++++++++++++++++++
-
 const resendOTP = async (req, res) => {
   try {
 
@@ -162,8 +144,6 @@ const resendOTP = async (req, res) => {
   }
 }
 
-// ++++++++++++++++++++++++++++++++++++++VERIFY OTP ++++++++++++++++++++++++++++++++++++++++++++++
-
 const verifymail = async (req, res) => {
   try {
     console.log('Current OTP:', otpsend);
@@ -172,8 +152,9 @@ const verifymail = async (req, res) => {
 
     if (req.body.otp == otpsend) {
       const use = req.body.usermon
-      console.log(use + "111111111111111");
-      // res.redirect('/login');
+      console.log(use);
+      let a = await User.updateOne({ _id: use }, { $set: { is_verified: 1 } });
+      console.log(a)
       res.render('login', { message: 'Your Account has been created.' });
     } else {
       res.render('otppage', { message: 'Invalid OTP. Please try again.' });
@@ -185,8 +166,6 @@ const verifymail = async (req, res) => {
 };
 
 
-
-// ++++++++++++++++++++++++++++++++++++++LOGIN AFTER SIGNUP++++++++++++++++++++++++++++++++++++++++++++++
 const loginUser = async (req, res) => {
 
 
