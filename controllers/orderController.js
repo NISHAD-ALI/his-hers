@@ -93,7 +93,7 @@ const placeOrder = async (req, res) => {
     const cartData = await Cart.findOne({ userid: userId });
     const totalAmount = cartData.total;
     const orderProducts = [];
-
+   console.log(totalAmount + 'total amount')
     for (const cartProduct of cartData.products) {
       orderProducts.push({
         productId: cartProduct.productId,
