@@ -28,7 +28,7 @@
                           <% let products=orderDat[j].products; %>
                             <% const username=orderDat[j].userid.name; %>
                               <% for (let i=0; i < products.length; i++) { %>
-                                <% const product=products[i].productId; %>
+                                <% const product=products[i]?.productId; %>
                                   <tr>
                                     <td>
                                       <%= username %>
@@ -36,12 +36,12 @@
                                     <td class="product-name-cell">
                                       <img src="/products/images/<%= product?.image[0] %>" alt="image" />
                                       <span class="pl-2 product-name">
-                                        <%= product.productname %>
+                                        <%= product?.productname %>
                                       </span>
                                     </td>
 
                                     <td>
-                                      <%= orderDat[j].purchaseDate.toLocaleString('en-US', { year: 'numeric' ,
+                                      <%= orderDat[j]?.purchaseDate.toLocaleString('en-US', { year: 'numeric' ,
                                         month: 'short' , day: '2-digit' , hour: '2-digit' , minute: '2-digit' ,
                                         second: '2-digit' }).replace(/,/, '' ).replace(/\//g, '-' ) %>
                                     </td>
@@ -53,13 +53,13 @@
                                       <div class="form-group">
                                         <select class="form-control order-status-select"
                                           data-order-id="<%= orderDat[j]._id %>">
-                                          <option value="Pending" <%=orderDat[j].status==="Pending" ? 'selected' : '' %>
+                                          <option value="Pending" <%=orderDat[j]?.status==="Pending" ? 'selected' : '' %>
                                             >Pending</option>
-                                          <option value="Processing" <%=orderDat[j].status==="Processing" ? 'selected'
+                                          <option value="Processing" <%=orderDat[j]?.status==="Processing" ? 'selected'
                                             : '' %>>Processing</option>
-                                          <option value="Shipped" <%=orderDat[j].status==="Shipped" ? 'selected' : '' %>
+                                          <option value="Shipped" <%=orderDat[j]?.status==="Shipped" ? 'selected' : '' %>
                                             >Shipped</option>
-                                          <option value="Delivered" <%=orderDat[j].status==="Delivered" ? 'selected'
+                                          <option value="Delivered" <%=orderDat[j]?.status==="Delivered" ? 'selected'
                                             : '' %>>Delivered</option>
                                           <option value="cancelled" <%=orderDat[j].status==="cancelled" ? 'selected'
                                             : '' %>>cancelled</option>
