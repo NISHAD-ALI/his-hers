@@ -45,8 +45,8 @@ const loadCheckout = async (req, res) => {
       const datatotal = cartData.products.map((products) => {
         return products.totalPrice * products.count;
       });
-      console.log(datatotal);
-
+      console.log(datatotal[0]+'hee');
+      await Cart.updateOne({ userid: userId },{$set:{total:datatotal[0]}})
       // grand total
       let totalamount = 0;
       if (datatotal.length > 0) {
@@ -93,7 +93,7 @@ const placeOrder = async (req, res) => {
     const cartData = await Cart.findOne({ userid: userId });
     const totalAmount = cartData.total;
     const orderProducts = [];
-   console.log(totalAmount + 'total amount')
+   console.log(cartData + 'total amount')
     for (const cartProduct of cartData.products) {
       orderProducts.push({
         productId: cartProduct.productId,
