@@ -491,8 +491,8 @@ const resetPasswordEmailLink = async (req, res) => {
     const tokenExpiration = new Date(Date.now() + 3600000);
     console.log(token);
     storeTokenInDatabase(user.id, token, tokenExpiration);
-    // const resetPasswordLink = `https://hisandhers.up.railway.app/loadpassReset?token=${token}`;
-    const resetPasswordLink = `http://localhost:3000/loadpassReset?token=${token}`;
+    const resetPasswordLink = `https://hisandhers.up.railway.app/loadpassReset?token=${token}`;
+    // const resetPasswordLink = `http://localhost:3000/loadpassReset?token=${token}`;
 
     const transporter = nodemailer.createTransport({
       host: 'smtp.gmail.com',
