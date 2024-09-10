@@ -14,9 +14,6 @@ const razorpay = new Razorpay({
   key_id: process.env.RAZORPAYKEYID,
   key_secret: process.env.RAZORPAYSECRETKEY,
 });
-console.log('Razorpay Key ID:', process.env.RAZORPAYKEYID);
-console.log('Razorpay Secret Key:', process.env.RAZORPAYSECRETKEY);
-console.log(razorpay)
 // ++++++++++++++++RENDER CHECKOUT++++++++++++++++++
 
 const loadCheckout = async (req, res) => {
@@ -48,8 +45,8 @@ const loadCheckout = async (req, res) => {
       const datatotal = cartData.products.map((products) => {
         return products.totalPrice * products.count;
       });
-      console.log(datatotal[0] + 'hee');
-      await Cart.updateOne({ userid: userId }, { $set: { total: datatotal[0] } })
+      console.log(datatotal[0]+'hee');
+      await Cart.updateOne({ userid: userId },{$set:{total:datatotal[0]}})
       // grand total
       let totalamount = 0;
       if (datatotal.length > 0) {
@@ -62,7 +59,7 @@ const loadCheckout = async (req, res) => {
 
       res.render('checkout', { accountDetails, UserAddress, userName, totalamount, datatotal, cartData: cartData, coupon, discAmount });
     } else {
-
+     
 
       res.redirect('/')
     }
@@ -96,7 +93,7 @@ const placeOrder = async (req, res) => {
     const cartData = await Cart.findOne({ userid: userId });
     const totalAmount = cartData.total;
     const orderProducts = [];
-    console.log(cartData + 'total amount')
+   console.log(cartData + 'total amount')
     for (const cartProduct of cartData.products) {
       orderProducts.push({
         productId: cartProduct.productId,
@@ -161,21 +158,12 @@ const placeOrder = async (req, res) => {
         currency: 'INR',
         receipt: "" + savedOrder._id
       };
-      console.log(options.amount + '--options');
-      razorpay.orders.create({
-        amount: options.amount,
-        currency: 'INR',
-        receipt: options.receipt,
-      }, (err, order) => {
-        if (err) {
-          console.error('Error creating Razorpay order:', err);
-          return res.status(500).json({ error: 'Failed to create order' });
-        }
-        console.log('Razorpay Order:', order);
+      
+      razorpay.orders.create(options, function (err, order) {
+        console.log(order.amount+'XP 6');
+        console.log(order+'XP 6');
         return res.json({ order });
       });
-
-
       await decreaseProductQuantities(orderProducts);
       console.log('XP 7');
     } else if (paymentMethod === 'cod') {
