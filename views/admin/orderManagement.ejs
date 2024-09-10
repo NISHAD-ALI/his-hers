@@ -25,8 +25,8 @@
                     <tbody>
                       <% if (orderDat.length> 0) { %>
                         <% for (let j=0; j < orderDat.length; j++) { %>
-                          <% let products=orderDat[j].products; %>
-                            <% const username=orderDat[j].userid.name; %>
+                          <% let products=orderDat[j]?.products; %>
+                            <% const username=orderDat[j]?.userid?.name; %>
                               <% for (let i=0; i < products.length; i++) { %>
                                 <% const product=products[i]?.productId; %>
                                   <tr>
@@ -46,7 +46,7 @@
                                         second: '2-digit' }).replace(/,/, '' ).replace(/\//g, '-' ) %>
                                     </td>
                                     <td>
-                                      <%= orderDat[j].status %>
+                                      <%= orderDat[j]?.status %>
                                     </td>
                                     <td>
                                       <!-- Order Status Select -->
@@ -100,42 +100,42 @@
                                                 <%= product?.price %>
                                               </p>
                                               <p><strong>Date:</strong>
-                                                <%= orderDat[j].purchaseDate.toLocaleString('en-US', { year: 'numeric' ,
+                                                <%= orderDat[j]?.purchaseDate.toLocaleString('en-US', { year: 'numeric' ,
                                                   month: 'short' , day: '2-digit' , hour: '2-digit' , minute: '2-digit'
                                                   , second: '2-digit' }).replace(/,/, '' ).replace(/\//g, '-' ) %>
                                               </p>
                                               <p><strong>Order Status:</strong>
-                                                <%= orderDat[j].status %>
+                                                <%= orderDat[j]?.status %>
                                               </p>
                                               <p><strong>Payment Method:</strong>
-                                                <%= orderDat[j].paymentMethod %>
+                                                <%= orderDat[j]?.paymentMethod %>
                                               </p>
 
                                               <h3>Address Details</h3>
                                               <br>
                                               <p><strong>Full Name:</strong>
-                                                <%= orderDat[j].deliveryDetails.address.address[0].fullname %>
+                                                <%= orderDat[j]?.deliveryDetails?.address?.address[0]?.fullname %>
                                               </p>
                                               <p><strong>Mobile Number:</strong>
-                                                <%= orderDat[j].deliveryDetails.address.address[0].mobile %>
+                                                <%= orderDat[j]?.deliveryDetails?.address?.address[0]?.mobile %>
                                               </p>
                                               <p><strong>Email:</strong>
-                                                <%= orderDat[j].deliveryDetails.address.address[0].email %>
+                                                <%= orderDat[j]?.deliveryDetails?.address.address[0]?.email %>
                                               </p>
                                               <p><strong>House No:</strong>
-                                                <%= orderDat[j].deliveryDetails.address.address[0].houseNo %>
+                                                <%= orderDat[j]?.deliveryDetails?.address?.address[0]?.houseNo %>
                                               </p>
                                               <p><strong>City:</strong>
-                                                <%= orderDat[j].deliveryDetails.address.address[0].city %>
+                                                <%= orderDat[j]?.deliveryDetails?.address?.address[0]?.city %>
                                               </p>
                                               <p><strong>State:</strong>
-                                                <%= orderDat[j].deliveryDetails.address.address[0].state %>
+                                                <%= orderDat[j]?.deliveryDetails?.address?.address[0]?.state %>
                                               </p>
                                               <p><strong>Zipcode:</strong>
-                                                <%= orderDat[j].deliveryDetails.address.address[0].zipcode %>
+                                                <%= orderDat[j]?.deliveryDetails?.address?.address[0]?.zipcode %>
                                               </p>
                                               <p><strong>AdditionalDetails:</strong>
-                                                <%= orderDat[j].deliveryDetails.address.address[0].additionalDetails %>
+                                                <%= orderDat[j]?.deliveryDetails?.address?.address[0]?.additionalDetails %>
                                               </p>
                                             </div>
                                             <div class="modal-footer">
