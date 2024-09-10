@@ -162,11 +162,20 @@ const placeOrder = async (req, res) => {
         receipt: "" + savedOrder._id
       };
       console.log(options.amount + '--options');
-      razorpay.orders.create(options, function (err, order) {
-        console.log('Razorpay Key ID:', process.env.RAZORPAYKEYID);
-        console.log('Razorpay Secret Key:', process.env.RAZORPAYSECRETKEY);
+      razorpay.orders.create({
+        amount: options.amount,
+        currency: 'INR',
+        receipt: options.receipt,
+      }, (err, order) => {
+        if (err) {
+          console.error('Error creating Razorpay order:', err);
+          return res.status(500).json({ error: 'Failed to create order' });
+        }
+        console.log('Razorpay Order:', order);
         return res.json({ order });
       });
+
+
       await decreaseProductQuantities(orderProducts);
       console.log('XP 7');
     } else if (paymentMethod === 'cod') {
