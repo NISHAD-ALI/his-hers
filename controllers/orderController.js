@@ -14,6 +14,9 @@ const razorpay = new Razorpay({
   key_id: process.env.RAZORPAYKEYID,
   key_secret: process.env.RAZORPAYSECRETKEY,
 });
+console.log('Razorpay Key ID:', process.env.RAZORPAYKEYID);
+console.log('Razorpay Secret Key:', process.env.RAZORPAYSECRETKEY);
+console.log(razorpay)
 // ++++++++++++++++RENDER CHECKOUT++++++++++++++++++
 
 const loadCheckout = async (req, res) => {
