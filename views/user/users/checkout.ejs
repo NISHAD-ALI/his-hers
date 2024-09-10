@@ -250,13 +250,13 @@
             method: 'POST',
             data: formData,
             success: function (response) {
-              console.log(response);
+              console.log(response+'inside front end');
               if (response.success === true) {
                 console.log('hi');
                 window.location.href = '/order-success';
               } else if (response.online === true) {
                 console.log('online');
-                // razorpayPayment(response.order);
+                razorpayPayment(response.order);  //
                 window.location.href = '/order-success';
               } else if (response.error === 'Insufficient funds in wallet') {
                 // Display SweetAlert for insufficient funds
