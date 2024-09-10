@@ -250,7 +250,7 @@
             method: 'POST',
             data: formData,
             success: function (response) {
-              console.log(response+'inside front end');
+              console.log(response.order+'inside front end');
               if (response.success === true) {
                 console.log('hi');
                 window.location.href = '/order-success';
