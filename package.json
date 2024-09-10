@@ -140,7 +140,7 @@
     "qs": "^6.11.0",
     "range-parser": "^1.2.1",
     "raw-body": "^2.5.2",
-    "razorpay": "^2.9.2",
+    "razorpay": "^2.9.4",
     "readable-stream": "^2.3.8",
     "readdirp": "^3.6.0",
     "rimraf": "^3.0.2",
