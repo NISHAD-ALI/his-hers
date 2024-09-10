@@ -462,7 +462,7 @@ const resetPasswordEmailLink = async (req, res) => {
     console.log(user);
     if (!user) {
       // If the email is not found, send an error message
-      return res.status(400).json({ error: 'Email not found' });
+      return res.json({ error: 'Email not found' });
     }
     const generateUniqueToken = (length = 32) => {
       const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -479,6 +479,7 @@ const resetPasswordEmailLink = async (req, res) => {
           { _id: userId },
           { resetPasswordToken: token, resetPasswordExpires: expiration }
         );
+        console.log(user + 'success token')
         if (!user) {
           console.error('User not found for storing token.');
         }
@@ -490,7 +491,8 @@ const resetPasswordEmailLink = async (req, res) => {
     const tokenExpiration = new Date(Date.now() + 3600000);
     console.log(token);
     storeTokenInDatabase(user.id, token, tokenExpiration);
-    const resetPasswordLink = `https://hisandhersfashion.shop/loadpassReset?token=${token}`;
+    // const resetPasswordLink = `https://hisandhers.up.railway.app/loadpassReset?token=${token}`;
+    const resetPasswordLink = `http://localhost:3000/loadpassReset?token=${token}`;
 
     const transporter = nodemailer.createTransport({
       host: 'smtp.gmail.com',
@@ -510,7 +512,6 @@ const resetPasswordEmailLink = async (req, res) => {
       html: `   <html>
       <head>
         <style>
-          /* Add your custom email styles here */
           body {
             font-family: Arial, sans-serif;
             background-color: #f3f3f3;
@@ -610,11 +611,10 @@ const resetPasswordPost = async (req, res) => {
 
     const user = await User.findOne({
       resetPasswordToken: token,
-      resetPasswordExpires: { $gt: Date.now() },
     });
     console.log(user);
     if (!user) {
-      return res.status(400).json({ error: 'Invalid or expired token' });
+      return res.json({ error: 'Invalid or expired token' });
     }
     const hashedPassword = await hashPassword(newPassword);
     // Reset the user's password

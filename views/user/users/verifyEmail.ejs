@@ -1,88 +1,79 @@
 <%- include('../layout/header.ejs') -%>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-
-
-  <div class="page-wrapper">
-    <main class="main">
-      <div class="container mt-5">
-        <div class="row">
-          <div class="col-md-6 offset-md-3">
-            <div class="card">
-              <div class="card-body">
-                <h4 class="card-title">Enter Your Email</h4>
-                <!-- Form for entering email -->
-                <form id="emailForm" action="/reset-password" method="post">
-                  <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email"
-                      required>
-                  </div>
-                  <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
-                <!-- Backend message div -->
-                <div id="messageDiv" class="mt-3"></div>
-              </div>
+<div class="page-wrapper">
+  <main class="main">
+    <div class="container mt-5">
+      <div class="row">
+        <div class="col-md-6 offset-md-3">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title">Enter Your Email</h4>
+              <!-- Form for entering email -->
+              <form id="emailForm">
+                <div class="form-group">
+                  <label for="email">Email:</label>
+                  <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </form>
+              <!-- Backend message div -->
+              <div id="messageDiv" class="mt-3"></div>
             </div>
           </div>
         </div>
       </div>
-    </main>
-  </div>
+    </div>
+  </main>
+</div>
 
+<script>
+  $(document).ready(function () {
+    console.log('Document ready called'); // Ensure this prints in the console
 
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-  
-  <script>
-    // Inside your JavaScript code
-    function sendResetPasswordEmail() {
+    // Attach the form submit event handler using `on`
+    $("#emailForm").on("submit", function (e) {
+      e.preventDefault(); // Prevent the form from the default submission behavior
+      console.log('Form submit event triggered');
+      sendResetPasswordEmail(); // Call the AJAX function
+    });
+  });
 
-
-      $.ajax({
-        url: "/reset-password", // Update the URL to match your server route
-        method: "POST",
-        data: {
-          email: $("#email").val(), // Get the email from the input field
-        },
-
-
-        success: (response) => {
-          if (response.success) {
-
-            Swal.fire({
-              icon: "success",
-              title: "Email Sent",
-              text: "A password reset link has been sent to your email. Please check your inbox.",
-            });
-          } else {
-            // Handle other response cases (e.g., email not found)
-            Swal.fire({
-              icon: "error",
-              title: "Email Not Found",
-              text: "The provided email address was not found in our records. Please try again.",
-            });
-          }
-        },
-        error: (error) => {
-
-          console.log(error);
+  function sendResetPasswordEmail() {
+    console.log('AJAX function called');
+    $.ajax({
+      url: "/reset-password", // Server route for reset password
+      method: "POST",
+      data: {
+        email: $("#email").val(), // Get the email from the input field
+      },
+      success: (response) => {
+        console.log(response + ' response here');
+        if (response.success) {
+          Swal.fire({
+            icon: "success",
+            title: "Email Sent",
+            text: "A password reset link has been sent to your email. Please check your inbox.",
+          });
+        } else {
           Swal.fire({
             icon: "error",
-            title: "Error",
-            text: "An error occurred while sending the email. Please try again later.",
+            title: "Email Not Found",
+            text: response.message || "The provided email address was not found in our records. Please try again.",
           });
-        },
-      });
-    }
-
-
-    $(document).ready(function () {
-      $("#emailForm").submit(function (e) {
-        e.preventDefault();
-        sendResetPasswordEmail();
-      });
+        }
+      },
+      error: (error) => {
+        console.log(error);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "An error occurred while sending the email. Please try again later.",
+        });
+      },
     });
-  </script>
-  <%- include('../layout/footer.ejs') -%>
+  }
+</script>
+<%- include('../layout/footer.ejs') -%>
