@@ -158,10 +158,10 @@ const placeOrder = async (req, res) => {
         currency: 'INR',
         receipt: "" + savedOrder._id
       };
-      console.log(options.totalAmount+'--options');
+      console.log(options+'--options');
       razorpay.orders.create(options, function (err, order) {
         console.log(order+'XP 6');
-        console.log('THIS IS THE ERROR --->'+err)
+        console.log('THIS IS THE ERROR --->'+err.error,err.statusCode)
         return res.json({ order });
       });
       await decreaseProductQuantities(orderProducts);
