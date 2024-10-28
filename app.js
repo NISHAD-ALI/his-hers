@@ -60,9 +60,5 @@ app.get('*', (req, res) => {
 
 
 
-<<<<<<< HEAD
-app.listen(3000, () => console.log('server started @ 3000'))
-=======
 app.listen(3001, () => console.log('server started'))
->>>>>>> temp-branch
 
